@@ -1,4 +1,4 @@
-# Contributing to GEO EVENTS
+# Contributing to GeoEvents
 
 ## Table of contents
 
