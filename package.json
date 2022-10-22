@@ -14,7 +14,7 @@
     "@types/node": "^16.11.68",
     "@types/react": "^18.0.21",
     "@types/react-dom": "^18.0.6",
-    "maplibre-gl": "^2.4.0",
+    "maplibre-gl": "^1.15.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-scripts": "5.0.1",
@@ -36,9 +36,7 @@
     "production": [
       ">0.2%",
       "not dead",
-      "not op_mini all",
-      "defaults",
-      "not ie 11"
+      "not op_mini all"
     ],
     "development": [
       "last 1 chrome version",

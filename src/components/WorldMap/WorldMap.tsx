@@ -1,14 +1,7 @@
 import { useRef, useEffect, useState, MutableRefObject } from "react";
-//@ts-ignore
-// eslint-disable-next-line import/no-webpack-loader-syntax
-import maplibregl from "!maplibre-gl";
-//@ts-ignore
-import maplibreglWorker from "maplibre-gl/dist/maplibre-gl-csp-worker";
-import { Map } from "maplibre-gl";
+import maplibregl, { Map } from "maplibre-gl";
 import "maplibre-gl/dist/maplibre-gl.css";
 import { Box } from "@mui/material";
-
-maplibregl.workerClass = maplibreglWorker;
 
 const WorldMap = () => {
   const mapContainer = useRef<HTMLBRElement | null>(
