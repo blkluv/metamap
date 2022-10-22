@@ -8,9 +8,9 @@ const WorldMap = () => {
     null
   ) as MutableRefObject<HTMLBRElement>;
   const map = useRef<Map | null>(null);
-  const [lng] = useState<number>(139.753);
-  const [lat] = useState<number>(35.6844);
-  const [zoom] = useState<number>(14);
+  const [lng] = useState<number>(24);
+  const [lat] = useState<number>(50);
+  const [zoom] = useState<number>(4);
 
   useEffect(() => {
     if (map.current) return;
@@ -21,6 +21,14 @@ const WorldMap = () => {
       zoom: zoom,
     });
     map.current.addControl(new maplibregl.NavigationControl({}), "top-right");
+    map.current.addControl(
+      new maplibregl.GeolocateControl({
+        positionOptions: {
+          enableHighAccuracy: true,
+        },
+        trackUserLocation: true,
+      })
+    );
   });
 
   return (
