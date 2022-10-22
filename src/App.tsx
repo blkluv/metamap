@@ -1,5 +1,11 @@
-function App() {
-  return <h1>GeoEvents</h1>;
-}
+import WorldMap from "./components/WorldMap/WorldMap";
+
+const App = () => {
+  return (
+    <div>
+      <WorldMap />
+    </div>
+  );
+};
 
 export default App;
