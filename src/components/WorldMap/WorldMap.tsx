@@ -1,12 +1,12 @@
 import { useRef, useEffect, useState, MutableRefObject } from "react";
 import maplibregl, { Map } from "maplibre-gl";
 import "maplibre-gl/dist/maplibre-gl.css";
-import "./map.css";
+import { Box } from "@mui/material";
 
 const WorldMap = () => {
-  const mapContainer = useRef<HTMLDivElement | null>(
+  const mapContainer = useRef<HTMLBRElement | null>(
     null
-  ) as MutableRefObject<HTMLDivElement>;
+  ) as MutableRefObject<HTMLBRElement>;
   const map = useRef<Map | null>(null);
   const [lng] = useState<number>(139.753);
   const [lat] = useState<number>(35.6844);
@@ -16,7 +16,7 @@ const WorldMap = () => {
     if (map.current) return;
     map.current = new Map({
       container: mapContainer.current,
-      style: `https://api.maptiler.com/maps/streets/style.json?key=${process.env.MAP_API_KEY}`,
+      style: `https://api.maptiler.com/maps/streets/style.json?key=${process.env.REACT_APP_MAP_API_KEY}`,
       center: [lng, lat],
       zoom: zoom,
     });
@@ -24,9 +24,9 @@ const WorldMap = () => {
   });
 
   return (
-    <div className="map-wrap">
-      <div ref={mapContainer} className="map" />
-    </div>
+    <Box width="100%" height="100vh" position="relative">
+      <Box width="100%" height="100%" position="absolute" ref={mapContainer} />
+    </Box>
   );
 };
 

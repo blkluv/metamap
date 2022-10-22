@@ -1,10 +1,11 @@
 import WorldMap from "./components/WorldMap/WorldMap";
+import { Box } from "@mui/material";
 
 const App = () => {
   return (
-    <div>
+    <Box width="100%">
       <WorldMap />
-    </div>
+    </Box>
   );
 };
 
