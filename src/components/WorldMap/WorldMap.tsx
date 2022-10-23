@@ -1,52 +1,70 @@
-import { useRef, useEffect, useState, MutableRefObject } from "react";
-import { Map, NavigationControl, GeolocateControl, Marker } from "maplibre-gl";
+import { useState } from "react";
+import Map, {
+  NavigationControl,
+  GeolocateControl,
+  Marker,
+  Popup,
+} from "react-map-gl";
+import PinCard from "../PinCard/PinCard";
+import maplibregl from "maplibre-gl";
 import "maplibre-gl/dist/maplibre-gl.css";
-import { Box } from "@mui/material";
+
+type NewMarker = {
+  lng: number;
+  lat: number;
+};
 
 const WorldMap = () => {
-  const mapContainer = useRef<HTMLBRElement | null>(
-    null
-  ) as MutableRefObject<HTMLBRElement>;
-  const map = useRef<Map | null>(null);
-  const [lng] = useState<number>(24);
-  const [lat] = useState<number>(50);
-  const [zoom] = useState<number>(4);
+  const [showPopup, setShowPopup] = useState<boolean>(true);
+  const [newMarker, setNewMarker] = useState<NewMarker | null>(null);
 
-  const addMarker = ({ coordinates, map }: any) => {
-    return new Marker().setLngLat(coordinates).addTo(map);
+  const handleDoubleClick = (e: any) => {
+    const { lng, lat } = e.lngLat;
+    setNewMarker({ lng, lat });
   };
 
-  useEffect(() => {
-    if (map.current) return;
-    map.current = new Map({
-      container: mapContainer.current,
-      style: `https://api.maptiler.com/maps/streets/style.json?key=${process.env.REACT_APP_MAP_API_KEY}`,
-      center: [lng, lat],
-      zoom: zoom,
-    });
-    map.current.addControl(new NavigationControl({}), "top-right");
-    map.current.addControl(
-      new GeolocateControl({
-        positionOptions: {
-          enableHighAccuracy: true,
-        },
-        trackUserLocation: true,
-      })
-    );
-    map.current.on("click", (e) => {
-      const coordinates = e.lngLat;
-      addMarker({ coordinates, map: map.current });
-    });
-  });
-
   return (
-    <Box
-      ref={mapContainer}
-      sx={{
-        width: "100%",
-        height: "92vh",
+    <Map
+      mapLib={maplibregl}
+      initialViewState={{
+        longitude: 24,
+        latitude: 50,
+        zoom: 4,
       }}
-    />
+      style={{ width: "100%", height: "92vh" }}
+      mapStyle={`https://api.maptiler.com/maps/streets/style.json?key=${process.env.REACT_APP_MAP_API_KEY}`}
+      doubleClickZoom={false}
+      onDblClick={handleDoubleClick}
+    >
+      <NavigationControl />
+      <GeolocateControl
+        trackUserLocation={true}
+        positionOptions={{
+          enableHighAccuracy: true,
+        }}
+      />
+      <Marker longitude={20} latitude={50} />
+      {showPopup && (
+        <Popup
+          longitude={20}
+          latitude={50}
+          anchor="top-left"
+          onClose={() => setShowPopup(false)}
+        >
+          <PinCard />
+        </Popup>
+      )}
+      {newMarker && (
+        <Popup
+          longitude={newMarker.lng}
+          latitude={newMarker.lat}
+          anchor="top-left"
+          onClose={() => setNewMarker(null)}
+        >
+          <PinCard />
+        </Popup>
+      )}
+    </Map>
   );
 };
 
