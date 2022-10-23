@@ -2,6 +2,7 @@ import { useState } from "react";
 import Map, {
   NavigationControl,
   GeolocateControl,
+  FullscreenControl,
   Marker,
   Popup,
 } from "react-map-gl";
@@ -43,6 +44,7 @@ const WorldMap = () => {
           enableHighAccuracy: true,
         }}
       />
+      <FullscreenControl />
       <Marker longitude={20} latitude={50} />
       {showPopup && (
         <Popup
