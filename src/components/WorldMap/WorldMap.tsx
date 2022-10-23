@@ -32,9 +32,13 @@ const WorldMap = () => {
   });
 
   return (
-    <Box width="100%" height="100vh" position="relative">
-      <Box width="100%" height="100%" position="absolute" ref={mapContainer} />
-    </Box>
+    <Box
+      ref={mapContainer}
+      sx={{
+        width: "100%",
+        height: "92vh",
+      }}
+    />
   );
 };
 
