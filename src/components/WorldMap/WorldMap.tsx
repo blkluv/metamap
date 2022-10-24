@@ -16,7 +16,7 @@ type NewMarker = {
 };
 
 const WorldMap = () => {
-  const [showPopup, setShowPopup] = useState<boolean>(true);
+  const [showPopup, setShowPopup] = useState<boolean>(false);
   const [newMarker, setNewMarker] = useState<NewMarker | null>(null);
 
   const handleDoubleClick = (e: any) => {
