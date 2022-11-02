@@ -1,12 +1,12 @@
-import { useState, useContext } from "react";
+import { useState, useEffect, useContext } from "react";
 import Map, {
   NavigationControl,
   GeolocateControl,
   FullscreenControl,
-  Marker,
   Popup,
 } from "react-map-gl";
 import PinCard from "../PinCard/PinCard";
+import Markers from "./Markers";
 import EventContext from "../../context/eventContext";
 import maplibregl from "maplibre-gl";
 import "maplibre-gl/dist/maplibre-gl.css";
@@ -17,13 +17,18 @@ type NewMarker = {
 };
 
 const WorldMap = () => {
-  const { events } = useContext(EventContext);
+  const { selectedEvent } = useContext(EventContext);
   const [newMarker, setNewMarker] = useState<NewMarker | null>(null);
+  const [key, setKey] = useState<number>(Math.random());
 
   const handleDoubleClick = (e: any) => {
     const { lng, lat } = e.lngLat;
     setNewMarker({ lng, lat });
   };
+
+  useEffect(() => {
+    setKey(Math.random());
+  }, [selectedEvent]);
 
   return (
     <Map
@@ -46,10 +51,7 @@ const WorldMap = () => {
         }}
       />
       <FullscreenControl />
-      {events.map(({ coordinates }) => (
-        <Marker longitude={coordinates.lng} latitude={coordinates.lat} />
-      ))}
-
+      <Markers key={key} />
       {newMarker && (
         <Popup
           longitude={newMarker.lng}

@@ -14,6 +14,7 @@ import { Event } from "./utils/interfaces";
 
 const App = () => {
   const [events, setEvents] = useState<Event[]>([]);
+  const [selectedEvent, setSelectedEvent] = useState<Event | undefined>();
 
   const getEvents = async () => {
     const events = await EventService.getEvents();
@@ -29,13 +30,29 @@ const App = () => {
     }
   };
 
+  const handleSetSelectedEvent = (id: string | undefined) => {
+    if (id === selectedEvent?._id) {
+      setSelectedEvent(undefined);
+    } else {
+      const selected = events.find((event) => event._id === id);
+      setSelectedEvent(selected);
+    }
+  };
+
   useEffect(() => {
     getEvents();
   }, []);
 
   return (
     <>
-      <EventContext.Provider value={{ events, onAddEvent: handleAddEvent }}>
+      <EventContext.Provider
+        value={{
+          events,
+          selectedEvent,
+          onAddEvent: handleAddEvent,
+          onSetSelectedEvent: handleSetSelectedEvent,
+        }}
+      >
         <CssBaseline />
         <Grid container>
           <ResponsiveAppBar />

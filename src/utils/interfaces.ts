@@ -1,5 +1,5 @@
 export interface Event {
-  _id?: number;
+  _id?: string;
   title: string;
   start: string;
   end: string;
@@ -13,11 +13,13 @@ export interface Event {
 
 export interface EventsContext {
   events: Event[];
+  selectedEvent?: Event;
   onAddEvent?: (event: Event) => Promise<void>;
+  onSetSelectedEvent?: (id: string | undefined) => void;
 }
 
 export interface EventHeader {
-  _id: number;
+  _id: string;
   title: string;
   date: string;
   location: string;
