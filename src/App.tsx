@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import WorldMap from "./components/WorldMap/WorldMap";
 import SignIn from "./components/SignIn/SignIn";
 import SignUp from "./components/Signup/SignUp";
@@ -7,16 +8,34 @@ import CssBaseline from "@mui/material/CssBaseline";
 import { Routes, Route } from "react-router-dom";
 import ResponsiveAppBar from "./components/Navbar/Navbar";
 import EventContext from "./context/eventContext";
-import useFetch from "./hooks/useFetch";
+import EventService from "./services/eventService";
+import { Toaster } from "react-hot-toast";
+import { Event } from "./utils/interfaces";
 
 const App = () => {
-  const data = useFetch(
-    "https://geoevents-api-production.up.railway.app/events"
-  );
+  const [events, setEvents] = useState<Event[]>([]);
+
+  const getEvents = async () => {
+    const events = await EventService.getEvents();
+    if (events) {
+      setEvents(events);
+    }
+  };
+
+  const handleAddEvent = async (event: Event) => {
+    const newEvent = await EventService.addEvent(event);
+    if (newEvent) {
+      setEvents((events) => [...events, newEvent]);
+    }
+  };
+
+  useEffect(() => {
+    getEvents();
+  }, []);
 
   return (
     <>
-      <EventContext.Provider value={data}>
+      <EventContext.Provider value={{ events, onAddEvent: handleAddEvent }}>
         <CssBaseline />
         <Grid container>
           <ResponsiveAppBar />
@@ -32,6 +51,7 @@ const App = () => {
             <WorldMap />
           </Grid>
         </Grid>
+        <Toaster />
       </EventContext.Provider>
     </>
   );

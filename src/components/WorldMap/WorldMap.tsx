@@ -16,7 +16,6 @@ type NewMarker = {
 };
 
 const WorldMap = () => {
-  const [showPopup, setShowPopup] = useState<boolean>(false);
   const [newMarker, setNewMarker] = useState<NewMarker | null>(null);
 
   const handleDoubleClick = (e: any) => {
@@ -46,16 +45,6 @@ const WorldMap = () => {
       />
       <FullscreenControl />
       <Marker longitude={20} latitude={50} />
-      {showPopup && (
-        <Popup
-          longitude={20}
-          latitude={50}
-          anchor="top-left"
-          onClose={() => setShowPopup(false)}
-        >
-          <PinCard />
-        </Popup>
-      )}
       {newMarker && (
         <Popup
           longitude={newMarker.lng}
@@ -63,7 +52,7 @@ const WorldMap = () => {
           anchor="top-left"
           onClose={() => setNewMarker(null)}
         >
-          <PinCard />
+          <PinCard coordinates={newMarker} />
         </Popup>
       )}
     </Map>

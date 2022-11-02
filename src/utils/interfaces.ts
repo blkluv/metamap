@@ -1,16 +1,19 @@
 export interface Event {
-  _id: number;
+  _id?: number;
   title: string;
-  date: string;
-  duration: string;
-  type: string;
+  start: string;
+  end: string;
+  category: string;
   location: string;
   coordinates: object;
   description: string;
   logo: string;
-  guests: object[];
-  organizers: object[];
-  creator: string;
+  creator?: string;
+}
+
+export interface EventsContext {
+  events: Event[];
+  onAddEvent?: (event: Event) => Promise<void>;
 }
 
 export interface EventHeader {
@@ -22,12 +25,6 @@ export interface EventHeader {
   logo: string;
 }
 
-export interface EventHeaders {
-  headers: EventHeader[];
-}
-
-export interface Events {
-  data: Event[];
-  isLoading: boolean;
-  error: boolean | unknown | string;
+export interface DateTimePickerProps {
+  label: string;
 }

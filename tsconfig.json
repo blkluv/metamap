@@ -23,7 +23,7 @@
     "strictNullChecks": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-    "noImplicitReturns": true,
+    "noImplicitReturns": false,
     "allowUnreachableCode": false
   },
   "include": ["src"]

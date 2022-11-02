@@ -6,7 +6,7 @@ import Avatar from "@mui/material/Avatar";
 import Typography from "@mui/material/Typography";
 import { Event } from "../../utils/interfaces";
 
-const EventHeader = ({ title, date, location, description, logo }: Event) => {
+const EventHeader = ({ title, start, location, description, logo }: Event) => {
   return (
     <ListItem alignItems="flex-start">
       <ListItemAvatar>
@@ -22,7 +22,7 @@ const EventHeader = ({ title, date, location, description, logo }: Event) => {
               variant="body2"
               color="text.primary"
             >
-              {date + " — " + location}
+              {start + " — " + location}
             </Typography>
             <Typography
               sx={{ display: "block" }}

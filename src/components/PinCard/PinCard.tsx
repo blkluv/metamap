@@ -1,14 +1,48 @@
-import { Box, Button, TextField, Typography } from "@mui/material";
+import { useContext } from "react";
+import EventContext from "../../context/eventContext";
+import {
+  Box,
+  Button,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Select,
+  TextField,
+  Typography,
+} from "@mui/material";
+import BasicDateTimePicker from "../DateTimePicker/DateTimePicker";
+import { notify } from "../../utils/notifications";
 
-const PinCard = () => {
+const PinCard = ({ lng, lat }: any) => {
+  const { onAddEvent } = useContext(EventContext);
+
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
 
-    console.log({
-      title: data.get("title"),
-      description: data.get("description"),
-    });
+    const eventData = {
+      title: "" + data.get("title"),
+      description: "" + data.get("description"),
+      start: "" + data.get("start"),
+      end: "" + data.get("end"),
+      category: "" + data.get("category"),
+      location: "" + data.get("location"),
+    };
+
+    if (eventData.start < eventData.end) {
+      onAddEvent?.({
+        title: eventData.title,
+        start: eventData.start,
+        end: eventData.end,
+        category: eventData.category,
+        location: eventData.location,
+        coordinates: { lng, lat },
+        description: eventData.description,
+        logo: eventData.category[0],
+      });
+    } else {
+      notify("The end of the event must be later than its beginning.");
+    }
   };
 
   return (
@@ -16,11 +50,34 @@ const PinCard = () => {
       <Typography component="h3" variant="h6">
         New event
       </Typography>
-      <Box component="form" onSubmit={handleSubmit} noValidate>
+      <Box component="form" onSubmit={handleSubmit}>
+        <BasicDateTimePicker label={"start"} />
+        <BasicDateTimePicker label={"end"} />
+        <FormControl variant="standard" required sx={{ minWidth: 120 }}>
+          <InputLabel id="eventCategory">Category</InputLabel>
+          <Select
+            margin="dense"
+            size="small"
+            variant="standard"
+            id="category"
+            labelId="eventCategory"
+            name="category"
+            autoComplete="category"
+          >
+            <MenuItem value={"art"}>Art</MenuItem>
+            <MenuItem value={"business"}>Business</MenuItem>
+            <MenuItem value={"community"}>Community</MenuItem>
+            <MenuItem value={"education"}>Education</MenuItem>
+            <MenuItem value={"entertainment"}>Entertainment</MenuItem>
+            <MenuItem value={"other"}>Other</MenuItem>
+            <MenuItem value={"sport"}>Sport</MenuItem>
+          </Select>
+        </FormControl>
         <TextField
           variant="standard"
           multiline={true}
           margin="dense"
+          size="small"
           maxRows={2}
           required
           inputProps={{ maxLength: 45 }}
@@ -33,7 +90,21 @@ const PinCard = () => {
         />
         <TextField
           variant="standard"
+          margin="dense"
+          size="small"
+          inputProps={{ maxLength: 25 }}
+          required
+          fullWidth
+          id="location"
+          label="Location"
+          name="location"
+          autoComplete="location"
+          autoFocus
+        />
+        <TextField
+          variant="standard"
           multiline={true}
+          size="small"
           margin="dense"
           maxRows={5}
           inputProps={{ maxLength: 800 }}
@@ -45,6 +116,7 @@ const PinCard = () => {
           autoComplete="description"
           autoFocus
         />
+
         <Button
           type="submit"
           fullWidth

@@ -3,16 +3,14 @@ import List from "@mui/material/List";
 import EventHeader from "./EventHeader";
 import { Event } from "../../utils/interfaces";
 import EventContext from "../../context/eventContext";
-import { CircularProgress } from "@mui/material";
 
 const EventHeaderList = () => {
-  const events = useContext(EventContext);
+  const { events } = useContext(EventContext);
 
   return (
     <>
-      {!events ? (
-        <CircularProgress />
-      ) : (
+      {events.length === 0 && <p>No events to display.</p>}
+      {events.length > 0 && (
         <List
           sx={{
             width: "100%",
@@ -21,7 +19,7 @@ const EventHeaderList = () => {
             overflow: "scroll",
           }}
         >
-          {events.data.map((event: Event) => (
+          {events.map((event: Event) => (
             <EventHeader key={event._id} {...event} />
           ))}
         </List>

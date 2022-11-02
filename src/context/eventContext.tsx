@@ -1,10 +1,8 @@
 import { createContext } from "react";
-import { Events } from "../utils/interfaces";
+import { EventsContext } from "../utils/interfaces";
 
-const INITIAL_STATE: Events = {
-  data: [],
-  isLoading: false,
-  error: false,
+const INITIAL_STATE: EventsContext = {
+  events: [],
 };
 
 const EventContext = createContext(INITIAL_STATE);
