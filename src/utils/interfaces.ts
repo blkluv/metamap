@@ -5,7 +5,7 @@ export interface Event {
   end: string;
   category: string;
   location: string;
-  coordinates: object;
+  coordinates: { lng: number; lat: number };
   description: string;
   logo: string;
   creator?: string;

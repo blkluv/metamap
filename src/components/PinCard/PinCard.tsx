@@ -13,7 +13,7 @@ import {
 import BasicDateTimePicker from "../DateTimePicker/DateTimePicker";
 import { notify } from "../../utils/notifications";
 
-const PinCard = ({ lng, lat }: any) => {
+const PinCard = (props: any) => {
   const { onAddEvent } = useContext(EventContext);
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
@@ -36,7 +36,7 @@ const PinCard = ({ lng, lat }: any) => {
         end: eventData.end,
         category: eventData.category,
         location: eventData.location,
-        coordinates: { lng, lat },
+        coordinates: { lng: props.coordinates.lng, lat: props.coordinates.lat },
         description: eventData.description,
         logo: eventData.category[0],
       });
