@@ -43,26 +43,17 @@ const ResponsiveAppBar = () => {
   };
 
   return (
-    <AppBar position="static" color="inherit" sx={{ zIndex: "1" }}>
+    <AppBar
+      elevation={0}
+      position="static"
+      color="inherit"
+      sx={{
+        background: "rgb(35,35,48)",
+        color: "rgb(120,120,126)",
+      }}
+    >
       <Container maxWidth="xl">
         <Toolbar disableGutters>
-          <PublicIcon sx={{ display: { xs: "none", md: "flex" }, mr: 1 }} />
-          <Link
-            component={RouterLink}
-            to="/"
-            color="inherit"
-            sx={{
-              mr: 2,
-              display: { xs: "none", md: "flex" },
-              fontWeight: 700,
-              fontSize: "1.3rem",
-              letterSpacing: ".1rem",
-              color: "inherit",
-              textDecoration: "none",
-            }}
-          >
-            GeoEvents
-          </Link>
           <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
             <IconButton
               size="large"

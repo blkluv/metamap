@@ -30,3 +30,14 @@ export interface EventHeader {
 export interface DateTimePickerProps {
   label: string;
 }
+
+export interface MenuItemProps {
+  label: string;
+  icon: string;
+  color: string;
+  link: string;
+}
+
+export interface MenuItemListProps {
+  items: object[];
+}

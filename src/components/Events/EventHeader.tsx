@@ -20,7 +20,12 @@ const EventHeader = ({
   return (
     <ListItem
       alignItems="flex-start"
-      sx={{ cursor: "pointer" }}
+      sx={{
+        cursor: "pointer",
+        borderRadius: "25px",
+        background: "rgb(53,51,64)",
+        marginBottom: "1rem",
+      }}
       selected={_id === selectedEvent?._id}
       onClick={() => onSetSelectedEvent?.(_id)}
     >
@@ -28,19 +33,29 @@ const EventHeader = ({
         <Avatar alt={title} src={logo} />
       </ListItemAvatar>
       <ListItemText
-        primary={title}
+        primary={
+          <Typography
+            sx={{ display: "block" }}
+            component="span"
+            variant="body2"
+            color="white"
+            fontSize={"1.5rem"}
+          >
+            {title}
+          </Typography>
+        }
         secondary={
           <Fragment>
             <Typography
               sx={{ display: "block" }}
               component="span"
               variant="body2"
-              color="text.primary"
+              color="white"
             >
               {start + " — " + location}
             </Typography>
             <Typography
-              sx={{ display: "block" }}
+              sx={{ display: "block", color: "white" }}
               component="span"
               variant="body2"
             >

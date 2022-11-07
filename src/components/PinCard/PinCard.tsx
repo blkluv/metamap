@@ -116,7 +116,6 @@ const PinCard = (props: any) => {
           autoComplete="description"
           autoFocus
         />
-
         <Button
           type="submit"
           fullWidth

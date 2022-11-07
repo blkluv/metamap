@@ -38,7 +38,7 @@ const WorldMap = () => {
         latitude: 50,
         zoom: 4,
       }}
-      style={{ width: "100%", height: "92vh" }}
+      style={{ width: "100%", height: "100%", borderRadius: "25px" }}
       mapStyle={`https://api.maptiler.com/maps/streets/style.json?key=${process.env.REACT_APP_MAP_API_KEY}`}
       doubleClickZoom={false}
       onDblClick={handleDoubleClick}
