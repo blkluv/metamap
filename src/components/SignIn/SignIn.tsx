@@ -10,8 +10,8 @@ import Box from "@mui/material/Box";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
-import Copyright from "../Copyright/Copyright";
 import { Link as RouterLink } from "react-router-dom";
+import { styled } from "@mui/material/styles";
 
 const SignIn = () => {
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
@@ -24,29 +24,57 @@ const SignIn = () => {
     });
   };
 
+  const CssTextField = styled(TextField)({
+    input: {
+      color: "white",
+    },
+    label: { color: "white" },
+    "& label.Mui-focused": {
+      color: "white",
+    },
+    "& .MuiInput-underline:after": {
+      borderBottomColor: "white",
+    },
+    "& .MuiOutlinedInput-root": {
+      "& fieldset": {
+        borderColor: "rgb(120,120,126)",
+      },
+      "&:hover fieldset": {
+        borderColor: "white",
+      },
+      "&.Mui-focused fieldset": {
+        borderColor: "white",
+      },
+    },
+  });
+
   return (
     <Container
       component="main"
       maxWidth="xs"
-      sx={{ border: "1px solid rgb(120,120,126)", borderRadius: "25px" }}
+      sx={{
+        border: "1px solid rgb(120,120,126)",
+        borderRadius: "25px",
+        height: "fit-content",
+      }}
     >
       <Box
         sx={{
-          marginTop: 8,
+          marginTop: 6,
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
           color: "white",
         }}
       >
-        <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
+        <Avatar sx={{ m: 1, bgcolor: "rgb(235, 110, 105)" }}>
           <LockOutlinedIcon />
         </Avatar>
         <Typography component="h1" variant="h5">
           Sign in
         </Typography>
         <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
-          <TextField
+          <CssTextField
             margin="normal"
             required
             fullWidth
@@ -56,7 +84,7 @@ const SignIn = () => {
             autoComplete="email"
             autoFocus
           />
-          <TextField
+          <CssTextField
             margin="normal"
             required
             fullWidth
@@ -67,7 +95,15 @@ const SignIn = () => {
             autoComplete="current-password"
           />
           <FormControlLabel
-            control={<Checkbox value="remember" color="primary" />}
+            control={
+              <Checkbox
+                value="remember"
+                color="primary"
+                sx={{
+                  color: "white",
+                }}
+              />
+            }
             label="Remember me"
           />
           <Button
@@ -78,21 +114,25 @@ const SignIn = () => {
           >
             Sign In
           </Button>
-          <Grid container>
+          <Grid container sx={{ mb: 8 }}>
             <Grid item xs>
-              <Link href="#" variant="body2">
+              <Link href="#" variant="body2" sx={{ color: "white" }}>
                 Forgot password?
               </Link>
             </Grid>
             <Grid item>
-              <Link component={RouterLink} to="/signup" variant="body2">
+              <Link
+                component={RouterLink}
+                to="/signup"
+                variant="body2"
+                sx={{ color: "white" }}
+              >
                 {"Don't have an account? Sign Up"}
               </Link>
             </Grid>
           </Grid>
         </Box>
       </Box>
-      <Copyright sx={{ mt: 8, mb: 4 }} />
     </Container>
   );
 };

@@ -10,8 +10,8 @@ import Box from "@mui/material/Box";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
-import Copyright from "../Copyright/Copyright";
 import { Link as RouterLink } from "react-router-dom";
+import { styled } from "@mui/material/styles";
 
 const SignUp = () => {
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
@@ -24,21 +24,50 @@ const SignUp = () => {
     });
   };
 
+  const CssTextField = styled(TextField)({
+    input: {
+      color: "white",
+    },
+    label: { color: "white" },
+    "& label.Mui-focused": {
+      color: "white",
+    },
+    "& .MuiInput-underline:after": {
+      borderBottomColor: "white",
+    },
+    "& .MuiOutlinedInput-root": {
+      "& fieldset": {
+        borderColor: "rgb(120,120,126)",
+      },
+      "&:hover fieldset": {
+        borderColor: "white",
+      },
+      "&.Mui-focused fieldset": {
+        borderColor: "white",
+      },
+    },
+  });
+
   return (
     <Container
       component="main"
       maxWidth="xs"
-      sx={{ border: "1px solid rgb(120,120,126)", borderRadius: "25px" }}
+      sx={{
+        border: "1px solid rgb(120,120,126)",
+        borderRadius: "25px",
+        height: "fit-content",
+      }}
     >
       <Box
         sx={{
-          marginTop: 8,
+          marginTop: 6,
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
+          color: "white",
         }}
       >
-        <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
+        <Avatar sx={{ m: 1, bgcolor: "rgb(235, 110, 105)" }}>
           <LockOutlinedIcon />
         </Avatar>
         <Typography component="h1" variant="h5">
@@ -47,7 +76,7 @@ const SignUp = () => {
         <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
           <Grid container spacing={2}>
             <Grid item xs={12} sm={6}>
-              <TextField
+              <CssTextField
                 autoComplete="given-name"
                 name="firstName"
                 required
@@ -58,7 +87,7 @@ const SignUp = () => {
               />
             </Grid>
             <Grid item xs={12} sm={6}>
-              <TextField
+              <CssTextField
                 required
                 fullWidth
                 id="lastName"
@@ -68,7 +97,7 @@ const SignUp = () => {
               />
             </Grid>
             <Grid item xs={12}>
-              <TextField
+              <CssTextField
                 required
                 fullWidth
                 id="email"
@@ -78,7 +107,7 @@ const SignUp = () => {
               />
             </Grid>
             <Grid item xs={12}>
-              <TextField
+              <CssTextField
                 required
                 fullWidth
                 name="password"
@@ -90,7 +119,15 @@ const SignUp = () => {
             </Grid>
             <Grid item xs={12}>
               <FormControlLabel
-                control={<Checkbox value="allowExtraEmails" color="primary" />}
+                control={
+                  <Checkbox
+                    value="allowExtraEmails"
+                    color="primary"
+                    sx={{
+                      color: "white",
+                    }}
+                  />
+                }
                 label="I want to receive inspiration, marketing promotions and updates via email."
               />
             </Grid>
@@ -103,16 +140,20 @@ const SignUp = () => {
           >
             Sign Up
           </Button>
-          <Grid container justifyContent="flex-end">
+          <Grid container justifyContent="flex-end" sx={{ mb: 8 }}>
             <Grid item>
-              <Link component={RouterLink} to="/signin" variant="body2">
+              <Link
+                component={RouterLink}
+                to="/signin"
+                variant="body2"
+                sx={{ color: "white" }}
+              >
                 Already have an account? Sign in
               </Link>
             </Grid>
           </Grid>
         </Box>
       </Box>
-      <Copyright sx={{ mt: 5 }} />
     </Container>
   );
 };
