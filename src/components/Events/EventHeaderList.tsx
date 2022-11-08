@@ -31,6 +31,7 @@ const EventHeaderList = () => {
             background: "rgb(35,35,48)",
             color: "white",
             padding: 0,
+            marginBottom: { xs: "0", md: "-2rem", lg: "-3rem" },
             overflow: "scroll",
           }}
         >

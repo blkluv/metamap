@@ -143,7 +143,7 @@ const App = () => {
                 width: "250px",
                 height: "auto",
                 justifyContent: "space-between",
-                padding: "1rem",
+                padding: "1.5rem",
               }}
             >
               <MenuItemList items={EventMenuItems} />
@@ -154,7 +154,7 @@ const App = () => {
                 display: "flex",
                 flexDirection: { xs: "column", md: "row" },
                 width: "100%",
-                padding: "1rem",
+                padding: { xs: "1rem", md: "1rem 2rem 2rem 2rem" },
                 background: "rgb(36,35,48)",
                 gridGap: "2rem",
                 height: "auto",
@@ -181,6 +181,7 @@ const App = () => {
                   minHeight: { xs: "90vh", md: "600px" },
                   maxHeight: "fit-content",
                   background: "rgb(36,35,48)",
+                  // margin: "-1rem",
                 }}
               >
                 <WorldMap />

@@ -25,13 +25,18 @@ const SignIn = () => {
   };
 
   return (
-    <Container component="main" maxWidth="xs">
+    <Container
+      component="main"
+      maxWidth="xs"
+      sx={{ border: "1px solid rgb(120,120,126)", borderRadius: "25px" }}
+    >
       <Box
         sx={{
           marginTop: 8,
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
+          color: "white",
         }}
       >
         <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
