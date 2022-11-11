@@ -5,11 +5,12 @@ import Map, {
   FullscreenControl,
   Popup,
 } from "react-map-gl";
-import PinCard from "../PinCard/PinCard";
+import PinCard from "./PinCard";
 import Markers from "./Markers";
 import EventContext from "../../context/eventContext";
 import maplibregl from "maplibre-gl";
 import "maplibre-gl/dist/maplibre-gl.css";
+import { Box } from "@mui/material";
 
 type NewMarker = {
   lng: number;
@@ -31,38 +32,47 @@ const WorldMap = () => {
   }, [selectedEvent]);
 
   return (
-    <Map
-      mapLib={maplibregl}
-      initialViewState={{
-        longitude: 24,
-        latitude: 50,
-        zoom: 4,
+    <Box
+      sx={{
+        width: { xs: "100%", md: "45%" },
+        minHeight: { xs: "90vh", md: "600px" },
+        maxHeight: "fit-content",
+        background: "rgb(36,35,48)",
       }}
-      style={{ width: "100%", height: "100%", borderRadius: "25px" }}
-      mapStyle={`https://api.maptiler.com/maps/streets/style.json?key=${process.env.REACT_APP_MAP_API_KEY}`}
-      doubleClickZoom={false}
-      onDblClick={handleDoubleClick}
     >
-      <NavigationControl />
-      <GeolocateControl
-        trackUserLocation={true}
-        positionOptions={{
-          enableHighAccuracy: true,
+      <Map
+        mapLib={maplibregl}
+        initialViewState={{
+          longitude: 24,
+          latitude: 50,
+          zoom: 4,
         }}
-      />
-      <FullscreenControl />
-      <Markers key={key} />
-      {newMarker && (
-        <Popup
-          longitude={newMarker.lng}
-          latitude={newMarker.lat}
-          anchor="top-left"
-          onClose={() => setNewMarker(null)}
-        >
-          <PinCard coordinates={newMarker} />
-        </Popup>
-      )}
-    </Map>
+        style={{ width: "100%", height: "100%", borderRadius: "25px" }}
+        mapStyle={`https://api.maptiler.com/maps/streets/style.json?key=${process.env.REACT_APP_MAP_API_KEY}`}
+        doubleClickZoom={false}
+        onDblClick={handleDoubleClick}
+      >
+        <NavigationControl />
+        <GeolocateControl
+          trackUserLocation={true}
+          positionOptions={{
+            enableHighAccuracy: true,
+          }}
+        />
+        <FullscreenControl />
+        <Markers key={key} />
+        {newMarker && (
+          <Popup
+            longitude={newMarker.lng}
+            latitude={newMarker.lat}
+            anchor="top-left"
+            onClose={() => setNewMarker(null)}
+          >
+            <PinCard coordinates={newMarker} />
+          </Popup>
+        )}
+      </Map>
+    </Box>
   );
 };
 

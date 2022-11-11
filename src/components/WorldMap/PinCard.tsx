@@ -10,7 +10,7 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import BasicDateTimePicker from "../DateTimePicker/DateTimePicker";
+import BasicDateTimePicker from "../Elements/DateTimePicker";
 import { notify } from "../../utils/notifications";
 
 const PinCard = (props: any) => {

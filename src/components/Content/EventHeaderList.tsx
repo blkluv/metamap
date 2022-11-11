@@ -4,7 +4,7 @@ import EventHeader from "./EventHeader";
 import { Event } from "../../utils/interfaces";
 import EventContext from "../../context/eventContext";
 import { Box, Divider } from "@mui/material";
-import EventMenu from "./EventMenu";
+import EventMenu from "../Navigation/EventMenu";
 
 const EventHeaderList = () => {
   const { events } = useContext(EventContext);

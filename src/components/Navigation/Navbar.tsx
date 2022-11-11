@@ -1,13 +1,19 @@
 import { Box, Link } from "@mui/material";
 import { Link as RouterLink } from "react-router-dom";
 import PublicIcon from "@mui/icons-material/Public";
-import ResponsiveAppBar from "../Navbar/Navbar";
-import HorizontalMenu from "../HorizontalMenu/HorizontalMenu";
+import ResponsiveAppBar from "./AppBar";
+import HorizontalMenu from "./HorizontalMenu";
 import { EventMenuItems } from "../../constants/menuItems";
 
 const TopNavbar = () => {
   return (
-    <>
+    <Box
+      sx={{
+        display: "flex",
+        flexDirection: { xs: "column", md: "row" },
+        background: "rgb(31,30,43)",
+      }}
+    >
       <Box
         sx={{
           display: { xs: "none", md: "flex" },
@@ -60,7 +66,7 @@ const TopNavbar = () => {
       >
         <HorizontalMenu items={EventMenuItems} />
       </Box>
-    </>
+    </Box>
   );
 };
 

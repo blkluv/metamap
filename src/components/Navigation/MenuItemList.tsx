@@ -1,7 +1,7 @@
 import List from "@mui/material/List";
 import { Key } from "react";
 // import { MenuItemListProps } from "../../utils/interfaces";
-import MenuItem from "./ListItem";
+import MenuItem from "../Content/ListItem";
 
 const MenuItemList = ({ items }: any) => {
   return (
