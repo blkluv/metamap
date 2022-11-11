@@ -41,3 +41,24 @@ export interface MenuItemProps {
 export interface MenuItemListProps {
   items: object[];
 }
+
+export interface User {
+  _id?: string;
+  username?: string;
+  password: string;
+  email: string;
+  lastLogged?: string;
+  external?: boolean;
+  newsletter?: boolean;
+  admin?: boolean;
+  friends?: string[];
+  createdAt?: Date;
+}
+
+export interface UsersContext {
+  currentUser: User | null;
+  onSignIn?: (user: User) => Promise<void>;
+  onSignUp?: (user: User) => Promise<void>;
+  onResetPassword?: (email: string) => Promise<void>;
+  onChangePassword?: (token: string, data: object) => Promise<void>;
+}

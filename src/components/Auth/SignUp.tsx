@@ -1,9 +1,7 @@
-import * as React from "react";
+import { useContext } from "react";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Checkbox from "@mui/material/Checkbox";
 import Link from "@mui/material/Link";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
@@ -12,16 +10,29 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { Link as RouterLink } from "react-router-dom";
 import { styled } from "@mui/material/styles";
+import UserContext from "../../context/userContext";
+import { notify } from "../../utils/notifications";
 
 const SignUp = () => {
+  const { onSignUp } = useContext(UserContext);
+
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
 
-    console.log({
+    if (data.get("password") !== data.get("passwordRepeat"))
+      return notify("Passwords don't match.");
+
+    const newUser = {
+      username: data.get("name"),
       email: data.get("email"),
       password: data.get("password"),
-    });
+      external: false,
+    };
+
+    if (newUser) {
+      onSignUp?.(Object(newUser));
+    }
   };
 
   const CssTextField = styled(TextField)({
@@ -73,27 +84,17 @@ const SignUp = () => {
         <Typography component="h1" variant="h5">
           Sign up
         </Typography>
-        <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
+        <Box component="form" onSubmit={handleSubmit} sx={{ mt: 3 }}>
           <Grid container spacing={2}>
-            <Grid item xs={12} sm={6}>
+            <Grid item xs={12}>
               <CssTextField
                 autoComplete="given-name"
-                name="firstName"
+                name="name"
                 required
                 fullWidth
-                id="firstName"
-                label="First Name"
+                id="name"
+                label="Name"
                 autoFocus
-              />
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <CssTextField
-                required
-                fullWidth
-                id="lastName"
-                label="Last Name"
-                name="lastName"
-                autoComplete="family-name"
               />
             </Grid>
             <Grid item xs={12}>
@@ -118,17 +119,14 @@ const SignUp = () => {
               />
             </Grid>
             <Grid item xs={12}>
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    value="allowExtraEmails"
-                    color="primary"
-                    sx={{
-                      color: "white",
-                    }}
-                  />
-                }
-                label="I want to receive inspiration, marketing promotions and updates via email."
+              <CssTextField
+                required
+                fullWidth
+                name="passwordRepeat"
+                label="Repeat Password"
+                type="password"
+                id="passwordRepeat"
+                autoComplete="new-password"
               />
             </Grid>
           </Grid>
@@ -146,7 +144,7 @@ const SignUp = () => {
                 component={RouterLink}
                 to="/signin"
                 variant="body2"
-                sx={{ color: "white" }}
+                sx={{ color: "white", textDecoration: "none" }}
               >
                 Already have an account? Sign in
               </Link>

@@ -2,14 +2,14 @@ import axios from "axios";
 import { Event } from "../utils/interfaces";
 import { notify } from "../utils/notifications";
 
-const BASE_URL = "http://localhost:5000";
+const BASE_URL = "http://localhost:5000/events";
 
 class EventService {
   http = axios.create({ baseURL: BASE_URL });
 
   async getEvents() {
     try {
-      const response = await this.http.get<Event[]>("/events");
+      const response = await this.http.get<Event[]>("/");
       return response.data;
     } catch (error: unknown) {
       if (error instanceof Error) {
@@ -22,7 +22,7 @@ class EventService {
 
   async addEvent(event: Event) {
     try {
-      const response = await this.http.post<Event>("/events", event);
+      const response = await this.http.post<Event>("/", event);
       notify("New event added.");
       return response.data;
     } catch (error: unknown) {

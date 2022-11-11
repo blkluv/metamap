@@ -58,7 +58,7 @@ export const EventMenu = () => {
         }}
       >
         <Typography sx={{ fontSize: 14 }} color="rgb(120,120,126)" gutterBottom>
-          {new Date().toLocaleString("en-US")}
+          {new Date().toLocaleString("en-GB")}
         </Typography>
         <Typography
           variant="h5"

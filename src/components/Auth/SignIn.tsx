@@ -1,9 +1,7 @@
-import * as React from "react";
+import { useContext } from "react";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Checkbox from "@mui/material/Checkbox";
 import Link from "@mui/material/Link";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
@@ -12,16 +10,23 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { Link as RouterLink } from "react-router-dom";
 import { styled } from "@mui/material/styles";
+import UserContext from "../../context/userContext";
 
 const SignIn = () => {
+  const { onSignIn } = useContext(UserContext);
+
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
 
-    console.log({
+    const userData = {
       email: data.get("email"),
       password: data.get("password"),
-    });
+    };
+
+    if (userData) {
+      onSignIn?.(Object(userData));
+    }
   };
 
   const CssTextField = styled(TextField)({
@@ -73,7 +78,7 @@ const SignIn = () => {
         <Typography component="h1" variant="h5">
           Sign in
         </Typography>
-        <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
+        <Box component="form" onSubmit={handleSubmit} sx={{ mt: 1 }}>
           <CssTextField
             margin="normal"
             required
@@ -94,18 +99,6 @@ const SignIn = () => {
             id="password"
             autoComplete="current-password"
           />
-          <FormControlLabel
-            control={
-              <Checkbox
-                value="remember"
-                color="primary"
-                sx={{
-                  color: "white",
-                }}
-              />
-            }
-            label="Remember me"
-          />
           <Button
             type="submit"
             fullWidth
@@ -116,7 +109,12 @@ const SignIn = () => {
           </Button>
           <Grid container sx={{ mb: 8 }}>
             <Grid item xs>
-              <Link href="#" variant="body2" sx={{ color: "white" }}>
+              <Link
+                component={RouterLink}
+                to="/resetpassword"
+                variant="body2"
+                sx={{ color: "white", textDecoration: "none" }}
+              >
                 Forgot password?
               </Link>
             </Grid>
@@ -125,7 +123,7 @@ const SignIn = () => {
                 component={RouterLink}
                 to="/signup"
                 variant="body2"
-                sx={{ color: "white" }}
+                sx={{ color: "white", textDecoration: "none" }}
               >
                 {"Don't have an account? Sign Up"}
               </Link>
