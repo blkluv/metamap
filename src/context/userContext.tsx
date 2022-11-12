@@ -8,7 +8,7 @@ const INITIAL_STATE: UsersContext = {
 
 const UserContext = createContext(INITIAL_STATE);
 
-export const UserProvider = ({ children }: any) => {
+export const UserProvider = ({ children }: React.PropsWithChildren) => {
   const [currentUser, setCurrentUser] = useState<User | null>(null);
 
   const handleSignUp = async (user: User) => {

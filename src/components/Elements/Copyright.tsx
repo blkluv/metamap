@@ -1,13 +1,8 @@
 import { Link, Typography } from "@mui/material";
 
-const Copyright = (props: any) => {
+const Copyright = () => {
   return (
-    <Typography
-      variant="body2"
-      color="text.secondary"
-      align="center"
-      {...props}
-    >
+    <Typography variant="body2" color="text.secondary" align="center">
       {"Copyright © "}
       <Link color="inherit" href="https://geoevents.pages.dev/">
         GeoEvents

@@ -27,19 +27,25 @@ export interface EventHeader {
   logo: string;
 }
 
+export interface PinCardProps {
+  lng: number;
+  lat: number;
+}
+
 export interface DateTimePickerProps {
   label: string;
 }
 
 export interface MenuItemProps {
+  id?: number;
   label: string;
-  icon: string;
-  color: string;
+  icon?: JSX.Element;
+  color?: string;
   link: string;
 }
 
 export interface MenuItemListProps {
-  items: object[];
+  items: MenuItemProps[];
 }
 
 export interface User {

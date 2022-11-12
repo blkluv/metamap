@@ -1,11 +1,11 @@
-// @ts-nocheck
 import * as React from "react";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import Box from "@mui/material/Box";
 import { Link as RouterLink } from "react-router-dom";
+import { MenuItemListProps } from "../../utils/interfaces";
 
-const HorizontalMenu = ({ items }: any) => {
+const HorizontalMenu = ({ items }: MenuItemListProps) => {
   const [value, setValue] = React.useState(0);
 
   const handleChange = (_event: React.SyntheticEvent, newValue: number) => {

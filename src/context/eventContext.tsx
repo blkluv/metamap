@@ -9,7 +9,7 @@ const INITIAL_STATE: EventsContext = {
 
 const EventContext = createContext(INITIAL_STATE);
 
-export const EventProvider = ({ children }: any) => {
+export const EventProvider = ({ children }: React.PropsWithChildren) => {
   const [events, setEvents] = useState<Event[]>([]);
   const [selectedEvent, setSelectedEvent] = useState<Event | undefined>();
 

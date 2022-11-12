@@ -4,6 +4,7 @@ import Map, {
   GeolocateControl,
   FullscreenControl,
   Popup,
+  MapLayerMouseEvent,
 } from "react-map-gl";
 import PinCard from "./PinCard";
 import Markers from "./Markers";
@@ -11,18 +12,14 @@ import EventContext from "../../context/eventContext";
 import maplibregl from "maplibre-gl";
 import "maplibre-gl/dist/maplibre-gl.css";
 import { Box } from "@mui/material";
-
-type NewMarker = {
-  lng: number;
-  lat: number;
-};
+import { PinCardProps } from "../../utils/interfaces";
 
 const WorldMap = () => {
   const { selectedEvent } = useContext(EventContext);
-  const [newMarker, setNewMarker] = useState<NewMarker | null>(null);
+  const [newMarker, setNewMarker] = useState<PinCardProps | null>(null);
   const [key, setKey] = useState<number>(Math.random());
 
-  const handleDoubleClick = (e: any) => {
+  const handleDoubleClick = (e: MapLayerMouseEvent) => {
     const { lng, lat } = e.lngLat;
     setNewMarker({ lng, lat });
   };
@@ -68,7 +65,7 @@ const WorldMap = () => {
             anchor="top-left"
             onClose={() => setNewMarker(null)}
           >
-            <PinCard coordinates={newMarker} />
+            <PinCard {...newMarker} />
           </Popup>
         )}
       </Map>

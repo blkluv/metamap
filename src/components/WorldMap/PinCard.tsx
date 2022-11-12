@@ -12,8 +12,9 @@ import {
 } from "@mui/material";
 import BasicDateTimePicker from "../Elements/DateTimePicker";
 import { notify } from "../../utils/notifications";
+import { PinCardProps } from "../../utils/interfaces";
 
-const PinCard = (props: any) => {
+const PinCard = ({ lng, lat }: PinCardProps) => {
   const { onAddEvent } = useContext(EventContext);
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
@@ -36,7 +37,7 @@ const PinCard = (props: any) => {
         end: eventData.end,
         category: eventData.category,
         location: eventData.location,
-        coordinates: { lng: props.coordinates.lng, lat: props.coordinates.lat },
+        coordinates: { lng, lat },
         description: eventData.description,
         logo: eventData.category[0],
       });
