@@ -49,22 +49,27 @@ export interface MenuItemListProps {
 }
 
 export interface User {
-  _id?: string;
-  username?: string;
+  username: string;
   password: string;
   email: string;
-  lastLogged?: string;
-  external?: boolean;
-  newsletter?: boolean;
-  admin?: boolean;
-  friends?: string[];
-  createdAt?: Date;
+  friends?: [];
+}
+
+export interface UserResponse {
+  token: string;
+  user: {
+    name: string;
+    email: string;
+    friends: [];
+    newsletter: boolean;
+  };
 }
 
 export interface UsersContext {
-  currentUser: User | null;
+  currentUser: UserResponse | null;
   onSignIn?: (user: User) => Promise<void>;
   onSignUp?: (user: User) => Promise<void>;
+  onLogout?: () => void;
   onResetPassword?: (email: string) => Promise<void>;
   onChangePassword?: (token: string, data: object) => Promise<void>;
 }

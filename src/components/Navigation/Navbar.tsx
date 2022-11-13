@@ -2,8 +2,6 @@ import { Box, Link } from "@mui/material";
 import { Link as RouterLink } from "react-router-dom";
 import PublicIcon from "@mui/icons-material/Public";
 import ResponsiveAppBar from "./AppBar";
-import HorizontalMenu from "./HorizontalMenu";
-import { EventMenuItems } from "../../constants/menuItems";
 
 const TopNavbar = () => {
   return (
@@ -56,15 +54,6 @@ const TopNavbar = () => {
         }}
       >
         <ResponsiveAppBar />
-      </Box>
-      <Box
-        sx={{
-          display: { xs: "flex", md: "none" },
-          justifyContent: "center",
-          alignItems: "center",
-        }}
-      >
-        <HorizontalMenu items={EventMenuItems} />
       </Box>
     </Box>
   );

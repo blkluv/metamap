@@ -142,8 +142,9 @@ const SignUp = () => {
             <Grid item>
               <Link
                 component={RouterLink}
-                to="/signin"
+                to="/account/signin"
                 variant="body2"
+                replace
                 sx={{ color: "white", textDecoration: "none" }}
               >
                 Already have an account? Sign in

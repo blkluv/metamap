@@ -1,9 +1,5 @@
 import { Box } from "@mui/material";
-import { Route, Routes } from "react-router-dom";
-import ChangePassword from "../Auth/ChangePassword";
-import ResetPassword from "../Auth/Reset";
-import SignIn from "../Auth/SignIn";
-import SignUp from "../Auth/SignUp";
+import { Navigate, Route, Routes } from "react-router-dom";
 import EventHeaderList from "../Content/EventHeaderList";
 
 const Content = () => {
@@ -17,12 +13,12 @@ const Content = () => {
       }}
     >
       <Routes>
-        <Route path="/" element={<Box>Homepage</Box>} />
-        <Route path="events" element={<EventHeaderList />} />
-        <Route path="signin" element={<SignIn />} />
-        <Route path="signup" element={<SignUp />} />
-        <Route path="resetpassword" element={<ResetPassword />} />
-        <Route path="changepassword" element={<ChangePassword />} />
+        <Route path="/" element={<h1>Home</h1>} />
+        <Route path="/events" element={<EventHeaderList />} />
+        <Route path="/places" element={<h1>Places</h1>} />
+        <Route path="/users" element={<h1>Users</h1>} />
+        <Route path="/settings" element={<h1>Settings</h1>} />
+        <Route path="*" element={<Navigate to="/" />} />
       </Routes>
     </Box>
   );

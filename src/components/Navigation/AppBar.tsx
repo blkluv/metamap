@@ -1,4 +1,4 @@
-import * as React from "react";
+import { useContext, useState } from "react";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
@@ -14,18 +14,16 @@ import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
 import { Link as RouterLink } from "react-router-dom";
 import { Link } from "@mui/material";
+import UserContext from "../../context/userContext";
+import Toggler from "../Elements/Switch";
+import { EventMenuItems } from "../../constants/menuItems";
 
-const pages = ["events"];
-const settings = ["Profile", "Account", "Dashboard", "Logout"];
+const settings = ["Profile", "Account", "Dashboard"];
 
 const ResponsiveAppBar = () => {
-  const [logged] = React.useState<boolean>(false);
-  const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(
-    null
-  );
-  const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(
-    null
-  );
+  const { currentUser, onLogout } = useContext(UserContext);
+  const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
+  const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
 
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElNav(event.currentTarget);
@@ -83,11 +81,11 @@ const ResponsiveAppBar = () => {
                 display: { xs: "block", md: "none" },
               }}
             >
-              {pages.map((page) => (
-                <MenuItem key={page} onClick={handleCloseNavMenu}>
+              {EventMenuItems.map((item) => (
+                <MenuItem key={item.id} onClick={handleCloseNavMenu}>
                   <Link
                     component={RouterLink}
-                    to={page}
+                    to={item.link}
                     color="inherit"
                     sx={{
                       mr: 2,
@@ -99,10 +97,11 @@ const ResponsiveAppBar = () => {
                       textTransform: "capitalize",
                     }}
                   >
-                    {page}
+                    {item.label}
                   </Link>
                 </MenuItem>
               ))}
+              <Toggler />
             </Menu>
           </Box>
           <PublicIcon sx={{ display: { xs: "flex", md: "none" }, mr: 1 }} />
@@ -123,31 +122,12 @@ const ResponsiveAppBar = () => {
           >
             GeoEvents
           </Link>
-          <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
-            {pages.map((page) => (
-              <Link
-                key={page}
-                component={RouterLink}
-                to={page}
-                onClick={handleCloseNavMenu}
-                sx={{
-                  my: 2,
-                  color: "inherit",
-                  display: "block",
-                  textTransform: "capitalize",
-                  letterSpacing: ".1rem",
-                  textDecoration: "none",
-                }}
-              >
-                {page}
-              </Link>
-            ))}
-          </Box>
-          {logged ? (
+          <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}></Box>
+          {currentUser ? (
             <Box sx={{ flexGrow: 0 }}>
               <Tooltip title="Open settings">
                 <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                  <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
+                  <Avatar alt="Guest" src="/static/images/avatar/2.jpg" />
                 </IconButton>
               </Tooltip>
               <Menu
@@ -171,11 +151,21 @@ const ResponsiveAppBar = () => {
                     <Typography textAlign="center">{setting}</Typography>
                   </MenuItem>
                 ))}
+                <MenuItem
+                  onClick={() => {
+                    handleCloseUserMenu();
+                    onLogout?.();
+                  }}
+                >
+                  <Typography textAlign="center" color={"rgb(235, 110, 105)"}>
+                    {"Logout"}
+                  </Typography>
+                </MenuItem>
               </Menu>
             </Box>
           ) : (
-            <Button component={RouterLink} to="/signin" color="inherit">
-              Login
+            <Button component={RouterLink} to="/account/signin" color="inherit">
+              Sign In
             </Button>
           )}
         </Toolbar>

@@ -1,5 +1,5 @@
 import axios from "axios";
-import { User } from "../utils/interfaces";
+import { User, UserResponse } from "../utils/interfaces";
 import { notify } from "../utils/notifications";
 
 const BASE_URL = "http://localhost:5000/users";
@@ -9,8 +9,10 @@ class UserService {
 
   async signUp(user: User) {
     try {
-      const response = await this.http.post<User>("/signup", user);
-      notify(`Welcome ${user.username}.`);
+      const response = await this.http.post<UserResponse>("/signup", user);
+      if (response.data?.user.name) {
+        notify(`Welcome ${response.data.user.name}.`);
+      }
       return response.data;
     } catch (error: unknown) {
       if (error instanceof Error) {
@@ -23,8 +25,10 @@ class UserService {
 
   async signIn(user: User) {
     try {
-      const response = await this.http.post<User>("/signin", user);
-      notify(`Welcome ${user.username}.`);
+      const response = await this.http.post<UserResponse>("/signin", user);
+      if (response.data?.user.name) {
+        notify(`Welcome ${response.data.user.name}.`);
+      }
       return response.data;
     } catch (error: unknown) {
       if (error instanceof Error) {
@@ -36,9 +40,9 @@ class UserService {
   }
 
   async resetPassword(email: string) {
-    console.log(email);
     try {
-      const response = await this.http.post<User>("/resetpassword", { email });
+      const response = await this.http.post("/resetpassword", { email });
+      notify(response.data.message);
       return response.data;
     } catch (error: unknown) {
       if (error instanceof Error) {
@@ -51,10 +55,8 @@ class UserService {
 
   async changePassword(token: string, data: object) {
     try {
-      const response = await this.http.patch<User>(
-        `/changepassword/${token}`,
-        data
-      );
+      const response = await this.http.patch(`/changepassword/${token}`, data);
+      notify(response.data.message);
       return response.data;
     } catch (error: unknown) {
       if (error instanceof Error) {

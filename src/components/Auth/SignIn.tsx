@@ -110,8 +110,9 @@ const SignIn = () => {
           <Grid container sx={{ mb: 8 }}>
             <Grid item xs>
               <Link
+                replace
                 component={RouterLink}
-                to="/resetpassword"
+                to="/account/resetpassword"
                 variant="body2"
                 sx={{ color: "white", textDecoration: "none" }}
               >
@@ -120,8 +121,9 @@ const SignIn = () => {
             </Grid>
             <Grid item>
               <Link
+                replace
                 component={RouterLink}
-                to="/signup"
+                to="/account/signup"
                 variant="body2"
                 sx={{ color: "white", textDecoration: "none" }}
               >

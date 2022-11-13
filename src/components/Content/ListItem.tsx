@@ -28,7 +28,7 @@ const MenuItem = ({ label, icon, color, link }: MenuItemProps) => {
       </ListItemAvatar>
       <Link
         component={RouterLink}
-        to={`/${link}`}
+        to={`/dashboard/${link}`}
         color="inherit"
         sx={{
           fontSize: "1rem",

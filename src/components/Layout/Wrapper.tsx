@@ -2,7 +2,7 @@ import { Box } from "@mui/material";
 import MainWindow from "./MainWindow";
 import TopNavbar from "../Navigation/Navbar";
 
-const AppWrapper = () => {
+const Wrapper = () => {
   return (
     <Box
       sx={{
@@ -17,4 +17,4 @@ const AppWrapper = () => {
   );
 };
 
-export default AppWrapper;
+export default Wrapper;

@@ -98,7 +98,8 @@ const ResetPassword = () => {
             <Grid item>
               <Link
                 component={RouterLink}
-                to="/signin"
+                to="/account/signin"
+                replace
                 variant="body2"
                 sx={{ color: "white", textDecoration: "none" }}
               >
