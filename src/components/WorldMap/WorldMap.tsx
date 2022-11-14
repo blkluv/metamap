@@ -65,7 +65,7 @@ const WorldMap = () => {
             anchor="top-left"
             onClose={() => setNewMarker(null)}
           >
-            <PinCard {...newMarker} />
+            <PinCard {...newMarker} onClose={setNewMarker} />
           </Popup>
         )}
       </Map>

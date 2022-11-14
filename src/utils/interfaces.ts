@@ -30,6 +30,7 @@ export interface EventHeader {
 export interface PinCardProps {
   lng: number;
   lat: number;
+  onClose?: React.Dispatch<React.SetStateAction<PinCardProps | null>>;
 }
 
 export interface DateTimePickerProps {

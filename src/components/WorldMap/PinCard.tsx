@@ -14,7 +14,7 @@ import BasicDateTimePicker from "../Elements/DateTimePicker";
 import { notify } from "../../utils/notifications";
 import { PinCardProps } from "../../utils/interfaces";
 
-const PinCard = ({ lng, lat }: PinCardProps) => {
+const PinCard = ({ lng, lat, onClose }: PinCardProps) => {
   const { onAddEvent } = useContext(EventContext);
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
@@ -41,6 +41,7 @@ const PinCard = ({ lng, lat }: PinCardProps) => {
         description: eventData.description,
         logo: eventData.category[0],
       });
+      onClose?.(null);
     } else {
       notify("The end of the event must be later than its beginning.");
     }
