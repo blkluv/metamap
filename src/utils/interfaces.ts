@@ -73,6 +73,7 @@ export interface UsersContext {
   onLogout?: () => void;
   onResetPassword?: (email: string) => Promise<void>;
   onChangePassword?: (token: string, data: object) => Promise<void>;
+  onDeleteUser?: () => Promise<void>;
 }
 
 export interface ProtectedRoutesProps {

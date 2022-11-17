@@ -7,6 +7,15 @@ const INITIAL_STATE: EventsContext = {
   events: [],
 };
 
+EventService.http.interceptors.request.use((req: any) => {
+  if (localStorage.getItem("auth")) {
+    req.headers.Authorization = `Bearer ${
+      JSON.parse(localStorage.getItem("auth") as string).token
+    }`;
+  }
+  return req;
+});
+
 const EventContext = createContext(INITIAL_STATE);
 
 export const EventProvider = ({ children }: React.PropsWithChildren) => {

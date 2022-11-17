@@ -41,3 +41,16 @@ export const EventMenuItems = [
     link: "settings",
   },
 ];
+
+export const UserLinks = [
+  {
+    id: 1,
+    label: "Profile",
+    link: "profile",
+  },
+  {
+    id: 2,
+    label: "Account",
+    link: "account",
+  },
+];

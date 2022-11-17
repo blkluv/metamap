@@ -10,6 +10,15 @@ const INITIAL_STATE: UsersContext = {
     : null,
 };
 
+UserService.http.interceptors.request.use((req: any) => {
+  if (localStorage.getItem("auth")) {
+    req.headers.Authorization = `Bearer ${
+      JSON.parse(localStorage.getItem("auth") as string).token
+    }`;
+  }
+  return req;
+});
+
 const UserContext = createContext(INITIAL_STATE);
 
 export const UserProvider = ({ children }: React.PropsWithChildren) => {
@@ -72,6 +81,14 @@ export const UserProvider = ({ children }: React.PropsWithChildren) => {
     await UserService.changePassword(token, data);
   };
 
+  const handleDeleteUser = async () => {
+    const deleteduser = await UserService.deleteUser();
+    if (!deleteduser.user) {
+      localStorage.removeItem("auth");
+      setCurrentUser(null);
+    }
+  };
+
   return (
     <UserContext.Provider
       value={{
@@ -81,6 +98,7 @@ export const UserProvider = ({ children }: React.PropsWithChildren) => {
         onLogout: handleLogout,
         onResetPassword: handleResetPassword,
         onChangePassword: handleChangePassword,
+        onDeleteUser: handleDeleteUser,
       }}
     >
       {children}

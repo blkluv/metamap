@@ -16,9 +16,7 @@ import { Link as RouterLink } from "react-router-dom";
 import { Link } from "@mui/material";
 import UserContext from "../../context/userContext";
 import Toggler from "../Elements/Switch";
-import { EventMenuItems } from "../../constants/menuItems";
-
-const settings = ["Profile", "Account", "Dashboard"];
+import { EventMenuItems, UserLinks } from "../../constants/menuItems";
 
 const ResponsiveAppBar = () => {
   const { currentUser, onLogout } = useContext(UserContext);
@@ -146,9 +144,19 @@ const ResponsiveAppBar = () => {
                 open={Boolean(anchorElUser)}
                 onClose={handleCloseUserMenu}
               >
-                {settings.map((setting) => (
-                  <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                    <Typography textAlign="center">{setting}</Typography>
+                {UserLinks.map((item) => (
+                  <MenuItem key={item.id} onClick={handleCloseUserMenu}>
+                    <Link
+                      component={RouterLink}
+                      to={item.link}
+                      color="inherit"
+                      sx={{
+                        mr: 2,
+                        textDecoration: "none",
+                      }}
+                    >
+                      {item.label}
+                    </Link>
                   </MenuItem>
                 ))}
                 <MenuItem
