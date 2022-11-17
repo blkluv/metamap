@@ -61,6 +61,7 @@ const SignIn = () => {
         border: "1px solid rgb(120,120,126)",
         borderRadius: "25px",
         height: "fit-content",
+        background: "rgb(53,51,64)",
       }}
     >
       <Box

@@ -1,9 +1,10 @@
 import { Box } from "@mui/material";
 import { Navigate, Route, Routes } from "react-router-dom";
-import ChangePassword from "../components/Auth/ChangePassword";
-import ResetPassword from "../components/Auth/ResetPassword";
-import SignIn from "../components/Auth/SignIn";
-import SignUp from "../components/Auth/SignUp";
+import ChangePassword from "./ChangePassword";
+import ResetPassword from "./ResetPassword";
+import SignIn from "./SignIn";
+import SignUp from "./SignUp";
+import mapbg from "../../images/mapbg.png";
 
 const AuthRoutes = () => {
   return (
@@ -12,7 +13,8 @@ const AuthRoutes = () => {
         display: "flex",
         height: "100%",
         alignItems: "center",
-        background: "rgb(31,30,43)",
+        background: `url(${mapbg})`,
+        backgroundSize: "cover",
       }}
     >
       <Routes>

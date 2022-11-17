@@ -74,3 +74,8 @@ export interface UsersContext {
   onResetPassword?: (email: string) => Promise<void>;
   onChangePassword?: (token: string, data: object) => Promise<void>;
 }
+
+export interface ProtectedRoutesProps {
+  logged: boolean;
+  redirect: string;
+}

@@ -1,33 +1,52 @@
-// @ts-nocheck
 import { useState, useEffect, createContext } from "react";
 import { User, UserResponse, UsersContext } from "../utils/interfaces";
 import UserService from "../services/userService";
-import { useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
+import jwt_decode from "jwt-decode";
 
 const INITIAL_STATE: UsersContext = {
   currentUser: localStorage.getItem("auth")
-    ? JSON.parse(localStorage.getItem("auth"))
+    ? JSON.parse(localStorage.getItem("auth") as string)
     : null,
 };
 
 const UserContext = createContext(INITIAL_STATE);
 
 export const UserProvider = ({ children }: React.PropsWithChildren) => {
-  const navigate = useNavigate();
+  let location = useLocation();
+
   const [currentUser, setCurrentUser] = useState<UserResponse | null>(
     localStorage.getItem("auth")
-      ? JSON.parse(localStorage.getItem("auth"))
+      ? JSON.parse(localStorage.getItem("auth") as string)
       : null
   );
 
+  const decodeJWT = (token: string): any => {
+    try {
+      return jwt_decode(token);
+    } catch (e) {
+      return null;
+    }
+  };
+
   useEffect(() => {
-    localStorage.setItem("auth", JSON.stringify(currentUser));
-  }, [currentUser]);
+    const user = JSON.parse(localStorage.getItem("auth") as string);
+
+    if (user) {
+      const decodedJWT = decodeJWT(user.token);
+
+      if (decodedJWT.exp * 1000 < Date.now()) {
+        handleLogout();
+      }
+    } else {
+      handleLogout();
+    }
+  }, [location]);
 
   const handleSignUp = async (user: User) => {
     const currentUser = await UserService.signUp(user);
     if (currentUser) {
-      navigate("/dashboard/events");
+      localStorage.setItem("auth", JSON.stringify(currentUser));
       setCurrentUser(currentUser);
     }
   };
@@ -35,15 +54,14 @@ export const UserProvider = ({ children }: React.PropsWithChildren) => {
   const handleSignIn = async (user: User) => {
     const currentUser = await UserService.signIn(user);
     if (currentUser) {
-      navigate("/dashboard/events");
+      localStorage.setItem("auth", JSON.stringify(currentUser));
       setCurrentUser(currentUser);
     }
   };
 
   const handleLogout = () => {
-    navigate("/account/signin");
-    setCurrentUser(null);
     localStorage.removeItem("auth");
+    setCurrentUser(null);
   };
 
   const handleResetPassword = async (email: string) => {
