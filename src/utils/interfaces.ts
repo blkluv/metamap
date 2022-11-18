@@ -49,11 +49,17 @@ export interface MenuItemListProps {
   items: MenuItemProps[];
 }
 
+export interface OtherUser {
+  _id: string;
+  name: string;
+  friends: OtherUser[];
+}
+
 export interface User {
   username: string;
   password: string;
   email: string;
-  friends?: [];
+  friends: OtherUser[];
 }
 
 export interface UserResponse {
@@ -61,13 +67,15 @@ export interface UserResponse {
   user: {
     name: string;
     email: string;
-    friends: [];
+    friends: OtherUser[];
     newsletter: boolean;
   };
 }
 
 export interface UsersContext {
   currentUser: UserResponse | null;
+  users: OtherUser[] | null;
+  onGetUsers?: () => Promise<void>;
   onSignIn?: (user: User) => Promise<void>;
   onSignUp?: (user: User) => Promise<void>;
   onLogout?: () => void;

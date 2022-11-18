@@ -4,6 +4,7 @@ import UserContext from "../../context/userContext";
 
 const Account = () => {
   const { currentUser, onDeleteUser } = useContext(UserContext);
+
   return (
     <Box>
       <>{currentUser?.user.name}</>

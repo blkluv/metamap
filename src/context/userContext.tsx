@@ -1,5 +1,10 @@
 import { useState, useEffect, createContext } from "react";
-import { User, UserResponse, UsersContext } from "../utils/interfaces";
+import {
+  OtherUser,
+  User,
+  UserResponse,
+  UsersContext,
+} from "../utils/interfaces";
 import UserService from "../services/userService";
 import { useLocation } from "react-router-dom";
 import jwt_decode from "jwt-decode";
@@ -7,6 +12,9 @@ import jwt_decode from "jwt-decode";
 const INITIAL_STATE: UsersContext = {
   currentUser: localStorage.getItem("auth")
     ? JSON.parse(localStorage.getItem("auth") as string)
+    : null,
+  users: localStorage.getItem("users")
+    ? JSON.parse(localStorage.getItem("users") as string)
     : null,
 };
 
@@ -27,6 +35,12 @@ export const UserProvider = ({ children }: React.PropsWithChildren) => {
   const [currentUser, setCurrentUser] = useState<UserResponse | null>(
     localStorage.getItem("auth")
       ? JSON.parse(localStorage.getItem("auth") as string)
+      : null
+  );
+
+  const [users, setUsers] = useState<OtherUser[]>(
+    localStorage.getItem("users")
+      ? JSON.parse(localStorage.getItem("users") as string)
       : null
   );
 
@@ -51,6 +65,14 @@ export const UserProvider = ({ children }: React.PropsWithChildren) => {
       handleLogout();
     }
   }, [location]);
+
+  const handleGetUsers = async () => {
+    const users = await UserService.getUsers();
+    if (users) {
+      localStorage.setItem("users", JSON.stringify(users));
+      setUsers(users);
+    }
+  };
 
   const handleSignUp = async (user: User) => {
     const currentUser = await UserService.signUp(user);
@@ -93,6 +115,8 @@ export const UserProvider = ({ children }: React.PropsWithChildren) => {
     <UserContext.Provider
       value={{
         currentUser,
+        users,
+        onGetUsers: handleGetUsers,
         onSignUp: handleSignUp,
         onSignIn: handleSignIn,
         onLogout: handleLogout,

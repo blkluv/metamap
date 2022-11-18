@@ -1,11 +1,24 @@
 import axios from "axios";
-import { User, UserResponse } from "../utils/interfaces";
+import { User, UserResponse, OtherUser } from "../utils/interfaces";
 import { notify } from "../utils/notifications";
 
 const BASE_URL = "http://localhost:5000/users";
 
 class UserService {
   http = axios.create({ baseURL: BASE_URL });
+
+  async getUsers() {
+    try {
+      const response = await this.http.get<OtherUser[]>("/getusers");
+      return response.data;
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        notify(error.message);
+      } else if (typeof error === "string") {
+        notify(error);
+      }
+    }
+  }
 
   async signUp(user: User) {
     try {
