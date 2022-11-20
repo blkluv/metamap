@@ -33,6 +33,32 @@ class EventService {
       }
     }
   }
+
+  async joinEvent(id: string | undefined) {
+    try {
+      const response = await this.http.patch<Event>(`/join/${id}`);
+      return response.data;
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        notify(error.message);
+      } else if (typeof error === "string") {
+        notify(error);
+      }
+    }
+  }
+
+  async leaveEvent(id: string | undefined) {
+    try {
+      const response = await this.http.patch<Event>(`/leave/${id}`);
+      return response.data;
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        notify(error.message);
+      } else if (typeof error === "string") {
+        notify(error);
+      }
+    }
+  }
 }
 
 export default new EventService();

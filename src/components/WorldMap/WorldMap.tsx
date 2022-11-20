@@ -9,19 +9,26 @@ import Map, {
 import PinCard from "./PinCard";
 import Markers from "./Markers";
 import EventContext from "../../context/eventContext";
+import UserContext from "../../context/userContext";
 import maplibregl from "maplibre-gl";
 import "maplibre-gl/dist/maplibre-gl.css";
 import { Box } from "@mui/material";
 import { PinCardProps } from "../../utils/interfaces";
+import { notify } from "../../utils/notifications";
 
 const WorldMap = () => {
   const { selectedEvent } = useContext(EventContext);
+  const { currentUser } = useContext(UserContext);
   const [newMarker, setNewMarker] = useState<PinCardProps | null>(null);
   const [key, setKey] = useState<number>(Math.random());
 
   const handleDoubleClick = (e: MapLayerMouseEvent) => {
-    const { lng, lat } = e.lngLat;
-    setNewMarker({ lng, lat });
+    if (currentUser) {
+      const { lng, lat } = e.lngLat;
+      setNewMarker({ lng, lat });
+    } else {
+      notify("Only registered users can add events.");
+    }
   };
 
   useEffect(() => {

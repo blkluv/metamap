@@ -1,6 +1,6 @@
 import { useState, useEffect, createContext } from "react";
 import {
-  OtherUser,
+  UserHeader,
   User,
   UserResponse,
   UsersContext,
@@ -38,7 +38,7 @@ export const UserProvider = ({ children }: React.PropsWithChildren) => {
       : null
   );
 
-  const [users, setUsers] = useState<OtherUser[]>(
+  const [users, setUsers] = useState<UserHeader[]>(
     localStorage.getItem("users")
       ? JSON.parse(localStorage.getItem("users") as string)
       : null

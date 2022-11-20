@@ -9,7 +9,7 @@ const ContentWindow = () => {
         display: "flex",
         flexDirection: { xs: "column", md: "row" },
         width: "100%",
-        padding: { xs: "1rem", md: "1rem 2rem 2rem 2rem" },
+        padding: { xs: "1rem", md: "1rem 2rem 2rem 2rem", overflow: "hidden" },
         background: "rgb(36,35,48)",
         gridGap: "2rem",
         height: "auto",

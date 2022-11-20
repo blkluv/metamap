@@ -1,7 +1,6 @@
 import { useState, useEffect, createContext } from "react";
-import { EventsContext } from "../utils/interfaces";
+import { Event, EventsContext } from "../utils/interfaces";
 import EventService from "../services/eventService";
-import { Event } from "../utils/interfaces";
 
 const INITIAL_STATE: EventsContext = {
   events: [],
@@ -36,6 +35,28 @@ export const EventProvider = ({ children }: React.PropsWithChildren) => {
     }
   };
 
+  const handleJoinEvent = async (id: string | undefined) => {
+    const updatedEvent = await EventService.joinEvent(id);
+    if (updatedEvent) {
+      const updatedEvents = events.map((event) =>
+        event._id === updatedEvent._id ? updatedEvent : event
+      );
+
+      setEvents(updatedEvents);
+    }
+  };
+
+  const handleLeaveEvent = async (id: string | undefined) => {
+    const updatedEvent = await EventService.leaveEvent(id);
+    if (updatedEvent) {
+      const updatedEvents = events.map((event) =>
+        event._id === updatedEvent._id ? updatedEvent : event
+      );
+
+      setEvents(updatedEvents);
+    }
+  };
+
   const handleSetSelectedEvent = (id: string | undefined) => {
     if (id === selectedEvent?._id) {
       setSelectedEvent(undefined);
@@ -54,6 +75,8 @@ export const EventProvider = ({ children }: React.PropsWithChildren) => {
       value={{
         events,
         selectedEvent,
+        onJoinEvent: handleJoinEvent,
+        onLeaveEvent: handleLeaveEvent,
         onAddEvent: handleAddEvent,
         onSetSelectedEvent: handleSetSelectedEvent,
       }}

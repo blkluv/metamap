@@ -1,3 +1,9 @@
+export interface UserHeader {
+  _id: string;
+  name: string;
+  friends?: UserHeader[];
+}
+
 export interface Event {
   _id?: string;
   title: string;
@@ -8,13 +14,16 @@ export interface Event {
   coordinates: { lng: number; lat: number };
   description: string;
   logo: string;
-  creator?: string;
+  creator?: UserHeader;
+  participants?: UserHeader[];
 }
 
 export interface EventsContext {
   events: Event[];
   selectedEvent?: Event;
   onAddEvent?: (event: Event) => Promise<void>;
+  onJoinEvent?: (id: string | undefined) => Promise<void>;
+  onLeaveEvent?: (id: string | undefined) => Promise<void>;
   onSetSelectedEvent?: (id: string | undefined) => void;
 }
 
@@ -49,32 +58,28 @@ export interface MenuItemListProps {
   items: MenuItemProps[];
 }
 
-export interface OtherUser {
-  _id: string;
-  name: string;
-  friends: OtherUser[];
-}
-
 export interface User {
+  _id: string;
   username: string;
   password: string;
   email: string;
-  friends: OtherUser[];
+  friends: UserHeader[];
 }
 
 export interface UserResponse {
   token: string;
   user: {
+    _id: string;
     name: string;
     email: string;
-    friends: OtherUser[];
+    friends: UserHeader[];
     newsletter: boolean;
   };
 }
 
 export interface UsersContext {
   currentUser: UserResponse | null;
-  users: OtherUser[] | null;
+  users: UserHeader[] | null;
   onGetUsers?: () => Promise<void>;
   onSignIn?: (user: User) => Promise<void>;
   onSignUp?: (user: User) => Promise<void>;

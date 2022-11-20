@@ -54,12 +54,9 @@ export const EventMenu = () => {
     <Box sx={{ width: "100%", background: "rgb(35,35,48)", color: "white" }}>
       <CardContent
         sx={{
-          padding: "8px",
+          padding: "8px 8px 0 8px",
         }}
       >
-        <Typography sx={{ fontSize: 14 }} color="rgb(120,120,126)" gutterBottom>
-          {new Date().toLocaleString("en-GB")}
-        </Typography>
         <Typography
           variant="h5"
           component="div"
@@ -71,6 +68,7 @@ export const EventMenu = () => {
           variant="body2"
           sx={{
             paddingTop: "0.5rem",
+            marginBottom: "-0.5rem",
             fontWeight: "bold",
           }}
         >

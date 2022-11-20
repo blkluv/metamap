@@ -1,5 +1,5 @@
 import axios from "axios";
-import { User, UserResponse, OtherUser } from "../utils/interfaces";
+import { User, UserResponse, UserHeader } from "../utils/interfaces";
 import { notify } from "../utils/notifications";
 
 const BASE_URL = "http://localhost:5000/users";
@@ -9,7 +9,7 @@ class UserService {
 
   async getUsers() {
     try {
-      const response = await this.http.get<OtherUser[]>("/getusers");
+      const response = await this.http.get<UserHeader[]>("/getusers");
       return response.data;
     } catch (error: unknown) {
       if (error instanceof Error) {

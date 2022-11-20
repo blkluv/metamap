@@ -50,6 +50,12 @@ const ResponsiveAppBar = () => {
     >
       <Container maxWidth="xl">
         <Toolbar disableGutters>
+          <Typography
+            sx={{ fontSize: 14, display: { xs: "none", md: "flex" } }}
+            color="rgb(120,120,126)"
+          >
+            {new Date().toLocaleString("en-GB")}
+          </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
             <IconButton
               size="large"
