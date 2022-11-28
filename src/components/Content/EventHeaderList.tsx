@@ -23,8 +23,7 @@ const EventHeaderList = () => {
         variant="middle"
         sx={{ background: "rgb(120,120,126)", margin: "1rem 0 1.5rem 0" }}
       />
-      {events.length === 0 && <p>No events to display.</p>}
-      {events.length > 0 && (
+      {events.length > 0 ? (
         <List
           sx={{
             width: "100%",
@@ -39,6 +38,8 @@ const EventHeaderList = () => {
             <EventHeader key={event._id} {...event} />
           ))}
         </List>
+      ) : (
+        <p>No events to display.</p>
       )}
     </Box>
   );

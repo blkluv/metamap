@@ -23,9 +23,7 @@ const EventHeader = ({
     useContext(EventContext);
   const { currentUser } = useContext(UserContext);
 
-  const ifJoined = participants?.find(
-    (user) => user._id === currentUser?.user._id
-  );
+  const ifJoined = participants?.find((user) => user._id === currentUser?._id);
 
   return (
     <ListItem
@@ -105,12 +103,13 @@ const EventHeader = ({
                 sx={{
                   color: ifJoined ? "rgb(235, 110, 105)" : "",
                   paddingLeft: 0,
+                  borderRadius: "15px",
                 }}
               >
                 {ifJoined ? (
-                  <CloseIcon fontSize="small" />
+                  <CloseIcon fontSize="small" sx={{ width: "1.5rem" }} />
                 ) : (
-                  <CheckIcon fontSize="small" />
+                  <CheckIcon fontSize="small" sx={{ width: "1.5rem" }} />
                 )}
                 {ifJoined ? "Leave" : "Join"}
               </Button>

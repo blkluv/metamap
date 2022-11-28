@@ -28,10 +28,10 @@ export const EventMenuItems = [
   },
   {
     id: 4,
-    label: "Users",
+    label: "Social",
     icon: <GroupIcon />,
     color: "rgb(120,120,126)",
-    link: "users",
+    link: "social",
   },
   {
     id: 5,

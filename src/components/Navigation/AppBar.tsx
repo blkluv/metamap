@@ -48,7 +48,7 @@ const ResponsiveAppBar = () => {
         color: "rgb(120,120,126)",
       }}
     >
-      <Container maxWidth="xl">
+      <Container maxWidth={false} sx={{ padding: { md: "0.5rem 2.5rem" } }}>
         <Toolbar disableGutters>
           <Typography
             sx={{ fontSize: 14, display: { xs: "none", md: "flex" } }}
@@ -131,7 +131,14 @@ const ResponsiveAppBar = () => {
             <Box sx={{ flexGrow: 0 }}>
               <Tooltip title="Open settings">
                 <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                  <Avatar alt="Guest" src="/static/images/avatar/2.jpg" />
+                  <Avatar
+                    alt="Guest"
+                    src="/static/images/avatar/2.jpg"
+                    sx={{
+                      height: { xs: "2rem", md: "2.5rem" },
+                      width: { xs: "2rem", md: "2.5rem" },
+                    }}
+                  />
                 </IconButton>
               </Tooltip>
               <Menu

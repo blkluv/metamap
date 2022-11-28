@@ -1,10 +1,6 @@
-import { useContext } from "react";
 import { Box, Divider, Typography } from "@mui/material";
-import UserContext from "../../context/userContext";
 
-const Account = () => {
-  const { onDeleteUser } = useContext(UserContext);
-
+const Settings = () => {
   return (
     <Box
       sx={{
@@ -23,16 +19,15 @@ const Account = () => {
           component="div"
           sx={{ fontWeight: "bold", mb: 1.5 }}
         >
-          Account
+          Settings
         </Typography>
         <Divider
           variant="middle"
           sx={{ background: "rgb(120,120,126)", margin: "1rem 0 1.5rem 0" }}
         />
-        <button onClick={() => onDeleteUser?.()}>Delete account</button>
       </Box>
     </Box>
   );
 };
 
-export default Account;
+export default Settings;

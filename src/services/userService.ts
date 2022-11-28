@@ -1,5 +1,10 @@
 import axios from "axios";
-import { User, UserResponse, UserHeader } from "../utils/interfaces";
+import {
+  User,
+  UserResponse,
+  UserHeader,
+  FollowResponse,
+} from "../utils/interfaces";
 import { notify } from "../utils/notifications";
 
 const BASE_URL = "http://localhost:5000/users";
@@ -84,6 +89,19 @@ class UserService {
     try {
       const response = await this.http.delete(`/deleteuser`);
       notify("Account deleted.");
+      return response.data;
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        notify(error.message);
+      } else if (typeof error === "string") {
+        notify(error);
+      }
+    }
+  }
+
+  async followUser(id: string) {
+    try {
+      const response = await this.http.patch<FollowResponse>(`/follow/${id}`);
       return response.data;
     } catch (error: unknown) {
       if (error instanceof Error) {

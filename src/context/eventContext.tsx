@@ -8,9 +8,9 @@ const INITIAL_STATE: EventsContext = {
 
 EventService.http.interceptors.request.use((req: any) => {
   if (localStorage.getItem("auth")) {
-    req.headers.Authorization = `Bearer ${
-      JSON.parse(localStorage.getItem("auth") as string).token
-    }`;
+    req.headers.Authorization = `Bearer ${JSON.parse(
+      localStorage.getItem("auth") as string
+    )}`;
   }
   return req;
 });

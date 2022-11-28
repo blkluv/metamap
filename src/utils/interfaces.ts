@@ -1,7 +1,8 @@
 export interface UserHeader {
   _id: string;
   name: string;
-  friends?: UserHeader[];
+  following?: UserHeader[];
+  followers?: UserHeader[];
 }
 
 export interface Event {
@@ -60,10 +61,12 @@ export interface MenuItemListProps {
 
 export interface User {
   _id: string;
-  username: string;
-  password: string;
+  name: string;
+  password?: string;
   email: string;
-  friends: UserHeader[];
+  following?: UserHeader[];
+  followers?: UserHeader[];
+  newsletter?: boolean;
 }
 
 export interface UserResponse {
@@ -72,13 +75,14 @@ export interface UserResponse {
     _id: string;
     name: string;
     email: string;
-    friends: UserHeader[];
-    newsletter: boolean;
+    following?: UserHeader[];
+    followers?: UserHeader[];
+    newsletter?: boolean;
   };
 }
 
 export interface UsersContext {
-  currentUser: UserResponse | null;
+  currentUser: User | null;
   users: UserHeader[] | null;
   onGetUsers?: () => Promise<void>;
   onSignIn?: (user: User) => Promise<void>;
@@ -87,9 +91,19 @@ export interface UsersContext {
   onResetPassword?: (email: string) => Promise<void>;
   onChangePassword?: (token: string, data: object) => Promise<void>;
   onDeleteUser?: () => Promise<void>;
+  onFollowUser?: (id: string) => Promise<void>;
 }
 
 export interface ProtectedRoutesProps {
   logged: boolean;
   redirect: string;
+}
+
+export interface SocialListProps {
+  data: UserHeader[];
+}
+
+export interface FollowResponse {
+  activeUser: User;
+  userToFollow: User;
 }
