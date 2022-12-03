@@ -17,8 +17,6 @@ export const SocialMenu = ({ handleFilter, users }: any) => {
   const followers = currentUser?.followers;
   const following = currentUser?.followers;
 
-  // name => unique username
-
   // remove @ts-ignore
 
   const filterData = (e: { target: { value: string } }) => {

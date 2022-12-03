@@ -1,6 +1,7 @@
 import { Box } from "@mui/material";
 import { Navigate, Route, Routes } from "react-router-dom";
 import EventHeaderList from "../Content/EventHeaderList";
+import Feed from "../Content/Feed";
 import Social from "../Content/Social";
 
 const Content = () => {
@@ -14,7 +15,7 @@ const Content = () => {
       }}
     >
       <Routes>
-        <Route path="/" element={<h1>Home</h1>} />
+        <Route path="/" element={<Feed />} />
         <Route path="/events" element={<EventHeaderList />} />
         <Route path="/places" element={<h1>Places</h1>} />
         <Route path="/social" element={<Social />} />

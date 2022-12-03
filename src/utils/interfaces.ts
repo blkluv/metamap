@@ -107,3 +107,11 @@ export interface FollowResponse {
   activeUser: User;
   userToFollow: User;
 }
+
+export interface Post {
+  creator?: UserHeader;
+  description: string;
+  file?: any;
+  createdAt?: string;
+  likes?: UserHeader[];
+}

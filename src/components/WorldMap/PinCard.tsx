@@ -17,9 +17,9 @@ import { PinCardProps } from "../../utils/interfaces";
 const PinCard = ({ lng, lat, onClose }: PinCardProps) => {
   const { onAddEvent } = useContext(EventContext);
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const data = new FormData(e.currentTarget);
 
     const eventData = {
       title: "" + data.get("title"),
