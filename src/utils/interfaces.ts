@@ -109,9 +109,17 @@ export interface FollowResponse {
 }
 
 export interface Post {
+  _id?: string;
   creator?: UserHeader;
   description: string;
   file?: any;
   createdAt?: string;
   likes?: UserHeader[];
+}
+
+export interface PostsContext {
+  posts: Post[];
+  onGetPosts?: () => Promise<void>;
+  onAddPost?: (post: Post) => Promise<void>;
+  onLikePost?: (id: string | undefined) => Promise<void>;
 }

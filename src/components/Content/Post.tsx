@@ -1,14 +1,32 @@
 import { useContext } from "react";
 import UserContext from "../../context/userContext";
+import PostContext from "../../context/postContext";
 import { Avatar, Box, CardMedia, ListItem, Typography } from "@mui/material";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import { Post as PostProps } from "../../utils/interfaces";
 import moment from "moment";
+import { notify } from "../../utils/notifications";
 
-const Post = ({ creator, description, file, createdAt, likes }: PostProps) => {
+const Post = ({
+  _id,
+  creator,
+  description,
+  file,
+  createdAt,
+  likes,
+}: PostProps) => {
   const { currentUser } = useContext(UserContext);
+  const { onLikePost } = useContext(PostContext);
+
+  const handleLikePost = () => {
+    if (creator?._id === currentUser?._id) {
+      notify("You can't like your own post.");
+    } else {
+      onLikePost?.(_id);
+    }
+  };
 
   return (
     <ListItem
@@ -106,17 +124,34 @@ const Post = ({ creator, description, file, createdAt, likes }: PostProps) => {
         sx={{
           display: "flex",
           alignItems: "center",
-          margin: "1rem 0 .5rem 0",
-          color: "white",
+          margin: "1rem 0 0 0",
           flexWrap: "wrap",
+          color: "white",
         }}
       >
-        {creator?._id === currentUser?._id ||
-        likes?.find((user) => user._id === currentUser?._id) ? (
-          <FavoriteIcon sx={{ fontSize: "1.5rem", cursor: "pointer" }} />
+        {likes?.find((user) => user._id === currentUser?._id) ? (
+          <FavoriteIcon
+            sx={{
+              fontSize: "1.5rem",
+              cursor: "pointer",
+              color: "rgb(235, 110, 105)",
+            }}
+            onClick={() => handleLikePost()}
+          />
         ) : (
-          <FavoriteBorderIcon sx={{ fontSize: "1.5rem", cursor: "pointer" }} />
+          <FavoriteBorderIcon
+            sx={{ fontSize: "1.5rem", cursor: "pointer" }}
+            onClick={() => handleLikePost()}
+          />
         )}
+        <Typography
+          sx={{ display: "block", marginLeft: ".5rem" }}
+          component="span"
+          variant="body2"
+          fontSize={".9rem"}
+        >
+          {likes?.length ? likes.length : ""}
+        </Typography>
       </Box>
     </ListItem>
   );

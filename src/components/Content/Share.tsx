@@ -34,7 +34,7 @@ const Share = () => {
     }
 
     try {
-      onAddPost({ postData });
+      onAddPost?.(postData);
       setFile(null);
       formRef.current?.reset();
     } catch (err) {}

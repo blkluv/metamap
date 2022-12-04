@@ -1,7 +1,8 @@
 import { useState, useEffect, createContext } from "react";
 import PostService from "../services/postService";
+import { Post, PostsContext } from "../utils/interfaces";
 
-const INITIAL_STATE: any = {
+const INITIAL_STATE: PostsContext = {
   posts: [],
 };
 
@@ -17,7 +18,7 @@ PostService.http.interceptors.request.use((req: any) => {
 const PostContext = createContext(INITIAL_STATE);
 
 export const PostProvider = ({ children }: React.PropsWithChildren) => {
-  const [posts, setPosts] = useState<any>([]);
+  const [posts, setPosts] = useState<Post[]>([]);
 
   const handleGetPosts = async () => {
     const posts = await PostService.getPosts();
@@ -26,10 +27,20 @@ export const PostProvider = ({ children }: React.PropsWithChildren) => {
     }
   };
 
-  const handleAddPost = async (post: any) => {
+  const handleAddPost = async (post: object) => {
     const newPost = await PostService.addPost(post);
     if (newPost) {
       setPosts((post: any) => [newPost, ...post]);
+    }
+  };
+
+  const handleLikePost = async (id: string | undefined) => {
+    const updatedPost = await PostService.likePost(id);
+    if (updatedPost) {
+      const updatedPosts = posts.map((post) =>
+        post._id === updatedPost._id ? updatedPost : post
+      );
+      setPosts(updatedPosts);
     }
   };
 
@@ -43,6 +54,7 @@ export const PostProvider = ({ children }: React.PropsWithChildren) => {
         posts,
         onGetPosts: handleGetPosts,
         onAddPost: handleAddPost,
+        onLikePost: handleLikePost,
       }}
     >
       {children}
