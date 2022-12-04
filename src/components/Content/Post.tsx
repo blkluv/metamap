@@ -1,13 +1,14 @@
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import UserContext from "../../context/userContext";
 import PostContext from "../../context/postContext";
 import { Avatar, Box, CardMedia, ListItem, Typography } from "@mui/material";
-import MoreVertIcon from "@mui/icons-material/MoreVert";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
+import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import { Post as PostProps } from "../../utils/interfaces";
 import moment from "moment";
 import { notify } from "../../utils/notifications";
+import ConfirmationDialog from "../Elements/ConfirmationDialog";
 
 const Post = ({
   _id,
@@ -18,7 +19,8 @@ const Post = ({
   likes,
 }: PostProps) => {
   const { currentUser } = useContext(UserContext);
-  const { onLikePost } = useContext(PostContext);
+  const { onLikePost, onDeletePost } = useContext(PostContext);
+  const [isOpen, setIsOpen] = useState<boolean>(false);
 
   const handleLikePost = () => {
     if (creator?._id === currentUser?._id) {
@@ -26,6 +28,17 @@ const Post = ({
     } else {
       onLikePost?.(_id);
     }
+  };
+
+  const handleOpenDialog = () => {
+    setIsOpen(true);
+  };
+  const handleCloseDialog = () => {
+    setIsOpen(false);
+  };
+  const handleConfirmDialog = async () => {
+    await onDeletePost?.(_id);
+    setIsOpen(false);
   };
 
   return (
@@ -92,7 +105,14 @@ const Post = ({
             </Typography>
           </Box>
         </Box>
-        <MoreVertIcon sx={{ cursor: "pointer", color: "lightgrey" }} />
+        {currentUser?._id === creator?._id ? (
+          <DeleteForeverIcon
+            sx={{ cursor: "pointer", color: "lightgrey" }}
+            onClick={() => handleOpenDialog()}
+          />
+        ) : (
+          <></>
+        )}
       </Box>
       <Box sx={{ width: "100%" }}>
         <Typography
@@ -153,6 +173,13 @@ const Post = ({
           {likes?.length ? likes.length : ""}
         </Typography>
       </Box>
+      <ConfirmationDialog
+        title={"Delete this post?"}
+        confirmLabel={"delete"}
+        isOpen={isOpen}
+        onClose={handleCloseDialog}
+        onConfirm={handleConfirmDialog}
+      />
     </ListItem>
   );
 };

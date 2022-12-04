@@ -122,4 +122,13 @@ export interface PostsContext {
   onGetPosts?: () => Promise<void>;
   onAddPost?: (post: Post) => Promise<void>;
   onLikePost?: (id: string | undefined) => Promise<void>;
+  onDeletePost?: (id: string | undefined) => Promise<void>;
+}
+
+export interface ConfirmationDialogProps {
+  title: string;
+  confirmLabel: string;
+  isOpen: boolean;
+  onConfirm: () => void;
+  onClose: () => void;
 }

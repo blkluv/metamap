@@ -34,6 +34,14 @@ export const PostProvider = ({ children }: React.PropsWithChildren) => {
     }
   };
 
+  const handleDeletePost = async (id: string | undefined) => {
+    const deletedPost = await PostService.deletePost(id);
+    if (!deletedPost) {
+      const updatedPosts = posts.filter((post) => post._id !== id);
+      setPosts(updatedPosts);
+    }
+  };
+
   const handleLikePost = async (id: string | undefined) => {
     const updatedPost = await PostService.likePost(id);
     if (updatedPost) {
@@ -55,6 +63,7 @@ export const PostProvider = ({ children }: React.PropsWithChildren) => {
         onGetPosts: handleGetPosts,
         onAddPost: handleAddPost,
         onLikePost: handleLikePost,
+        onDeletePost: handleDeletePost,
       }}
     >
       {children}
