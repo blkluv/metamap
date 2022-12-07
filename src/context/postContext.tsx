@@ -4,6 +4,7 @@ import { Post, PostsContext } from "../utils/interfaces";
 
 const INITIAL_STATE: PostsContext = {
   posts: [],
+  usersPosts: [],
 };
 
 PostService.http.interceptors.request.use((req: any) => {
@@ -19,11 +20,19 @@ const PostContext = createContext(INITIAL_STATE);
 
 export const PostProvider = ({ children }: React.PropsWithChildren) => {
   const [posts, setPosts] = useState<Post[]>([]);
+  const [usersPosts, setUsersPosts] = useState<Post[]>([]);
 
-  const handleGetPosts = async () => {
-    const posts = await PostService.getPosts();
+  const handleGetFollowingPosts = async () => {
+    const posts = await PostService.getFollowingPosts();
     if (posts) {
       setPosts(posts);
+    }
+  };
+
+  const handleGetUsersPosts = async (id: string | undefined) => {
+    const posts = await PostService.getUsersPosts(id);
+    if (posts) {
+      setUsersPosts(posts);
     }
   };
 
@@ -39,6 +48,9 @@ export const PostProvider = ({ children }: React.PropsWithChildren) => {
     if (!deletedPost) {
       const updatedPosts = posts.filter((post) => post._id !== id);
       setPosts(updatedPosts);
+
+      const updatedUsersPosts = usersPosts.filter((post) => post._id !== id);
+      setUsersPosts(updatedUsersPosts);
     }
   };
 
@@ -49,18 +61,25 @@ export const PostProvider = ({ children }: React.PropsWithChildren) => {
         post._id === updatedPost._id ? updatedPost : post
       );
       setPosts(updatedPosts);
+
+      const updatedUsersPosts = usersPosts.map((post) =>
+        post._id === updatedPost._id ? updatedPost : post
+      );
+      setUsersPosts(updatedUsersPosts);
     }
   };
 
   useEffect(() => {
-    handleGetPosts();
+    handleGetFollowingPosts();
   }, []);
 
   return (
     <PostContext.Provider
       value={{
         posts,
-        onGetPosts: handleGetPosts,
+        usersPosts,
+        onGetFollowingPosts: handleGetFollowingPosts,
+        onGetUsersPosts: handleGetUsersPosts,
         onAddPost: handleAddPost,
         onLikePost: handleLikePost,
         onDeletePost: handleDeletePost,

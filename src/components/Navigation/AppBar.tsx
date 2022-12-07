@@ -16,7 +16,7 @@ import { Link as RouterLink } from "react-router-dom";
 import { Link } from "@mui/material";
 import UserContext from "../../context/userContext";
 import Toggler from "../Elements/Switch";
-import { EventMenuItems, UserLinks } from "../../constants/menuItems";
+import { EventMenuItems } from "../../constants/menuItems";
 
 const ResponsiveAppBar = () => {
   const { currentUser, onLogout } = useContext(UserContext);
@@ -157,28 +157,53 @@ const ResponsiveAppBar = () => {
                 open={Boolean(anchorElUser)}
                 onClose={handleCloseUserMenu}
               >
-                {UserLinks.map((item) => (
-                  <MenuItem key={item.id} onClick={handleCloseUserMenu}>
-                    <Link
-                      component={RouterLink}
-                      to={item.link}
-                      color="inherit"
-                      sx={{
-                        mr: 2,
-                        textDecoration: "none",
-                      }}
-                    >
-                      {item.label}
-                    </Link>
-                  </MenuItem>
-                ))}
+                <MenuItem onClick={handleCloseUserMenu}>
+                  <Link
+                    component={RouterLink}
+                    to={`/dashboard/profile/${currentUser?.name}`}
+                    color="inherit"
+                    sx={{
+                      mr: 2,
+                      fontWeight: 500,
+                      fontSize: "1.1rem",
+                      letterSpacing: ".1rem",
+                      color: "inherit",
+                      textDecoration: "none",
+                      textTransform: "capitalize",
+                    }}
+                  >
+                    Profile
+                  </Link>
+                </MenuItem>
+                <MenuItem onClick={handleCloseUserMenu}>
+                  <Link
+                    component={RouterLink}
+                    to="account"
+                    color="inherit"
+                    sx={{
+                      mr: 2,
+                      fontWeight: 500,
+                      fontSize: "1.1rem",
+                      letterSpacing: ".1rem",
+                      color: "inherit",
+                      textDecoration: "none",
+                      textTransform: "capitalize",
+                    }}
+                  >
+                    Account
+                  </Link>
+                </MenuItem>
                 <MenuItem
                   onClick={() => {
                     handleCloseUserMenu();
                     onLogout?.();
                   }}
                 >
-                  <Typography textAlign="center" color={"rgb(235, 110, 105)"}>
+                  <Typography
+                    textAlign="center"
+                    color={"rgb(235, 110, 105)"}
+                    sx={{ fontWeight: 500 }}
+                  >
                     {"Logout"}
                   </Typography>
                 </MenuItem>

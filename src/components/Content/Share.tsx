@@ -1,5 +1,6 @@
 import { useContext, useState, useRef } from "react";
 import PostContext from "../../context/postContext";
+import UserContext from "../../context/userContext";
 import convertImage from "../../utils/imageConverter";
 import { Post } from "../../utils/interfaces";
 import { Cancel, EmojiEmotions, PermMedia, Room } from "@mui/icons-material";
@@ -10,13 +11,14 @@ import {
   CardMedia,
   Divider,
   FormLabel,
-  IconButton,
   Input,
   TextField,
 } from "@mui/material";
+import { NavLink } from "react-router-dom";
 
 const Share = () => {
   const { onAddPost } = useContext(PostContext);
+  const { currentUser } = useContext(UserContext);
   const [file, setFile] = useState<File | null>(null);
   const formRef = useRef<any>();
 
@@ -60,7 +62,10 @@ const Share = () => {
         }}
       >
         <Box sx={{ display: "flex", alignItems: "center" }}>
-          <IconButton onClick={() => alert("avatar")} sx={{ p: 0 }}>
+          <NavLink
+            to={`/dashboard/profile/${currentUser?.name}`}
+            style={{ textDecoration: "none" }}
+          >
             <Avatar
               alt="User avatar"
               src={"avatar"}
@@ -70,7 +75,7 @@ const Share = () => {
                 marginRight: "10px",
               }}
             />
-          </IconButton>
+          </NavLink>
           <TextField
             placeholder="What's in your mind?"
             variant="standard"

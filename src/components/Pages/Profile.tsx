@@ -1,30 +1,24 @@
-import { Box, Divider, Typography } from "@mui/material";
+import { Box } from "@mui/material";
+import { Outlet } from "react-router-dom";
 
 const Profile = () => {
   return (
     <Box
       sx={{
-        display: "flex",
-        flexDirection: { xs: "column", md: "row" },
         width: "100%",
-        padding: { xs: "1rem", md: "1rem 2rem 2rem 2rem", overflow: "hidden" },
-        background: "rgb(35,35,48)",
-        height: "auto",
+        padding: { xs: "2rem 1rem", md: "0 2rem" },
+        background: "rgb(36,35,48)",
         color: "white",
       }}
     >
-      <Box sx={{ padding: "8px" }}>
-        <Typography
-          variant="h5"
-          component="div"
-          sx={{ fontWeight: "bold", mb: 1.5 }}
-        >
-          Profile
-        </Typography>
-        <Divider
-          variant="middle"
-          sx={{ background: "rgb(120,120,126)", margin: "1rem 0 1.5rem 0" }}
-        />
+      <Box
+        sx={{
+          height: "100%",
+          minHeight: { xs: "600px", md: "600px" },
+          maxHeight: { xs: "250vh", md: "85vh" },
+        }}
+      >
+        <Outlet />
       </Box>
     </Box>
   );

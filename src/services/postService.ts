@@ -7,9 +7,22 @@ const BASE_URL = "http://localhost:5000/posts";
 class PostService {
   http = axios.create({ baseURL: BASE_URL });
 
-  async getPosts() {
+  async getFollowingPosts() {
     try {
-      const response = await this.http.get<Post[]>("/");
+      const response = await this.http.get<Post[]>("/following");
+      return response.data;
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        notify(error.message);
+      } else if (typeof error === "string") {
+        notify(error);
+      }
+    }
+  }
+
+  async getUsersPosts(id: string | undefined) {
+    try {
+      const response = await this.http.get<Post[]>(`/user/${id}`);
       return response.data;
     } catch (error: unknown) {
       if (error instanceof Error) {

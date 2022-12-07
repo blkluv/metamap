@@ -1,6 +1,7 @@
 export interface UserHeader {
   _id: string;
   name: string;
+  description?: string;
   following?: UserHeader[];
   followers?: UserHeader[];
 }
@@ -29,12 +30,8 @@ export interface EventsContext {
 }
 
 export interface EventHeader {
-  _id: string;
-  title: string;
-  date: string;
-  location: string;
-  description: string;
-  logo: string;
+  event: Event;
+  variant: string;
 }
 
 export interface PinCardProps {
@@ -77,13 +74,16 @@ export interface UserResponse {
     email: string;
     following?: UserHeader[];
     followers?: UserHeader[];
+    description?: string;
     newsletter?: boolean;
   };
 }
 
 export interface UsersContext {
   currentUser: User | null;
+  user?: UserHeader | null;
   users: UserHeader[] | null;
+  onGetUser?: (id: string | undefined) => Promise<void>;
   onGetUsers?: () => Promise<void>;
   onSignIn?: (user: User) => Promise<void>;
   onSignUp?: (user: User) => Promise<void>;
@@ -119,7 +119,9 @@ export interface Post {
 
 export interface PostsContext {
   posts: Post[];
-  onGetPosts?: () => Promise<void>;
+  usersPosts: Post[];
+  onGetFollowingPosts?: () => Promise<void>;
+  onGetUsersPosts?: (id: string | undefined) => Promise<void>;
   onAddPost?: (post: Post) => Promise<void>;
   onLikePost?: (id: string | undefined) => Promise<void>;
   onDeletePost?: (id: string | undefined) => Promise<void>;

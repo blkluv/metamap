@@ -12,6 +12,19 @@ const BASE_URL = "http://localhost:5000/users";
 class UserService {
   http = axios.create({ baseURL: BASE_URL });
 
+  async getUser(id: string | undefined) {
+    try {
+      const response = await this.http.get<UserHeader>(`/getuser/${id}`);
+      return response.data;
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        notify(error.message);
+      } else if (typeof error === "string") {
+        notify(error);
+      }
+    }
+  }
+
   async getUsers() {
     try {
       const response = await this.http.get<UserHeader[]>("/getusers");

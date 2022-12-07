@@ -1,7 +1,7 @@
 import { useState, useEffect, createContext } from "react";
 import { UserHeader, User, UsersContext } from "../utils/interfaces";
 import UserService from "../services/userService";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import jwt_decode from "jwt-decode";
 
 const INITIAL_STATE: UsersContext = {
@@ -26,12 +26,15 @@ const UserContext = createContext(INITIAL_STATE);
 
 export const UserProvider = ({ children }: React.PropsWithChildren) => {
   let location = useLocation();
+  let navigate = useNavigate();
 
   const [currentUser, setCurrentUser] = useState<User | null>(
     localStorage.getItem("currentUser")
       ? JSON.parse(localStorage.getItem("currentUser") as string)
       : null
   );
+
+  const [user, setUser] = useState<UserHeader | null>();
 
   const [users, setUsers] = useState<UserHeader[]>(
     localStorage.getItem("users")
@@ -48,10 +51,10 @@ export const UserProvider = ({ children }: React.PropsWithChildren) => {
   };
 
   useEffect(() => {
-    const user = JSON.parse(localStorage.getItem("auth") as string);
+    const currentuser = JSON.parse(localStorage.getItem("auth") as string);
 
-    if (user) {
-      const decodedJWT = decodeJWT(user);
+    if (currentuser) {
+      const decodedJWT = decodeJWT(currentuser);
 
       if (decodedJWT.exp * 1000 < Date.now()) {
         handleLogout();
@@ -60,6 +63,15 @@ export const UserProvider = ({ children }: React.PropsWithChildren) => {
       handleLogout();
     }
   }, [location]);
+
+  const handleGetUser = async (id: string | undefined) => {
+    const user = await UserService.getUser(id);
+    if (user) {
+      setUser(user);
+    } else {
+      navigate("/");
+    }
+  };
 
   const handleGetUsers = async () => {
     const users = await UserService.getUsers();
@@ -129,7 +141,9 @@ export const UserProvider = ({ children }: React.PropsWithChildren) => {
     <UserContext.Provider
       value={{
         currentUser,
+        user,
         users,
+        onGetUser: handleGetUser,
         onGetUsers: handleGetUsers,
         onSignUp: handleSignUp,
         onSignIn: handleSignIn,

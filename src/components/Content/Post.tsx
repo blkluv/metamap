@@ -1,4 +1,6 @@
 import { useContext, useState } from "react";
+import { NavLink } from "react-router-dom";
+import ConfirmationDialog from "../Elements/ConfirmationDialog";
 import UserContext from "../../context/userContext";
 import PostContext from "../../context/postContext";
 import { Avatar, Box, CardMedia, ListItem, Typography } from "@mui/material";
@@ -6,9 +8,8 @@ import FavoriteIcon from "@mui/icons-material/Favorite";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import { Post as PostProps } from "../../utils/interfaces";
-import moment from "moment";
 import { notify } from "../../utils/notifications";
-import ConfirmationDialog from "../Elements/ConfirmationDialog";
+import moment from "moment";
 
 const Post = ({
   _id,
@@ -65,35 +66,45 @@ const Post = ({
         }}
       >
         <Box sx={{ display: "flex", alignItems: "center" }}>
-          <Avatar
-            alt={creator?.name}
-            src={"avatar"}
-            sx={{
-              margin: ".2rem .5rem .2rem 0",
-              height: "2.5rem",
-              width: "2.5rem",
-              cursor: "pointer",
-            }}
-          />
+          <NavLink
+            to={`/dashboard/profile/${creator?.name}`}
+            style={{ textDecoration: "none" }}
+          >
+            <Avatar
+              alt={creator?.name}
+              src={"avatar"}
+              sx={{
+                margin: ".2rem .5rem .2rem 0",
+                height: "2.5rem",
+                width: "2.5rem",
+                cursor: "pointer",
+              }}
+            />
+          </NavLink>
           <Box
             sx={{
               display: "flex",
               flexDirection: "column",
             }}
           >
-            <Typography
-              sx={{
-                display: "block",
-                cursor: "pointer",
-              }}
-              component="span"
-              variant="body2"
-              color="white"
-              fontSize={".9rem"}
-              fontWeight={500}
+            <NavLink
+              to={`/dashboard/profile/${creator?.name}`}
+              style={{ textDecoration: "none" }}
             >
-              {creator?.name}
-            </Typography>
+              <Typography
+                sx={{
+                  display: "block",
+                  cursor: "pointer",
+                }}
+                component="span"
+                variant="body2"
+                color="white"
+                fontSize={".9rem"}
+                fontWeight={500}
+              >
+                {creator?.name}
+              </Typography>
+            </NavLink>
             <Typography
               sx={{ display: "block" }}
               component="span"

@@ -1,4 +1,5 @@
 import { useContext } from "react";
+import { NavLink } from "react-router-dom";
 import ListItem from "@mui/material/ListItem";
 import ListItemText from "@mui/material/ListItemText";
 import Typography from "@mui/material/Typography";
@@ -6,6 +7,7 @@ import { UserHeader as Header, User } from "../../utils/interfaces";
 import { Avatar, Box, Button } from "@mui/material";
 import CheckIcon from "@mui/icons-material/Check";
 import CloseIcon from "@mui/icons-material/Close";
+import PeopleIcon from "@mui/icons-material/People";
 import UserContext from "../../context/userContext";
 
 const UserHeader = ({ _id, name }: Header) => {
@@ -20,27 +22,32 @@ const UserHeader = ({ _id, name }: Header) => {
 
   return (
     <ListItem
-      alignItems="flex-start"
       sx={{
-        cursor: "pointer",
         borderRadius: "25px",
         background: "rgb(53,51,64)",
         marginBottom: "1rem",
         display: "flex",
         justifyContent: "center",
-        alignItems: "flex-start",
+        alignItems: "center",
+        minHeight: "80px",
       }}
-      onClick={() => {}}
     >
-      <Avatar
-        alt={name}
-        src="/static/images/avatar/1.jpg"
-        sx={{
-          marginRight: "1rem",
-          marginTop: "0.5rem",
-          marginBottom: "0.5rem",
-        }}
-      />
+      <NavLink
+        to={`/dashboard/profile/${name}`}
+        style={{ textDecoration: "none" }}
+      >
+        <Avatar
+          alt="User avatar"
+          src="/static/images/avatar/1.jpg"
+          sx={{
+            margin: "0 .5rem .2rem 0",
+            height: "2.5rem",
+            width: "2.5rem",
+            cursor: "pointer",
+            alignSelf: "center",
+          }}
+        />
+      </NavLink>
       <ListItemText
         sx={{
           display: "flex",
@@ -49,23 +56,29 @@ const UserHeader = ({ _id, name }: Header) => {
         }}
         primary={
           <>
-            <Typography
-              sx={{ display: "block" }}
-              component="span"
-              variant="body2"
-              color="white"
-              fontSize={"1rem"}
+            <NavLink
+              to={`/dashboard/profile/${name}`}
+              style={{ textDecoration: "none" }}
             >
-              {name}
-            </Typography>
-            <Typography
-              sx={{ display: "block" }}
-              component="span"
-              variant="body2"
-              color="rgb(120,120,126)"
-            >
-              username
-            </Typography>
+              <Typography
+                sx={{ display: "block", cursor: "pointer" }}
+                component="span"
+                variant="body2"
+                color="white"
+                fontSize={".9rem"}
+              >
+                {name}
+              </Typography>
+            </NavLink>
+            {ifFollowing(currentUser, _id) ? (
+              <PeopleIcon
+                sx={{
+                  width: "1.5rem",
+                  fontSize: "1rem",
+                  color: "rgb(120,120,126)",
+                }}
+              />
+            ) : null}
           </>
         }
         secondary={
@@ -76,7 +89,7 @@ const UserHeader = ({ _id, name }: Header) => {
                 sx={{
                   color: ifFollowing(currentUser, _id)
                     ? "rgb(235, 110, 105)"
-                    : "",
+                    : "default",
                   borderRadius: "15px",
                 }}
               >

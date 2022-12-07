@@ -5,7 +5,6 @@ import { Route, Routes } from "react-router-dom";
 import Profile from "../Pages/Profile";
 import Settings from "../Pages/Settings";
 import User from "../Content/User";
-import Users from "../Pages/Users";
 import Account from "../Pages/Account";
 
 const MainWindow = () => {
@@ -21,11 +20,10 @@ const MainWindow = () => {
       <Sidebar />
       <Routes>
         <Route path="/*" element={<ContentWindow />} />
-        <Route path="/profile" element={<Profile />} />
-        <Route path="/account" element={<Account />} />
-        <Route path="/users" element={<Users />}>
+        <Route path="/profile" element={<Profile />}>
           <Route path=":id" element={<User />} />
         </Route>
+        <Route path="/account" element={<Account />} />
         <Route path="/settings" element={<Settings />} />
       </Routes>
     </Box>

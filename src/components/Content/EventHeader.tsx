@@ -2,7 +2,7 @@ import { useContext } from "react";
 import ListItem from "@mui/material/ListItem";
 import ListItemText from "@mui/material/ListItemText";
 import Typography from "@mui/material/Typography";
-import { Event } from "../../utils/interfaces";
+import { EventHeader as Header } from "../../utils/interfaces";
 import EventContext from "../../context/eventContext";
 import UserContext from "../../context/userContext";
 import { Box, Button, CardMedia } from "@mui/material";
@@ -12,13 +12,9 @@ import GroupIcon from "@mui/icons-material/Group";
 import preview from "../../images/preview.png";
 
 const EventHeader = ({
-  _id,
-  title,
-  start,
-  location,
-  description,
-  participants,
-}: Event) => {
+  event: { _id, title, start, location, description, participants },
+  variant,
+}: Header) => {
   const { selectedEvent, onSetSelectedEvent, onJoinEvent, onLeaveEvent } =
     useContext(EventContext);
   const { currentUser } = useContext(UserContext);
@@ -34,6 +30,10 @@ const EventHeader = ({
         background: "rgb(53,51,64)",
         marginBottom: "1rem",
         display: "flex",
+        flexDirection:
+          variant === "list"
+            ? { xs: "column", sm: "row" }
+            : { xs: "column", sm: "row", md: "column" },
         justifyContent: "center",
         alignItems: "flex-start",
       }}
@@ -43,9 +43,12 @@ const EventHeader = ({
       <CardMedia
         component="img"
         sx={{
-          width: 155,
+          width:
+            variant === "list"
+              ? { xs: "100%", sm: 155 }
+              : { xs: "100%", sm: 155, md: "100%" },
           borderRadius: "10px",
-          marginRight: "1rem",
+          marginRight: variant === "list" ? "1rem" : { sm: "1rem", md: 0 },
           marginTop: "0.5rem",
           marginBottom: "0.5rem",
         }}

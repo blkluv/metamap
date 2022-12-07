@@ -6,7 +6,7 @@ import EventContext from "../../context/eventContext";
 import { Box, Divider } from "@mui/material";
 import EventMenu from "../Navigation/EventMenu";
 
-const EventHeaderList = () => {
+const Events = () => {
   const { events } = useContext(EventContext);
 
   return (
@@ -35,7 +35,7 @@ const EventHeaderList = () => {
           }}
         >
           {events.map((event: Event) => (
-            <EventHeader key={event._id} {...event} />
+            <EventHeader key={event._id} variant={"list"} event={event} />
           ))}
         </List>
       ) : (
@@ -45,4 +45,4 @@ const EventHeaderList = () => {
   );
 };
 
-export default EventHeaderList;
+export default Events;

@@ -8,7 +8,6 @@ const MenuItemList = ({ items }: MenuItemListProps) => {
       sx={{
         width: "100%",
         color: "rgb(120,120,126)",
-        paddingTop: "2rem",
       }}
     >
       {items.map((item) => (

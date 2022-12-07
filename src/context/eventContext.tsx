@@ -31,7 +31,7 @@ export const EventProvider = ({ children }: React.PropsWithChildren) => {
   const handleAddEvent = async (event: Event) => {
     const newEvent = await EventService.addEvent(event);
     if (newEvent) {
-      setEvents((events) => [...events, newEvent]);
+      setEvents((events) => [newEvent, ...events]);
     }
   };
 

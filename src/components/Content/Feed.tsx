@@ -5,10 +5,10 @@ import PostContext from "../../context/postContext";
 import Share from "./Share";
 
 const Feed = () => {
-  const { posts, onGetPosts } = useContext(PostContext);
+  const { posts, onGetFollowingPosts } = useContext(PostContext);
 
   useEffect(() => {
-    onGetPosts?.();
+    onGetFollowingPosts?.();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
