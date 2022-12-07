@@ -11,10 +11,12 @@ const AuthRoutes = () => {
     <Box
       sx={{
         display: "flex",
-        height: "100%",
+        minHeight: "100%",
         alignItems: "center",
         background: `url(${mapbg})`,
         backgroundSize: "cover",
+        padding: "1rem",
+        overflow: "scroll",
       }}
     >
       <Routes>
