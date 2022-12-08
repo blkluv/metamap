@@ -4,6 +4,7 @@ export interface UserHeader {
   description?: string;
   following?: UserHeader[];
   followers?: UserHeader[];
+  avatar?: any;
 }
 
 export interface Event {
@@ -64,6 +65,8 @@ export interface User {
   following?: UserHeader[];
   followers?: UserHeader[];
   newsletter?: boolean;
+  description?: string;
+  avatar?: any;
 }
 
 export interface UserResponse {
@@ -76,6 +79,7 @@ export interface UserResponse {
     followers?: UserHeader[];
     description?: string;
     newsletter?: boolean;
+    avatar?: any;
   };
 }
 
@@ -84,6 +88,7 @@ export interface UsersContext {
   user?: UserHeader | null;
   users: UserHeader[] | null;
   onGetUser?: (id: string | undefined) => Promise<void>;
+  onGetAvatar?: (id: string | undefined) => Promise<string | null>;
   onGetUsers?: () => Promise<void>;
   onSignIn?: (user: User) => Promise<void>;
   onSignUp?: (user: User) => Promise<void>;
@@ -92,6 +97,7 @@ export interface UsersContext {
   onChangePassword?: (token: string, data: object) => Promise<void>;
   onDeleteUser?: () => Promise<void>;
   onFollowUser?: (id: string) => Promise<void>;
+  onUpdateUser?: (data: UserUpdateReq) => Promise<void>;
 }
 
 export interface ProtectedRoutesProps {
@@ -133,4 +139,9 @@ export interface ConfirmationDialogProps {
   isOpen: boolean;
   onConfirm: () => void;
   onClose: () => void;
+}
+
+export interface UserUpdateReq {
+  dataType: string;
+  data: string | [];
 }

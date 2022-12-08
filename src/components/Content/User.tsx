@@ -1,29 +1,66 @@
-import { useContext, useEffect } from "react";
-import { Avatar, Box, Divider, List, Typography } from "@mui/material";
+import { useContext, useEffect, useState } from "react";
+import {
+  Avatar,
+  Box,
+  Divider,
+  FormLabel,
+  Input,
+  List,
+  Typography,
+} from "@mui/material";
 import { useParams } from "react-router-dom";
 import UserContext from "../../context/userContext";
 import EventContext from "../../context/eventContext";
 import Masonry from "@mui/lab/Masonry";
-import { Event } from "../../utils/interfaces";
+import { Event, UserHeader, User as LoggedUser } from "../../utils/interfaces";
 import EventHeader from "./EventHeader";
 import PostContext from "../../context/postContext";
 import Post from "./Post";
+import convertImage from "../../utils/imageConverter";
+import CheckIcon from "@mui/icons-material/Check";
 
 const User = () => {
   const { events } = useContext(EventContext);
   const { usersPosts, onGetUsersPosts } = useContext(PostContext);
-  const { user, onGetUser } = useContext(UserContext);
+  const { user, currentUser, onGetUser, onUpdateUser } =
+    useContext(UserContext);
   const { id } = useParams();
-
-  const getUsersEvents = (eventsArray: Event[]) => {
-    return eventsArray.filter((event: Event) => event?.creator?.name === id);
-  };
+  const [file, setFile] = useState<File | null>(null);
 
   useEffect(() => {
     onGetUser?.(id);
     onGetUsersPosts?.(id);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  const getUsersEvents = (eventsArray: Event[]) => {
+    return eventsArray.filter((event: Event) => event?.creator?.name === id);
+  };
+
+  const handleSubmitAvatar = async () => {
+    let convertedFile;
+    if (file) {
+      convertedFile = await convertImage(file);
+    }
+
+    try {
+      await onUpdateUser?.({ dataType: "avatar", data: String(convertedFile) });
+      setFile(null);
+    } catch (err) {}
+  };
+
+  const renderAvatar = (
+    user: UserHeader | undefined | null,
+    currentuser: LoggedUser | undefined | null,
+    file: any
+  ) => {
+    if (file) return URL.createObjectURL(file);
+    if (user?._id === currentUser?._id) {
+      return currentuser?.avatar;
+    }
+    if (user?.avatar) return user?.avatar;
+    return "";
+  };
 
   return (
     <Box
@@ -55,15 +92,49 @@ const User = () => {
               alignItems: "center",
             }}
           >
-            <Avatar
-              alt={"User avatar"}
-              src={"avatar"}
-              sx={{
-                margin: "0 2rem 1rem 0",
-                height: { xs: "8rem", md: "7rem" },
-                width: { xs: "8rem", md: "7rem" },
-              }}
-            />
+            <Box sx={{ position: "relative" }}>
+              <FormLabel htmlFor="file">
+                <Avatar
+                  alt={"User avatar"}
+                  src={renderAvatar(user, currentUser, file)}
+                  sx={{
+                    margin: "0 2rem 1rem 0",
+                    height: { xs: "8rem", md: "7rem" },
+                    width: { xs: "8rem", md: "7rem" },
+                    cursor:
+                      user?._id === currentUser?._id ? "pointer" : "default",
+                  }}
+                />
+                {user?._id === currentUser?._id ? (
+                  <Input
+                    type="file"
+                    inputProps={{ accept: ".png,.jpeg,.jpg,.webp" }}
+                    sx={{ display: "none" }}
+                    id="file"
+                    onChange={(e: any) => {
+                      setFile(e.target.files[0]);
+                    }}
+                  />
+                ) : (
+                  <></>
+                )}
+              </FormLabel>
+              {file ? (
+                <CheckIcon
+                  sx={{
+                    position: "absolute",
+                    bottom: "10px",
+                    right: "10px",
+                    cursor: "pointer",
+                    opacity: "0.8",
+                    color: "yellowgreen",
+                    borderRadius: "50%",
+                    border: "1px solid yellowgreen",
+                  }}
+                  onClick={() => handleSubmitAvatar()}
+                />
+              ) : null}
+            </Box>
             <Box sx={{ display: "flex", flexDirection: "column" }}>
               <Typography
                 variant="h5"

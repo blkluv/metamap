@@ -68,7 +68,7 @@ const Share = () => {
           >
             <Avatar
               alt="User avatar"
-              src={"avatar"}
+              src={currentUser?.avatar}
               sx={{
                 height: { xs: "2rem", md: "2.5rem" },
                 width: { xs: "2rem", md: "2.5rem" },

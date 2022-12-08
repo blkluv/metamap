@@ -124,6 +124,19 @@ class UserService {
       }
     }
   }
+
+  async updateUser(data: object) {
+    try {
+      const response = await this.http.patch<User>("/update", data);
+      return response.data;
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        notify(error.message);
+      } else if (typeof error === "string") {
+        notify(error);
+      }
+    }
+  }
 }
 
 export default new UserService();

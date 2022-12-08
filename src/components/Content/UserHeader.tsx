@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
 import ListItem from "@mui/material/ListItem";
 import ListItemText from "@mui/material/ListItemText";
@@ -11,13 +11,24 @@ import PeopleIcon from "@mui/icons-material/People";
 import UserContext from "../../context/userContext";
 
 const UserHeader = ({ _id, name }: Header) => {
-  const { currentUser, onFollowUser } = useContext(UserContext);
+  const { currentUser, onFollowUser, onGetAvatar } = useContext(UserContext);
+  const [avatar, setAvatar] = useState<any>(null);
+
+  useEffect(() => {
+    getAvatar(name);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const ifFollowing = (currentuser: User | null, id: string) => {
     if (currentUser) {
       return currentuser?.following?.find((user) => user._id === id);
     }
     return null;
+  };
+
+  const getAvatar = async (id: any) => {
+    const avatar = await onGetAvatar?.(id);
+    return setAvatar(avatar);
   };
 
   return (
@@ -38,7 +49,7 @@ const UserHeader = ({ _id, name }: Header) => {
       >
         <Avatar
           alt="User avatar"
-          src="/static/images/avatar/1.jpg"
+          src={avatar}
           sx={{
             margin: "0 .5rem .2rem 0",
             height: "2.5rem",

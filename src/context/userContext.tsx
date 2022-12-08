@@ -1,5 +1,10 @@
 import { useState, useEffect, createContext } from "react";
-import { UserHeader, User, UsersContext } from "../utils/interfaces";
+import {
+  UserHeader,
+  User,
+  UsersContext,
+  UserUpdateReq,
+} from "../utils/interfaces";
 import UserService from "../services/userService";
 import { useLocation, useNavigate } from "react-router-dom";
 import jwt_decode from "jwt-decode";
@@ -73,6 +78,12 @@ export const UserProvider = ({ children }: React.PropsWithChildren) => {
     }
   };
 
+  const handleGetAvatar = async (id: string | undefined) => {
+    const user = await UserService.getUser(id);
+    if (user) return String(user.avatar);
+    return null;
+  };
+
   const handleGetUsers = async () => {
     const users = await UserService.getUsers();
     if (users) {
@@ -137,6 +148,15 @@ export const UserProvider = ({ children }: React.PropsWithChildren) => {
     }
   };
 
+  const handleUpdateUser = async (data: UserUpdateReq) => {
+    const response = await UserService.updateUser(data);
+
+    if (response) {
+      setCurrentUser(response);
+      localStorage.setItem("currentUser", JSON.stringify(response));
+    }
+  };
+
   return (
     <UserContext.Provider
       value={{
@@ -144,6 +164,7 @@ export const UserProvider = ({ children }: React.PropsWithChildren) => {
         user,
         users,
         onGetUser: handleGetUser,
+        onGetAvatar: handleGetAvatar,
         onGetUsers: handleGetUsers,
         onSignUp: handleSignUp,
         onSignIn: handleSignIn,
@@ -152,6 +173,7 @@ export const UserProvider = ({ children }: React.PropsWithChildren) => {
         onChangePassword: handleChangePassword,
         onDeleteUser: handleDeleteUser,
         onFollowUser: handleFollowUser,
+        onUpdateUser: handleUpdateUser,
       }}
     >
       {children}

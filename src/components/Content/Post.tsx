@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext, useState, useEffect } from "react";
 import { NavLink } from "react-router-dom";
 import ConfirmationDialog from "../Elements/ConfirmationDialog";
 import UserContext from "../../context/userContext";
@@ -19,9 +19,15 @@ const Post = ({
   createdAt,
   likes,
 }: PostProps) => {
-  const { currentUser } = useContext(UserContext);
+  const { currentUser, onGetAvatar } = useContext(UserContext);
   const { onLikePost, onDeletePost } = useContext(PostContext);
   const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [avatar, setAvatar] = useState<any>(null);
+
+  useEffect(() => {
+    getAvatar(creator?.name);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentUser]);
 
   const handleLikePost = () => {
     if (creator?._id === currentUser?._id) {
@@ -40,6 +46,11 @@ const Post = ({
   const handleConfirmDialog = async () => {
     await onDeletePost?.(_id);
     setIsOpen(false);
+  };
+
+  const getAvatar = async (id: any) => {
+    const avatar = await onGetAvatar?.(id);
+    return setAvatar(avatar);
   };
 
   return (
@@ -72,7 +83,7 @@ const Post = ({
           >
             <Avatar
               alt={creator?.name}
-              src={"avatar"}
+              src={avatar}
               sx={{
                 margin: ".2rem .5rem .2rem 0",
                 height: "2.5rem",
