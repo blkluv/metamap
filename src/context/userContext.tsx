@@ -102,6 +102,15 @@ export const UserProvider = ({ children }: React.PropsWithChildren) => {
     }
   };
 
+  const handleSignUpDemo = async () => {
+    const currentUser = await UserService.signUpDemo();
+    if (currentUser?.user) {
+      localStorage.setItem("auth", JSON.stringify(currentUser.token));
+      localStorage.setItem("currentUser", JSON.stringify(currentUser.user));
+      setCurrentUser(currentUser.user);
+    }
+  };
+
   const handleSignIn = async (user: User) => {
     const currentUser = await UserService.signIn(user);
     if (currentUser) {
@@ -184,6 +193,7 @@ export const UserProvider = ({ children }: React.PropsWithChildren) => {
           onGetAvatar: handleGetAvatar,
           onGetUsers: handleGetUsers,
           onSignUp: handleSignUp,
+          onSignUpDemo: handleSignUpDemo,
           onSignIn: handleSignIn,
           onExternalSignIn: handleExternalSignIn,
           onLogout: handleLogout,

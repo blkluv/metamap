@@ -93,6 +93,7 @@ export interface UsersContext {
   onSignIn?: (user: User) => Promise<void>;
   onExternalSignIn?: (token: string) => Promise<void>;
   onSignUp?: (user: User) => Promise<void>;
+  onSignUpDemo?: () => Promise<void>;
   onLogout?: () => void;
   onResetPassword?: (email: string) => Promise<void>;
   onChangePassword?: (token: string, data: object) => Promise<void>;

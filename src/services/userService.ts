@@ -54,6 +54,22 @@ class UserService {
     }
   }
 
+  async signUpDemo() {
+    try {
+      const response = await this.http.post<UserResponse>("/signupdemo");
+      if (response.data?.user.name) {
+        notify(`Welcome ${response.data.user.name}.`);
+      }
+      return response.data;
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        notify(error.message);
+      } else if (typeof error === "string") {
+        notify(error);
+      }
+    }
+  }
+
   async signIn(user: User) {
     try {
       const response = await this.http.post<UserResponse>("/signin", user);

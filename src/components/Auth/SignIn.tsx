@@ -14,7 +14,7 @@ import { Divider } from "@mui/material";
 import { CssTextField } from "./AuthStyles";
 
 const SignIn = () => {
-  const { onSignIn } = useContext(UserContext);
+  const { onSignIn, onSignUpDemo } = useContext(UserContext);
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -84,6 +84,14 @@ const SignIn = () => {
             sx={{ mt: 1, mb: 1 }}
           >
             Sign In
+          </Button>
+          <Button
+            onClick={() => onSignUpDemo?.()}
+            fullWidth
+            variant="contained"
+            sx={{ mt: 1, mb: 1, color: "black", background: "white" }}
+          >
+            DEMO
           </Button>
           <Divider
             variant="middle"
