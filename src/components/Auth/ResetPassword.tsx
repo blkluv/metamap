@@ -1,7 +1,6 @@
 import { useContext } from "react";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
-import TextField from "@mui/material/TextField";
 import Link from "@mui/material/Link";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
@@ -9,8 +8,8 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { Link as RouterLink } from "react-router-dom";
-import { styled } from "@mui/material/styles";
 import UserContext from "../../context/userContext";
+import { CssTextField } from "./AuthStyles";
 
 const ResetPassword = () => {
   const { onResetPassword } = useContext(UserContext);
@@ -25,30 +24,6 @@ const ResetPassword = () => {
       onResetPassword?.(email);
     }
   };
-
-  const CssTextField = styled(TextField)({
-    input: {
-      color: "white",
-    },
-    label: { color: "white" },
-    "& label.Mui-focused": {
-      color: "white",
-    },
-    "& .MuiInput-underline:after": {
-      borderBottomColor: "white",
-    },
-    "& .MuiOutlinedInput-root": {
-      "& fieldset": {
-        borderColor: "rgb(120,120,126)",
-      },
-      "&:hover fieldset": {
-        borderColor: "white",
-      },
-      "&.Mui-focused fieldset": {
-        borderColor: "white",
-      },
-    },
-  });
 
   return (
     <Container

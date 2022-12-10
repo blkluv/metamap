@@ -1,4 +1,5 @@
 import { useState, useEffect, createContext } from "react";
+import { GoogleOAuthProvider, googleLogout } from "@react-oauth/google";
 import {
   UserHeader,
   User,
@@ -110,7 +111,17 @@ export const UserProvider = ({ children }: React.PropsWithChildren) => {
     }
   };
 
+  const handleExternalSignIn = async (token: string) => {
+    const currentUser = await UserService.externalSignIn(token);
+    if (currentUser) {
+      localStorage.setItem("auth", JSON.stringify(currentUser.token));
+      localStorage.setItem("currentUser", JSON.stringify(currentUser.user));
+      setCurrentUser(currentUser.user);
+    }
+  };
+
   const handleLogout = () => {
+    googleLogout();
     localStorage.removeItem("auth");
     localStorage.removeItem("currentUser");
     localStorage.removeItem("users");
@@ -128,6 +139,7 @@ export const UserProvider = ({ children }: React.PropsWithChildren) => {
   const handleDeleteUser = async () => {
     const deleteduser = await UserService.deleteUser();
     if (!deleteduser.user) {
+      googleLogout();
       localStorage.removeItem("auth");
       localStorage.removeItem("currentUser");
       localStorage.removeItem("users");
@@ -158,26 +170,33 @@ export const UserProvider = ({ children }: React.PropsWithChildren) => {
   };
 
   return (
-    <UserContext.Provider
-      value={{
-        currentUser,
-        user,
-        users,
-        onGetUser: handleGetUser,
-        onGetAvatar: handleGetAvatar,
-        onGetUsers: handleGetUsers,
-        onSignUp: handleSignUp,
-        onSignIn: handleSignIn,
-        onLogout: handleLogout,
-        onResetPassword: handleResetPassword,
-        onChangePassword: handleChangePassword,
-        onDeleteUser: handleDeleteUser,
-        onFollowUser: handleFollowUser,
-        onUpdateUser: handleUpdateUser,
-      }}
+    <GoogleOAuthProvider
+      clientId={
+        "546341062149-qn4vdlsiqchh7sav2tcim70frqhc62er.apps.googleusercontent.com"
+      }
     >
-      {children}
-    </UserContext.Provider>
+      <UserContext.Provider
+        value={{
+          currentUser,
+          user,
+          users,
+          onGetUser: handleGetUser,
+          onGetAvatar: handleGetAvatar,
+          onGetUsers: handleGetUsers,
+          onSignUp: handleSignUp,
+          onSignIn: handleSignIn,
+          onExternalSignIn: handleExternalSignIn,
+          onLogout: handleLogout,
+          onResetPassword: handleResetPassword,
+          onChangePassword: handleChangePassword,
+          onDeleteUser: handleDeleteUser,
+          onFollowUser: handleFollowUser,
+          onUpdateUser: handleUpdateUser,
+        }}
+      >
+        {children}
+      </UserContext.Provider>
+    </GoogleOAuthProvider>
   );
 };
 

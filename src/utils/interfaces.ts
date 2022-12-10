@@ -91,6 +91,7 @@ export interface UsersContext {
   onGetAvatar?: (id: string | undefined) => Promise<string | null>;
   onGetUsers?: () => Promise<void>;
   onSignIn?: (user: User) => Promise<void>;
+  onExternalSignIn?: (token: string) => Promise<void>;
   onSignUp?: (user: User) => Promise<void>;
   onLogout?: () => void;
   onResetPassword?: (email: string) => Promise<void>;

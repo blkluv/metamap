@@ -70,6 +70,25 @@ class UserService {
     }
   }
 
+  async externalSignIn(token: string) {
+    try {
+      const response = await this.http.post<UserResponse>(
+        "/externalsignin",
+        token
+      );
+      if (response.data?.user.name) {
+        notify(`Welcome ${response.data.user.name}.`);
+      }
+      return response.data;
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        notify(error.message);
+      } else if (typeof error === "string") {
+        notify(error);
+      }
+    }
+  }
+
   async resetPassword(email: string) {
     try {
       const response = await this.http.post("/resetpassword", { email });

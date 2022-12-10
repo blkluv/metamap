@@ -67,7 +67,12 @@ export const EventProvider = ({ children }: React.PropsWithChildren) => {
   };
 
   useEffect(() => {
-    getEvents();
+    const loggedUser = localStorage.getItem("auth")
+      ? JSON.parse(localStorage.getItem("auth") as string)
+      : null;
+    if (loggedUser) {
+      getEvents();
+    }
   }, []);
 
   return (

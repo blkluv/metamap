@@ -1,7 +1,6 @@
 import { useContext } from "react";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
-import TextField from "@mui/material/TextField";
 import Link from "@mui/material/Link";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
@@ -9,9 +8,9 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { Link as RouterLink } from "react-router-dom";
-import { styled } from "@mui/material/styles";
 import UserContext from "../../context/userContext";
 import { notify } from "../../utils/notifications";
+import { CssTextField } from "./AuthStyles";
 
 const SignUp = () => {
   const { onSignUp } = useContext(UserContext);
@@ -34,30 +33,6 @@ const SignUp = () => {
       onSignUp?.(Object(newUser));
     }
   };
-
-  const CssTextField = styled(TextField)({
-    input: {
-      color: "white",
-    },
-    label: { color: "white" },
-    "& label.Mui-focused": {
-      color: "white",
-    },
-    "& .MuiInput-underline:after": {
-      borderBottomColor: "white",
-    },
-    "& .MuiOutlinedInput-root": {
-      "& fieldset": {
-        borderColor: "rgb(120,120,126)",
-      },
-      "&:hover fieldset": {
-        borderColor: "white",
-      },
-      "&.Mui-focused fieldset": {
-        borderColor: "white",
-      },
-    },
-  });
 
   return (
     <Container

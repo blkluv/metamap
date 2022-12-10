@@ -70,7 +70,12 @@ export const PostProvider = ({ children }: React.PropsWithChildren) => {
   };
 
   useEffect(() => {
-    handleGetFollowingPosts();
+    const loggedUser = localStorage.getItem("auth")
+      ? JSON.parse(localStorage.getItem("auth") as string)
+      : null;
+    if (loggedUser) {
+      handleGetFollowingPosts();
+    }
   }, []);
 
   return (

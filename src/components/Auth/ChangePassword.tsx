@@ -1,13 +1,12 @@
 import { useContext } from "react";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
-import TextField from "@mui/material/TextField";
 import Box from "@mui/material/Box";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
-import { styled } from "@mui/material/styles";
 import UserContext from "../../context/userContext";
+import { CssTextField } from "./AuthStyles";
 
 const ChangePassword = () => {
   const { onChangePassword } = useContext(UserContext);
@@ -28,30 +27,6 @@ const ChangePassword = () => {
       onChangePassword?.(token, passwords);
     }
   };
-
-  const CssTextField = styled(TextField)({
-    input: {
-      color: "white",
-    },
-    label: { color: "white" },
-    "& label.Mui-focused": {
-      color: "white",
-    },
-    "& .MuiInput-underline:after": {
-      borderBottomColor: "white",
-    },
-    "& .MuiOutlinedInput-root": {
-      "& fieldset": {
-        borderColor: "rgb(120,120,126)",
-      },
-      "&:hover fieldset": {
-        borderColor: "white",
-      },
-      "&.Mui-focused fieldset": {
-        borderColor: "white",
-      },
-    },
-  });
 
   return (
     <Container

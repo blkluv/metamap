@@ -1,7 +1,6 @@
 import { useContext } from "react";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
-import TextField from "@mui/material/TextField";
 import Link from "@mui/material/Link";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
@@ -9,8 +8,10 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { Link as RouterLink } from "react-router-dom";
-import { styled } from "@mui/material/styles";
 import UserContext from "../../context/userContext";
+import GoogleLoginButton from "./GoogleLogin";
+import { Divider } from "@mui/material";
+import { CssTextField } from "./AuthStyles";
 
 const SignIn = () => {
   const { onSignIn } = useContext(UserContext);
@@ -28,30 +29,6 @@ const SignIn = () => {
       onSignIn?.(Object(userData));
     }
   };
-
-  const CssTextField = styled(TextField)({
-    input: {
-      color: "white",
-    },
-    label: { color: "white" },
-    "& label.Mui-focused": {
-      color: "white",
-    },
-    "& .MuiInput-underline:after": {
-      borderBottomColor: "white",
-    },
-    "& .MuiOutlinedInput-root": {
-      "& fieldset": {
-        borderColor: "rgb(120,120,126)",
-      },
-      "&:hover fieldset": {
-        borderColor: "white",
-      },
-      "&.Mui-focused fieldset": {
-        borderColor: "white",
-      },
-    },
-  });
 
   return (
     <Container
@@ -104,10 +81,15 @@ const SignIn = () => {
             type="submit"
             fullWidth
             variant="contained"
-            sx={{ mt: 3, mb: 2 }}
+            sx={{ mt: 1, mb: 1 }}
           >
             Sign In
           </Button>
+          <Divider
+            variant="middle"
+            sx={{ background: "rgb(120,120,126)", margin: "1rem" }}
+          />
+          <GoogleLoginButton />
           <Grid container sx={{ mb: 8 }}>
             <Grid item xs>
               <Link
