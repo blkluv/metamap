@@ -1,4 +1,5 @@
-import { useContext, useState, useRef } from "react";
+import { useContext, useState } from "react";
+import { useForm } from "react-hook-form";
 import PostContext from "../../context/postContext";
 import UserContext from "../../context/userContext";
 import convertImage from "../../utils/imageConverter";
@@ -15,19 +16,32 @@ import {
   TextField,
 } from "@mui/material";
 import { NavLink } from "react-router-dom";
+import { notify } from "../../utils/notifications";
 
 const Share = () => {
   const { onAddPost } = useContext(PostContext);
   const { currentUser } = useContext(UserContext);
   const [file, setFile] = useState<File | null>(null);
-  const formRef = useRef<any>();
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    const data = new FormData(e.currentTarget);
+  const {
+    register: registerPost,
+    handleSubmit: handleRegisterPost,
+    reset: resetPost,
+  } = useForm({
+    defaultValues: {
+      description: null,
+    },
+  });
+
+  const handleAddPost = async (data: { description: string | null }) => {
+    const description = data.description?.trim();
+
+    if (!description) {
+      return notify("Please complete all fields.");
+    }
 
     const postData: Post = {
-      description: ("" + data.get("postShareDescription")).trim(),
+      description,
     };
 
     if (file) {
@@ -38,7 +52,7 @@ const Share = () => {
     try {
       onAddPost?.(postData);
       setFile(null);
-      formRef.current?.reset();
+      resetPost();
     } catch (err) {}
   };
 
@@ -51,8 +65,7 @@ const Share = () => {
     >
       <Box
         component="form"
-        ref={formRef}
-        onSubmit={handleSubmit}
+        onSubmit={handleRegisterPost(handleAddPost)}
         sx={{
           padding: "1rem 1.5rem",
           borderRadius: "25px",
@@ -84,13 +97,16 @@ const Share = () => {
             margin="dense"
             maxRows={3}
             InputProps={{ disableUnderline: true }}
-            inputProps={{ maxLength: 800, style: { color: "lightgrey" } }}
-            required
+            inputProps={{ style: { color: "lightgrey" } }}
             fullWidth
             id="postShareDescription"
-            name="postShareDescription"
             autoComplete="postShareDescription"
             autoFocus
+            {...registerPost("description", {
+              required: true,
+              minLength: 8,
+              maxLength: 800,
+            })}
           />
         </Box>
         {file && (
