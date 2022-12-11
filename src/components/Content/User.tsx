@@ -40,7 +40,7 @@ const User = () => {
   const handleSubmitAvatar = async () => {
     let convertedFile;
     if (file) {
-      convertedFile = await convertImage(file);
+      convertedFile = await convertImage(file, 170, 170);
     }
 
     try {

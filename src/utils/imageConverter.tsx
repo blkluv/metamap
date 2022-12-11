@@ -1,11 +1,11 @@
 import Resizer from "react-image-file-resizer";
 
-const convertImage = async (file: File) => {
+const convertImage = async (file: File, width: number, height: number) => {
   return new Promise((resolve) => {
     Resizer.imageFileResizer(
       file,
-      800,
-      600,
+      width,
+      height,
       "JPG",
       90,
       0,
