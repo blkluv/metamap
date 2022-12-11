@@ -1,4 +1,5 @@
 import { useContext } from "react";
+import { useForm } from "react-hook-form";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import Link from "@mui/material/Link";
@@ -12,22 +13,36 @@ import UserContext from "../../context/userContext";
 import GoogleLoginButton from "./GoogleLogin";
 import { Divider } from "@mui/material";
 import { CssTextField } from "./AuthStyles";
+import { notify } from "../../utils/notifications";
 
 const SignIn = () => {
   const { onSignIn, onSignUpDemo } = useContext(UserContext);
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
+  const {
+    register: registerSignIn,
+    handleSubmit: handleRegisterSignIn,
+    reset: resetSignIn,
+  } = useForm({
+    defaultValues: {
+      password: null,
+      email: null,
+    },
+  });
 
-    const userData = {
-      email: data.get("email"),
-      password: data.get("password"),
-    };
+  const handleSignIn = (data: {
+    email: string | null;
+    password: string | null;
+  }) => {
+    const email = data.email?.trim();
+    const password = data.password?.trim();
 
-    if (userData) {
-      onSignIn?.(Object(userData));
+    if (!email || !password) {
+      notify("Please complete all fields.");
+      return;
     }
+
+    onSignIn?.(Object({ email, password }));
+    resetSignIn();
   };
 
   return (
@@ -56,26 +71,41 @@ const SignIn = () => {
         <Typography component="h1" variant="h5">
           Sign in
         </Typography>
-        <Box component="form" onSubmit={handleSubmit} sx={{ mt: 1 }}>
+
+        <Box
+          component="form"
+          onSubmit={handleRegisterSignIn(handleSignIn)}
+          sx={{ mt: 1 }}
+        >
           <CssTextField
             margin="normal"
             required
             fullWidth
             id="email"
             label="Email Address"
-            name="email"
             autoComplete="email"
             autoFocus
+            {...registerSignIn("email", {
+              required: true,
+              minLength: 5,
+              maxLength: 40,
+              pattern:
+                /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+            })}
           />
           <CssTextField
             margin="normal"
             required
             fullWidth
-            name="password"
             label="Password"
             type="password"
             id="password"
             autoComplete="current-password"
+            {...registerSignIn("password", {
+              required: true,
+              minLength: 8,
+              maxLength: 25,
+            })}
           />
           <Button
             type="submit"

@@ -1,4 +1,5 @@
 import { useContext } from "react";
+import { useForm } from "react-hook-form";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import Link from "@mui/material/Link";
@@ -15,23 +16,38 @@ import { CssTextField } from "./AuthStyles";
 const SignUp = () => {
   const { onSignUp } = useContext(UserContext);
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
+  const {
+    register: registerSignUp,
+    handleSubmit: handleRegisterSignUp,
+    reset: resetSignUp,
+  } = useForm({
+    defaultValues: {
+      username: null,
+      password: null,
+      passwordRepeat: null,
+      email: null,
+    },
+  });
 
-    if (data.get("password") !== data.get("passwordRepeat"))
-      return notify("Passwords don't match.");
+  const handleSignUp = (data: {
+    username: string | null;
+    email: string | null;
+    password: string | null;
+    passwordRepeat: string | null;
+  }) => {
+    const username = data.username?.trim();
+    const email = data.email?.trim();
+    const password = data.password?.trim();
+    const passwordRepeat = data.passwordRepeat?.trim();
 
-    const newUser = {
-      username: data.get("name"),
-      email: data.get("email"),
-      password: data.get("password"),
-      external: false,
-    };
-
-    if (newUser) {
-      onSignUp?.(Object(newUser));
+    if (!username || !email || !password || !passwordRepeat) {
+      return notify("Please complete all fields.");
     }
+
+    if (password !== passwordRepeat) return notify("Passwords don't match.");
+
+    onSignUp?.(Object({ username, email, password, external: false }));
+    resetSignUp();
   };
 
   return (
@@ -60,17 +76,26 @@ const SignUp = () => {
         <Typography component="h1" variant="h5">
           Sign up
         </Typography>
-        <Box component="form" onSubmit={handleSubmit} sx={{ mt: 3 }}>
+        <Box
+          component="form"
+          onSubmit={handleRegisterSignUp(handleSignUp)}
+          sx={{ mt: 3 }}
+        >
           <Grid container spacing={2}>
             <Grid item xs={12}>
               <CssTextField
                 autoComplete="given-name"
-                name="name"
                 required
                 fullWidth
                 id="name"
                 label="Name"
+                placeholder="3 - 30 characters"
                 autoFocus
+                {...registerSignUp("username", {
+                  required: true,
+                  minLength: 3,
+                  maxLength: 30,
+                })}
               />
             </Grid>
             <Grid item xs={12}>
@@ -79,30 +104,46 @@ const SignUp = () => {
                 fullWidth
                 id="email"
                 label="Email Address"
-                name="email"
                 autoComplete="email"
+                placeholder="5 - 40 characters"
+                {...registerSignUp("email", {
+                  required: true,
+                  minLength: 5,
+                  maxLength: 40,
+                  pattern:
+                    /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+                })}
               />
             </Grid>
             <Grid item xs={12}>
               <CssTextField
                 required
                 fullWidth
-                name="password"
                 label="Password"
                 type="password"
                 id="password"
                 autoComplete="new-password"
+                placeholder="8 - 25 characters"
+                {...registerSignUp("password", {
+                  required: true,
+                  minLength: 8,
+                  maxLength: 25,
+                })}
               />
             </Grid>
             <Grid item xs={12}>
               <CssTextField
                 required
                 fullWidth
-                name="passwordRepeat"
                 label="Repeat Password"
                 type="password"
                 id="passwordRepeat"
                 autoComplete="new-password"
+                {...registerSignUp("passwordRepeat", {
+                  required: true,
+                  minLength: 8,
+                  maxLength: 25,
+                })}
               />
             </Grid>
           </Grid>

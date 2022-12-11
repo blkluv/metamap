@@ -1,4 +1,5 @@
 import { useContext } from "react";
+import { useForm } from "react-hook-form";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import Link from "@mui/material/Link";
@@ -10,19 +11,30 @@ import Container from "@mui/material/Container";
 import { Link as RouterLink } from "react-router-dom";
 import UserContext from "../../context/userContext";
 import { CssTextField } from "./AuthStyles";
+import { notify } from "../../utils/notifications";
 
 const ResetPassword = () => {
   const { onResetPassword } = useContext(UserContext);
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
+  const {
+    register: registerResetPassword,
+    handleSubmit: handleRegisterResetPassword,
+    reset: resetForm,
+  } = useForm({
+    defaultValues: {
+      email: null,
+    },
+  });
 
-    const email = String(data.get("email"));
+  const handleResetPassword = (data: { email: string | null }) => {
+    const useremail = data.email?.trim();
 
-    if (email) {
-      onResetPassword?.(email);
+    if (!useremail) {
+      return notify("Please complete all fields.");
     }
+
+    onResetPassword?.(useremail);
+    resetForm();
   };
 
   return (
@@ -51,16 +63,27 @@ const ResetPassword = () => {
         <Typography component="h1" variant="h5">
           Reset Password
         </Typography>
-        <Box component="form" onSubmit={handleSubmit} sx={{ mt: 1 }}>
+        <Box
+          component="form"
+          onSubmit={handleRegisterResetPassword(handleResetPassword)}
+          sx={{ mt: 1 }}
+        >
           <CssTextField
             margin="normal"
             required
             fullWidth
             id="email"
             label="Email Address"
-            name="email"
             autoComplete="email"
             autoFocus
+            placeholder="5 - 40 characters"
+            {...registerResetPassword("email", {
+              required: true,
+              minLength: 5,
+              maxLength: 40,
+              pattern:
+                /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+            })}
           />
           <Button
             type="submit"
