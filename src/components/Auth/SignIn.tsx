@@ -14,6 +14,7 @@ import GoogleLoginButton from "./GoogleLogin";
 import { Divider } from "@mui/material";
 import { CssTextField } from "./AuthStyles";
 import { notify } from "../../utils/notifications";
+import debounce from "../../utils/debounce";
 
 const SignIn = () => {
   const { onSignIn, onSignUpDemo } = useContext(UserContext);
@@ -74,7 +75,7 @@ const SignIn = () => {
 
         <Box
           component="form"
-          onSubmit={handleRegisterSignIn(handleSignIn)}
+          onSubmit={handleRegisterSignIn(debounce(handleSignIn, 400))}
           sx={{ mt: 1 }}
         >
           <CssTextField

@@ -1,60 +1,150 @@
-import { useContext } from "react";
+import { useContext, useState } from "react";
+import { useForm } from "react-hook-form";
 import EventContext from "../../context/eventContext";
 import {
   Box,
   Button,
+  CardMedia,
   FormControl,
+  FormLabel,
+  Input,
   InputLabel,
   MenuItem,
   Select,
   TextField,
   Typography,
 } from "@mui/material";
-import BasicDateTimePicker from "../Elements/DateTimePicker";
 import { notify } from "../../utils/notifications";
-import { PinCardProps } from "../../utils/interfaces";
+import { Event, PinCardProps } from "../../utils/interfaces";
+import convertImage from "../../utils/imageConverter";
+import { Cancel } from "@mui/icons-material";
+import debounce from "../../utils/debounce";
 
 const PinCard = ({ lng, lat, onClose }: PinCardProps) => {
   const { onAddEvent } = useContext(EventContext);
+  const [logo, setLogo] = useState<File | null>(null);
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    const data = new FormData(e.currentTarget);
+  const {
+    register: registerEvent,
+    handleSubmit: handleRegisterEvent,
+    reset: resetEventForm,
+  } = useForm({
+    defaultValues: {
+      title: null,
+      description: null,
+      start: null,
+      end: null,
+      category: null,
+      location: null,
+    },
+  });
 
-    const eventData = {
-      title: "" + data.get("title"),
-      description: "" + data.get("description"),
-      start: "" + data.get("start"),
-      end: "" + data.get("end"),
-      category: "" + data.get("category"),
-      location: "" + data.get("location"),
+  const handleAddEvent = async (data: Event) => {
+    const title = data.title?.trim();
+    const start = data.start?.trim();
+    const end = data.end?.trim();
+    const description = data.description?.trim();
+    const category = data.category?.trim();
+    const location = data.location?.trim();
+
+    if (!description || !title || !start || !end || !category || !location) {
+      return notify("Please complete all fields.");
+    }
+
+    const eventData: Event = {
+      title,
+      description,
+      start,
+      end,
+      category,
+      location,
+      coordinates: { lng, lat },
     };
 
-    if (eventData.start < eventData.end) {
-      onAddEvent?.({
-        title: eventData.title,
-        start: eventData.start,
-        end: eventData.end,
-        category: eventData.category,
-        location: eventData.location,
-        coordinates: { lng, lat },
-        description: eventData.description,
-        logo: eventData.category[0],
-      });
-      onClose?.(null);
-    } else {
-      notify("The end of the event must be later than its beginning.");
+    if (
+      eventData.start &&
+      eventData.end &&
+      eventData?.start >= eventData?.end
+    ) {
+      return notify("The end of the event must be later than its beginning.");
     }
+
+    if (logo) {
+      eventData.logo = await convertImage(logo, 320, 320);
+    }
+
+    try {
+      onAddEvent?.(eventData);
+      setLogo(null);
+      onClose?.(null);
+      resetEventForm();
+    } catch (err) {}
   };
+
+  // inny datetime w headerze eventu
+  // usememo ?
 
   return (
     <Box sx={{ ml: 1, mr: 1 }}>
       <Typography component="h3" variant="h6">
         New event
       </Typography>
-      <Box component="form" onSubmit={handleSubmit}>
-        <BasicDateTimePicker label={"start"} />
-        <BasicDateTimePicker label={"end"} />
+      {logo && (
+        <Box sx={{ position: "relative" }}>
+          <CardMedia
+            component="img"
+            src={URL.createObjectURL(logo)}
+            sx={{
+              width: "100%",
+              height: "100%",
+              maxHeight: "200px",
+              borderRadius: "10px",
+              marginTop: "1rem",
+              marginBottom: "1rem",
+            }}
+            alt={"Event image"}
+          />
+          <Cancel
+            sx={{
+              position: "absolute",
+              top: "5px",
+              right: "5px",
+              cursor: "pointer",
+              opacity: "0.8",
+              background: "white",
+              borderRadius: "50%",
+            }}
+            onClick={() => setLogo(null)}
+          />
+        </Box>
+      )}
+
+      <Box
+        component="form"
+        onSubmit={handleRegisterEvent(debounce(handleAddEvent, 400))}
+      >
+        <TextField
+          sx={{ mt: 1, mb: 1, textTransform: "capitalize" }}
+          size="small"
+          variant="standard"
+          id={"start"}
+          autoComplete={"start"}
+          type="datetime-local"
+          {...registerEvent("start", {
+            required: true,
+          })}
+        />
+        <TextField
+          sx={{ mt: 1, mb: 1, textTransform: "capitalize" }}
+          size="small"
+          variant="standard"
+          id={"end"}
+          autoComplete={"end"}
+          type="datetime-local"
+          {...registerEvent("end", {
+            required: true,
+          })}
+        />
         <FormControl variant="standard" required sx={{ minWidth: 120 }}>
           <InputLabel id="eventCategory">Category</InputLabel>
           <Select
@@ -63,8 +153,10 @@ const PinCard = ({ lng, lat, onClose }: PinCardProps) => {
             variant="standard"
             id="category"
             labelId="eventCategory"
-            name="category"
             autoComplete="category"
+            {...registerEvent("category", {
+              required: true,
+            })}
           >
             <MenuItem value={"art"}>Art</MenuItem>
             <MenuItem value={"business"}>Business</MenuItem>
@@ -81,27 +173,31 @@ const PinCard = ({ lng, lat, onClose }: PinCardProps) => {
           margin="dense"
           size="small"
           maxRows={2}
-          required
-          inputProps={{ maxLength: 45 }}
           fullWidth
           id="title"
           label="Title"
-          name="title"
           autoComplete="title"
           autoFocus
+          {...registerEvent("title", {
+            required: true,
+            minLength: 3,
+            maxLength: 45,
+          })}
         />
         <TextField
           variant="standard"
           margin="dense"
           size="small"
-          inputProps={{ maxLength: 25 }}
-          required
           fullWidth
           id="location"
           label="Location"
-          name="location"
           autoComplete="location"
           autoFocus
+          {...registerEvent("location", {
+            required: true,
+            minLength: 3,
+            maxLength: 25,
+          })}
         />
         <TextField
           variant="standard"
@@ -109,21 +205,45 @@ const PinCard = ({ lng, lat, onClose }: PinCardProps) => {
           size="small"
           margin="dense"
           maxRows={5}
-          inputProps={{ maxLength: 800 }}
-          required
           fullWidth
           id="description"
           label="Description"
-          name="description"
           autoComplete="description"
           autoFocus
+          {...registerEvent("description", {
+            required: true,
+            minLength: 5,
+            maxLength: 800,
+          })}
         />
-        <Button
-          type="submit"
-          fullWidth
-          variant="contained"
-          sx={{ mt: 3, mb: 1 }}
+        <FormLabel
+          htmlFor="logo"
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            marginRight: "0.5rem",
+            marginBottom: "0.5rem",
+            cursor: "pointer",
+            color: "inherit",
+          }}
         >
+          <Button
+            component="span"
+            fullWidth
+            sx={{ fontSize: "0.9rem", fontWeight: "500", mt: 1, mb: 0.5 }}
+          >
+            Photo
+          </Button>
+          <Input
+            type="file"
+            inputProps={{ accept: ".png,.jpeg,.jpg,.webp" }}
+            sx={{ display: "none" }}
+            id="logo"
+            onChange={(e: any) => setLogo(e.target.files[0])}
+          />
+        </FormLabel>
+        <Button type="submit" fullWidth variant="contained" sx={{ mb: 0.5 }}>
           Create
         </Button>
       </Box>

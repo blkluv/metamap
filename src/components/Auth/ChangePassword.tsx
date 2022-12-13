@@ -9,6 +9,7 @@ import Container from "@mui/material/Container";
 import UserContext from "../../context/userContext";
 import { CssTextField } from "./AuthStyles";
 import { notify } from "../../utils/notifications";
+import debounce from "../../utils/debounce";
 
 const ChangePassword = () => {
   const { onChangePassword } = useContext(UserContext);
@@ -72,7 +73,9 @@ const ChangePassword = () => {
         </Typography>
         <Box
           component="form"
-          onSubmit={handleRegisterChangePassword(handleChangePassword)}
+          onSubmit={handleRegisterChangePassword(
+            debounce(handleChangePassword, 400)
+          )}
           sx={{ mt: 1 }}
         >
           <CssTextField

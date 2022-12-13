@@ -10,6 +10,7 @@ import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import { Post as PostProps } from "../../utils/interfaces";
 import { notify } from "../../utils/notifications";
 import moment from "moment";
+import debounce from "../../utils/debounce";
 
 const Post = ({
   _id,
@@ -178,12 +179,12 @@ const Post = ({
               cursor: "pointer",
               color: "rgb(235, 110, 105)",
             }}
-            onClick={() => handleLikePost()}
+            onClick={debounce(() => handleLikePost(), 400)}
           />
         ) : (
           <FavoriteBorderIcon
             sx={{ fontSize: "1.5rem", cursor: "pointer" }}
-            onClick={() => handleLikePost()}
+            onClick={debounce(() => handleLikePost(), 400)}
           />
         )}
         <Typography

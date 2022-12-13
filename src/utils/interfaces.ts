@@ -1,3 +1,4 @@
+// user
 export interface UserHeader {
   _id: string;
   name: string;
@@ -5,56 +6,6 @@ export interface UserHeader {
   following?: UserHeader[];
   followers?: UserHeader[];
   avatar?: any;
-}
-
-export interface Event {
-  _id?: string;
-  title: string;
-  start: string;
-  end: string;
-  category: string;
-  location: string;
-  coordinates: { lng: number; lat: number };
-  description: string;
-  logo: string;
-  creator?: UserHeader;
-  participants?: UserHeader[];
-}
-
-export interface EventsContext {
-  events: Event[];
-  selectedEvent?: Event;
-  onAddEvent?: (event: Event) => Promise<void>;
-  onJoinEvent?: (id: string | undefined) => Promise<void>;
-  onLeaveEvent?: (id: string | undefined) => Promise<void>;
-  onSetSelectedEvent?: (id: string | undefined) => void;
-}
-
-export interface EventHeader {
-  event: Event;
-  variant: string;
-}
-
-export interface PinCardProps {
-  lng: number;
-  lat: number;
-  onClose?: React.Dispatch<React.SetStateAction<PinCardProps | null>>;
-}
-
-export interface DateTimePickerProps {
-  label: string;
-}
-
-export interface MenuItemProps {
-  id?: number;
-  label: string;
-  icon?: JSX.Element;
-  color?: string;
-  link: string;
-}
-
-export interface MenuItemListProps {
-  items: MenuItemProps[];
 }
 
 export interface User {
@@ -69,6 +20,11 @@ export interface User {
   avatar?: any;
 }
 
+export interface UserUpdateReq {
+  dataType: string;
+  data: string | [];
+}
+
 export interface UserResponse {
   token: string;
   user: {
@@ -81,6 +37,15 @@ export interface UserResponse {
     newsletter?: boolean;
     avatar?: any;
   };
+}
+
+export interface FollowResponse {
+  activeUser: User;
+  userToFollow: User;
+}
+
+export interface SocialListProps {
+  data: UserHeader[];
 }
 
 export interface UsersContext {
@@ -102,20 +67,36 @@ export interface UsersContext {
   onUpdateUser?: (data: UserUpdateReq) => Promise<void>;
 }
 
-export interface ProtectedRoutesProps {
-  logged: boolean;
-  redirect: string;
+// event
+export interface Event {
+  _id?: string;
+  title: string | null;
+  start: string | null;
+  end: string | null;
+  category: string | null;
+  location: string | null;
+  coordinates?: { lng: number; lat: number };
+  description: string | null;
+  logo?: any;
+  creator?: UserHeader;
+  participants?: UserHeader[];
 }
 
-export interface SocialListProps {
-  data: UserHeader[];
+export interface EventsContext {
+  events: Event[];
+  selectedEvent?: Event;
+  onAddEvent?: (event: Event) => Promise<void>;
+  onJoinEvent?: (id: string | undefined) => Promise<void>;
+  onLeaveEvent?: (id: string | undefined) => Promise<void>;
+  onSetSelectedEvent?: (id: string | undefined) => void;
 }
 
-export interface FollowResponse {
-  activeUser: User;
-  userToFollow: User;
+export interface EventHeader {
+  event: Event;
+  variant: string;
 }
 
+// post
 export interface Post {
   _id?: string;
   creator?: UserHeader;
@@ -123,6 +104,12 @@ export interface Post {
   file?: any;
   createdAt?: string;
   likes?: UserHeader[];
+}
+
+export interface PinCardProps {
+  lng: number;
+  lat: number;
+  onClose?: React.Dispatch<React.SetStateAction<PinCardProps | null>>;
 }
 
 export interface PostsContext {
@@ -135,15 +122,32 @@ export interface PostsContext {
   onDeletePost?: (id: string | undefined) => Promise<void>;
 }
 
+// other
+export interface DateTimePickerProps {
+  label: string;
+}
+
+export interface MenuItemProps {
+  id?: number;
+  label: string;
+  icon?: JSX.Element;
+  color?: string;
+  link: string;
+}
+
+export interface MenuItemListProps {
+  items: MenuItemProps[];
+}
+
+export interface ProtectedRoutesProps {
+  logged: boolean;
+  redirect: string;
+}
+
 export interface ConfirmationDialogProps {
   title: string;
   confirmLabel: string;
   isOpen: boolean;
   onConfirm: () => void;
   onClose: () => void;
-}
-
-export interface UserUpdateReq {
-  dataType: string;
-  data: string | [];
 }

@@ -17,6 +17,7 @@ import {
 } from "@mui/material";
 import { NavLink } from "react-router-dom";
 import { notify } from "../../utils/notifications";
+import debounce from "../../utils/debounce";
 
 const Share = () => {
   const { onAddPost } = useContext(PostContext);
@@ -65,7 +66,7 @@ const Share = () => {
     >
       <Box
         component="form"
-        onSubmit={handleRegisterPost(handleAddPost)}
+        onSubmit={handleRegisterPost(debounce(handleAddPost, 400))}
         sx={{
           padding: "1rem 1.5rem",
           borderRadius: "25px",

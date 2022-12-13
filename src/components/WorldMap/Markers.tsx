@@ -12,8 +12,8 @@ const Markers = () => {
         events.map(({ coordinates, _id }) => (
           <Marker
             key={_id}
-            longitude={coordinates.lng}
-            latitude={coordinates.lat}
+            longitude={coordinates?.lng}
+            latitude={coordinates?.lat}
             color={
               _id === selectedEvent?._id ? "rgb(235, 110, 105)" : "#3FB1CE"
             }

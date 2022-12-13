@@ -21,7 +21,6 @@ const BasicDateTimePicker = ({ label }: DateTimePickerProps) => {
             id={label}
             name={label}
             autoComplete={label}
-            required
           />
         )}
         label={label}

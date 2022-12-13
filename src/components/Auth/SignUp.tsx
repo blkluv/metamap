@@ -12,6 +12,7 @@ import { Link as RouterLink } from "react-router-dom";
 import UserContext from "../../context/userContext";
 import { notify } from "../../utils/notifications";
 import { CssTextField } from "./AuthStyles";
+import debounce from "../../utils/debounce";
 
 const SignUp = () => {
   const { onSignUp } = useContext(UserContext);
@@ -78,7 +79,7 @@ const SignUp = () => {
         </Typography>
         <Box
           component="form"
-          onSubmit={handleRegisterSignUp(handleSignUp)}
+          onSubmit={handleRegisterSignUp(debounce(handleSignUp, 400))}
           sx={{ mt: 3 }}
         >
           <Grid container spacing={2}>

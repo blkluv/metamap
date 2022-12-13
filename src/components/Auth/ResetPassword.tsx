@@ -12,6 +12,7 @@ import { Link as RouterLink } from "react-router-dom";
 import UserContext from "../../context/userContext";
 import { CssTextField } from "./AuthStyles";
 import { notify } from "../../utils/notifications";
+import debounce from "../../utils/debounce";
 
 const ResetPassword = () => {
   const { onResetPassword } = useContext(UserContext);
@@ -65,7 +66,9 @@ const ResetPassword = () => {
         </Typography>
         <Box
           component="form"
-          onSubmit={handleRegisterResetPassword(handleResetPassword)}
+          onSubmit={handleRegisterResetPassword(
+            debounce(handleResetPassword, 400)
+          )}
           sx={{ mt: 1 }}
         >
           <CssTextField

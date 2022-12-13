@@ -9,6 +9,7 @@ import CheckIcon from "@mui/icons-material/Check";
 import CloseIcon from "@mui/icons-material/Close";
 import PeopleIcon from "@mui/icons-material/People";
 import UserContext from "../../context/userContext";
+import debounce from "../../utils/debounce";
 
 const UserHeader = ({ _id, name }: Header) => {
   const { currentUser, onFollowUser, onGetAvatar } = useContext(UserContext);
@@ -96,7 +97,7 @@ const UserHeader = ({ _id, name }: Header) => {
           <>
             <Box sx={{ display: "flex", alignItems: "center" }}>
               <Button
-                onClick={() => onFollowUser?.(_id)}
+                onClick={debounce(() => onFollowUser?.(_id), 1000)}
                 sx={{
                   color: ifFollowing(currentUser, _id)
                     ? "rgb(235, 110, 105)"

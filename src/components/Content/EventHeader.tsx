@@ -9,10 +9,11 @@ import { Box, Button, CardMedia } from "@mui/material";
 import CheckIcon from "@mui/icons-material/Check";
 import CloseIcon from "@mui/icons-material/Close";
 import GroupIcon from "@mui/icons-material/Group";
+import debounce from "../../utils/debounce";
 import preview from "../../images/preview.png";
 
 const EventHeader = ({
-  event: { _id, title, start, location, description, participants },
+  event: { _id, title, start, location, description, participants, logo },
   variant,
 }: Header) => {
   const { selectedEvent, onSetSelectedEvent, onJoinEvent, onLeaveEvent } =
@@ -43,6 +44,10 @@ const EventHeader = ({
       <CardMedia
         component="img"
         sx={{
+          height:
+            variant === "list"
+              ? { xs: "100%", sm: 155 }
+              : { xs: "100%", sm: 155, md: "100%" },
           width:
             variant === "list"
               ? { xs: "100%", sm: 155 }
@@ -52,7 +57,7 @@ const EventHeader = ({
           marginTop: "0.5rem",
           marginBottom: "0.5rem",
         }}
-        image={preview}
+        image={logo ? logo : preview}
         alt="Marker on the map"
       />
       <ListItemText
@@ -100,8 +105,10 @@ const EventHeader = ({
                 </Typography>
               </Typography>
               <Button
-                onClick={() =>
-                  ifJoined ? onLeaveEvent?.(_id) : onJoinEvent?.(_id)
+                onClick={
+                  ifJoined
+                    ? debounce(() => onLeaveEvent?.(_id), 400)
+                    : debounce(() => onJoinEvent?.(_id), 400)
                 }
                 sx={{
                   color: ifJoined ? "rgb(235, 110, 105)" : "",
