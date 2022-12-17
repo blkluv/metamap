@@ -1,9 +1,11 @@
 import { useContext } from "react";
 import { Box, Divider, Typography } from "@mui/material";
 import UserContext from "../../context/userContext";
+import ThemeContext from "../../context/themeContext";
 
 const Account = () => {
   const { onDeleteUser } = useContext(UserContext);
+  const { palette } = useContext(ThemeContext);
 
   return (
     <Box
@@ -12,9 +14,9 @@ const Account = () => {
         flexDirection: { xs: "column", md: "row" },
         width: "100%",
         padding: { xs: "1rem", md: "1rem 2rem 2rem 2rem", overflow: "hidden" },
-        background: "rgb(35,35,48)",
+        background: palette?.background.primary,
         height: "auto",
-        color: "white",
+        color: palette?.text.primary,
       }}
     >
       <Box sx={{ padding: "8px" }}>
@@ -27,7 +29,7 @@ const Account = () => {
         </Typography>
         <Divider
           variant="middle"
-          sx={{ background: "rgb(120,120,126)", margin: "1rem 0 1.5rem 0" }}
+          sx={{ background: palette?.divider, margin: "1rem 0 1.5rem 0" }}
         />
         <button onClick={() => onDeleteUser?.()}>Delete account</button>
       </Box>

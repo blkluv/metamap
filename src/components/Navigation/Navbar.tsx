@@ -1,15 +1,19 @@
+import { useContext } from "react";
 import { Box, Link } from "@mui/material";
 import { Link as RouterLink } from "react-router-dom";
 import PublicIcon from "@mui/icons-material/Public";
 import ResponsiveAppBar from "./AppBar";
+import ThemeContext from "../../context/themeContext";
 
 const TopNavbar = () => {
+  const { palette } = useContext(ThemeContext);
+
   return (
     <Box
       sx={{
         display: "flex",
         flexDirection: { xs: "column", md: "row" },
-        background: "rgb(31,30,43)",
+        background: palette?.background.secondary,
       }}
     >
       <Box
@@ -50,7 +54,7 @@ const TopNavbar = () => {
           width: "100%",
           height: "100%",
           alignItems: "center",
-          background: "rgb(36,35,48)",
+          background: palette?.background.primary,
         }}
       >
         <ResponsiveAppBar />

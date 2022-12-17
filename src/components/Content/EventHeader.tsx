@@ -11,6 +11,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import GroupIcon from "@mui/icons-material/Group";
 import debounce from "../../utils/debounce";
 import preview from "../../images/preview.png";
+import ThemeContext from "../../context/themeContext";
 
 const EventHeader = ({
   event: { _id, title, start, location, description, participants, logo },
@@ -19,6 +20,7 @@ const EventHeader = ({
   const { selectedEvent, onSetSelectedEvent, onJoinEvent, onLeaveEvent } =
     useContext(EventContext);
   const { currentUser } = useContext(UserContext);
+  const { palette } = useContext(ThemeContext);
 
   const ifJoined = participants?.find((user) => user._id === currentUser?._id);
 
@@ -28,7 +30,7 @@ const EventHeader = ({
       sx={{
         cursor: "pointer",
         borderRadius: "25px",
-        background: "rgb(53,51,64)",
+        background: palette?.background.tertiary,
         marginBottom: "1rem",
         display: "flex",
         flexDirection:
@@ -63,11 +65,11 @@ const EventHeader = ({
       <ListItemText
         primary={
           <Typography
-            sx={{ display: "block" }}
+            sx={{ display: "block", fontWeight: "500" }}
             component="span"
             variant="body2"
-            color="white"
-            fontSize={"1.5rem"}
+            color={palette?.text.tertiary}
+            fontSize={"1rem"}
           >
             {title}
           </Typography>
@@ -75,18 +77,19 @@ const EventHeader = ({
         secondary={
           <>
             <Typography
-              sx={{ display: "block", marginTop: "0.2rem" }}
+              sx={{ display: "block", marginTop: "0.2rem", fontSize: ".8rem" }}
               component="span"
               variant="body2"
-              color="white"
+              color={palette?.text.primary}
             >
               {start + " — " + location}
             </Typography>
             <Typography
               sx={{
                 display: "block",
-                color: "white",
+                color: palette?.text.tertiary,
                 margin: "0.5rem 0 0.8rem 0",
+                fontSize: ".9rem",
               }}
               component="span"
               variant="body2"
@@ -95,12 +98,18 @@ const EventHeader = ({
             </Typography>
             <Box sx={{ display: "flex", alignItems: "center" }}>
               <Typography
-                sx={{ display: "flex", color: "white" }}
+                sx={{
+                  display: "flex",
+                  color: palette?.text.primary,
+                }}
                 component="div"
                 variant="body2"
               >
-                <GroupIcon />
-                <Typography component="div" sx={{ margin: "0 1rem 0 0.3rem" }}>
+                <GroupIcon sx={{ fontSize: "1.2rem" }} />
+                <Typography
+                  component="div"
+                  sx={{ margin: "0 1rem 0 0.3rem", fontSize: ".8rem" }}
+                >
                   {participants?.length}
                 </Typography>
               </Typography>
@@ -111,9 +120,10 @@ const EventHeader = ({
                     : debounce(() => onJoinEvent?.(_id), 400)
                 }
                 sx={{
-                  color: ifJoined ? "rgb(235, 110, 105)" : "",
+                  color: ifJoined ? palette?.warning : "",
                   paddingLeft: 0,
                   borderRadius: "15px",
+                  fontSize: ".8rem",
                 }}
               >
                 {ifJoined ? (

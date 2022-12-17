@@ -1,5 +1,7 @@
 import { useContext } from "react";
 import { Box } from "@mui/material";
+import UserContext from "../../context/userContext";
+import ThemeContext from "../../context/themeContext";
 import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
 import Button from "@mui/material/Button";
@@ -8,16 +10,14 @@ import SearchIcon from "@mui/icons-material/Search";
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import CheckIcon from "@mui/icons-material/Check";
 import VisibilityIcon from "@mui/icons-material/Visibility";
-import UserContext from "../../context/userContext";
 import { Search, SearchIconWrapper, StyledInputBase } from "./SocialMenuStyles";
 
 export const SocialMenu = ({ handleFilter, users }: any) => {
   const { currentUser } = useContext(UserContext);
+  const { palette } = useContext(ThemeContext);
 
   const followers = currentUser?.followers;
   const following = currentUser?.followers;
-
-  // remove @ts-ignore
 
   const filterData = (e: { target: { value: string } }) => {
     if (e.target.value.length >= 3) {
@@ -36,7 +36,13 @@ export const SocialMenu = ({ handleFilter, users }: any) => {
   };
 
   return (
-    <Box sx={{ width: "100%", background: "rgb(35,35,48)", color: "white" }}>
+    <Box
+      sx={{
+        width: "100%",
+        background: palette?.background.primary,
+        color: palette?.text.primary,
+      }}
+    >
       <CardContent
         sx={{
           padding: "8px 8px 0 8px",
@@ -71,6 +77,7 @@ export const SocialMenu = ({ handleFilter, users }: any) => {
             marginLeft: "0 !important",
             marginRight: "0.5rem !important",
             marginTop: "0.5rem !important",
+            background: palette?.background.tertiary,
           }}
         >
           <SearchIconWrapper>
@@ -85,8 +92,10 @@ export const SocialMenu = ({ handleFilter, users }: any) => {
         <Button
           variant="contained"
           startIcon={<PersonAddIcon />}
+          disableElevation
           sx={{
-            background: "rgb(68,68,80)",
+            color: palette?.text.primary,
+            background: palette?.background.tertiary,
             marginLeft: "0 !important",
             marginRight: "0.5rem !important",
             marginTop: "0.5rem !important",
@@ -100,7 +109,7 @@ export const SocialMenu = ({ handleFilter, users }: any) => {
           variant="outlined"
           startIcon={<CheckIcon />}
           sx={{
-            border: "1px solid rgb(68,68,80)",
+            border: `1px solid ${palette?.background.tertiary}`,
             marginLeft: "0 !important",
             marginRight: "0.5rem !important",
             marginTop: "0.5rem !important",
@@ -113,11 +122,11 @@ export const SocialMenu = ({ handleFilter, users }: any) => {
           variant="outlined"
           startIcon={<VisibilityIcon />}
           sx={{
-            border: "1px solid rgb(68,68,80)",
+            border: `1px solid ${palette?.background.tertiary}`,
             marginLeft: "0 !important",
             marginRight: "0.5rem !important",
             marginTop: "0.5rem !important",
-            color: "yellowgreen",
+            color: palette?.green,
           }}
         >
           Followers

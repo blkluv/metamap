@@ -122,6 +122,34 @@ export interface PostsContext {
   onDeletePost?: (id: string | undefined) => Promise<void>;
 }
 
+// theme
+export interface Palette {
+  primary: string;
+  divider: string;
+  warning: string;
+  blue: string;
+  green: string;
+  background: {
+    primary: string;
+    secondary: string;
+    tertiary: string;
+  };
+  text: {
+    primary: string;
+    secondary: string;
+    tertiary: string;
+  };
+  map: {
+    style: string;
+  };
+}
+
+export interface ThemesContext {
+  theme: string;
+  palette?: Palette;
+  onChangeTheme?: () => void;
+}
+
 // other
 export interface DateTimePickerProps {
   label: string;

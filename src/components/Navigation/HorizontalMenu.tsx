@@ -1,12 +1,14 @@
-import * as React from "react";
+import { useState, useContext } from "react";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import Box from "@mui/material/Box";
 import { Link as RouterLink } from "react-router-dom";
 import { MenuItemListProps } from "../../utils/interfaces";
+import ThemeContext from "../../context/themeContext";
 
 const HorizontalMenu = ({ items }: MenuItemListProps) => {
-  const [value, setValue] = React.useState(0);
+  const { palette } = useContext(ThemeContext);
+  const [value, setValue] = useState(0);
 
   const handleChange = (_event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
@@ -16,7 +18,7 @@ const HorizontalMenu = ({ items }: MenuItemListProps) => {
     <Box
       sx={{
         width: "100vw",
-        bgcolor: "rgb(36,35,48)",
+        bgcolor: palette?.background.primary,
         padding: "0.5rem 1rem",
         display: "flex",
         justifyContent: "center",

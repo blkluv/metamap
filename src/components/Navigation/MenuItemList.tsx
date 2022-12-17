@@ -1,13 +1,17 @@
+import { useContext } from "react";
 import List from "@mui/material/List";
+import ThemeContext from "../../context/themeContext";
 import { MenuItemListProps } from "../../utils/interfaces";
 import MenuItem from "../Content/ListItem";
 
 const MenuItemList = ({ items }: MenuItemListProps) => {
+  const { palette } = useContext(ThemeContext);
+
   return (
     <List
       sx={{
         width: "100%",
-        color: "rgb(120,120,126)",
+        color: palette?.text.secondary,
       }}
     >
       {items.map((item) => (

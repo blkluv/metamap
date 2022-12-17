@@ -1,11 +1,13 @@
 import { useContext, useEffect } from "react";
 import { Box, Divider, List } from "@mui/material";
-import Post from "./Post";
 import PostContext from "../../context/postContext";
+import ThemeContext from "../../context/themeContext";
+import Post from "./Post";
 import Share from "./Share";
 
 const Feed = () => {
   const { posts, onGetFollowingPosts } = useContext(PostContext);
+  const { palette } = useContext(ThemeContext);
 
   useEffect(() => {
     onGetFollowingPosts?.();
@@ -24,13 +26,17 @@ const Feed = () => {
       <Share />
       <Divider
         variant="middle"
-        sx={{ background: "rgb(120,120,126)", margin: "1rem 0 1.5rem 0" }}
+        sx={{
+          opacity: "0%",
+          margin: "1rem 3rem 1rem 3rem",
+        }}
       />
       {posts.length > 0 ? (
         <List
           sx={{
             width: "100%",
-            background: "rgb(35,35,48)",
+            borderRadius: "25px",
+            background: palette?.background.primary,
             padding: 0,
             marginBottom: { xs: "0", md: "-2rem", lg: "-3rem" },
             overflow: "scroll",

@@ -81,11 +81,8 @@ const PinCard = ({ lng, lat, onClose }: PinCardProps) => {
     } catch (err) {}
   };
 
-  // inny datetime w headerze eventu
-  // usememo ?
-
   return (
-    <Box sx={{ ml: 1, mr: 1 }}>
+    <Box sx={{ padding: ".5rem" }}>
       <Typography component="h3" variant="h6">
         New event
       </Typography>

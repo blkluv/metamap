@@ -18,10 +18,12 @@ import {
 import { NavLink } from "react-router-dom";
 import { notify } from "../../utils/notifications";
 import debounce from "../../utils/debounce";
+import ThemeContext from "../../context/themeContext";
 
 const Share = () => {
   const { onAddPost } = useContext(PostContext);
   const { currentUser } = useContext(UserContext);
+  const { palette } = useContext(ThemeContext);
   const [file, setFile] = useState<File | null>(null);
 
   const {
@@ -70,7 +72,7 @@ const Share = () => {
         sx={{
           padding: "1rem 1.5rem",
           borderRadius: "25px",
-          background: "rgb(53,51,64)",
+          background: palette?.background.tertiary,
           WebkitBoxShadow: "0px 0px 16px -8px rgba(0, 0, 0, 0.68)",
           boxShadow: "0px 0px 16px -8px rgba(0, 0, 0, 0.68)",
         }}
@@ -98,14 +100,14 @@ const Share = () => {
             margin="dense"
             maxRows={3}
             InputProps={{ disableUnderline: true }}
-            inputProps={{ style: { color: "lightgrey" } }}
+            inputProps={{ style: { color: palette?.text.primary } }}
             fullWidth
             id="postShareDescription"
             autoComplete="postShareDescription"
             autoFocus
             {...registerPost("description", {
               required: true,
-              minLength: 8,
+              minLength: 3,
               maxLength: 800,
             })}
           />
@@ -140,7 +142,7 @@ const Share = () => {
         )}
         <Divider
           variant="middle"
-          sx={{ background: "rgb(120,120,126)", margin: "1rem 0" }}
+          sx={{ background: palette?.divider, margin: "1rem 0" }}
         />
         <Box
           sx={{
@@ -235,11 +237,10 @@ const Share = () => {
               border: "none",
               padding: "0.2rem",
               borderRadius: "5px",
-              backgroundColor: "grey",
               fontWeight: "500",
               marginRight: "0.5rem",
               cursor: "pointer",
-              color: "white",
+              color: palette?.text.tertiary,
             }}
           >
             Share

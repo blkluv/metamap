@@ -1,3 +1,4 @@
+import { useContext } from "react";
 import { Box } from "@mui/material";
 import { styled, alpha } from "@mui/material/styles";
 import CardActions from "@mui/material/CardActions";
@@ -9,8 +10,11 @@ import SearchIcon from "@mui/icons-material/Search";
 import TravelExploreIcon from "@mui/icons-material/TravelExplore";
 import CheckIcon from "@mui/icons-material/Check";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
+import ThemeContext from "../../context/themeContext";
 
 export const EventMenu = () => {
+  const { palette } = useContext(ThemeContext);
+
   const Search = styled("div")(({ theme }) => ({
     position: "relative",
     borderRadius: theme.shape.borderRadius,
@@ -51,7 +55,13 @@ export const EventMenu = () => {
   }));
 
   return (
-    <Box sx={{ width: "100%", background: "rgb(35,35,48)", color: "white" }}>
+    <Box
+      sx={{
+        width: "100%",
+        background: palette?.background.primary,
+        color: palette?.text.primary,
+      }}
+    >
       <CardContent
         sx={{
           padding: "8px 8px 0 8px",
@@ -86,6 +96,7 @@ export const EventMenu = () => {
             marginLeft: "0 !important",
             marginRight: "0.5rem !important",
             marginTop: "0.5rem !important",
+            background: palette?.background.tertiary,
           }}
         >
           <SearchIconWrapper>
@@ -99,8 +110,10 @@ export const EventMenu = () => {
         <Button
           variant="contained"
           startIcon={<TravelExploreIcon />}
+          disableElevation
           sx={{
-            background: "rgb(68,68,80)",
+            color: palette?.text.primary,
+            background: palette?.background.tertiary,
             marginLeft: "0 !important",
             marginRight: "0.5rem !important",
             marginTop: "0.5rem !important",
@@ -112,7 +125,7 @@ export const EventMenu = () => {
           variant="outlined"
           startIcon={<CheckIcon />}
           sx={{
-            border: "1px solid rgb(68,68,80)",
+            border: `1px solid ${palette?.background.tertiary}`,
             marginLeft: "0 !important",
             marginRight: "0.5rem !important",
             marginTop: "0.5rem !important",
@@ -124,11 +137,11 @@ export const EventMenu = () => {
           variant="outlined"
           startIcon={<AccessTimeIcon />}
           sx={{
-            border: "1px solid rgb(68,68,80)",
+            border: `1px solid ${palette?.background.tertiary}`,
             marginLeft: "0 !important",
             marginRight: "0.5rem !important",
             marginTop: "0.5rem !important",
-            color: "rgb(235, 110, 105)",
+            color: palette?.warning,
           }}
         >
           Ending

@@ -1,15 +1,17 @@
+import { useContext } from "react";
 import List from "@mui/material/List";
+import UserHeader from "./UserHeader";
+import ThemeContext from "../../context/themeContext";
 import { UserHeader as Header, SocialListProps } from "../../utils/interfaces";
 
-import UserHeader from "./UserHeader";
-
 const SocialList = ({ data }: SocialListProps) => {
+  const { palette } = useContext(ThemeContext);
+
   return (
     <List
       sx={{
         width: "100%",
-        background: "rgb(35,35,48)",
-        color: "white",
+        background: palette?.background.primary,
         padding: 0,
         marginBottom: { xs: "0", md: "-2rem", lg: "-3rem" },
         overflow: "scroll",

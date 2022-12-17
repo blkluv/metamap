@@ -5,9 +5,11 @@ import { Event } from "../../utils/interfaces";
 import EventContext from "../../context/eventContext";
 import { Box, Divider } from "@mui/material";
 import EventMenu from "../Navigation/EventMenu";
+import ThemeContext from "../../context/themeContext";
 
 const Events = () => {
   const { events } = useContext(EventContext);
+  const { palette } = useContext(ThemeContext);
 
   return (
     <Box
@@ -27,7 +29,7 @@ const Events = () => {
         <List
           sx={{
             width: "100%",
-            background: "rgb(35,35,48)",
+            background: palette?.background.primary,
             color: "white",
             padding: 0,
             marginBottom: { xs: "0", md: "-2rem", lg: "-3rem" },

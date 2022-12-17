@@ -9,10 +9,12 @@ import CheckIcon from "@mui/icons-material/Check";
 import CloseIcon from "@mui/icons-material/Close";
 import PeopleIcon from "@mui/icons-material/People";
 import UserContext from "../../context/userContext";
+import ThemeContext from "../../context/themeContext";
 import debounce from "../../utils/debounce";
 
 const UserHeader = ({ _id, name }: Header) => {
   const { currentUser, onFollowUser, onGetAvatar } = useContext(UserContext);
+  const { palette } = useContext(ThemeContext);
   const [avatar, setAvatar] = useState<any>(null);
 
   useEffect(() => {
@@ -36,7 +38,7 @@ const UserHeader = ({ _id, name }: Header) => {
     <ListItem
       sx={{
         borderRadius: "25px",
-        background: "rgb(53,51,64)",
+        background: palette?.background.tertiary,
         marginBottom: "1rem",
         display: "flex",
         justifyContent: "center",
@@ -76,7 +78,7 @@ const UserHeader = ({ _id, name }: Header) => {
                 sx={{ display: "block", cursor: "pointer" }}
                 component="span"
                 variant="body2"
-                color="white"
+                color={palette?.text.tertiary}
                 fontSize={".9rem"}
               >
                 {name}
@@ -87,7 +89,7 @@ const UserHeader = ({ _id, name }: Header) => {
                 sx={{
                   width: "1.5rem",
                   fontSize: "1rem",
-                  color: "rgb(120,120,126)",
+                  color: palette?.text.tertiary,
                 }}
               />
             ) : null}
@@ -100,7 +102,7 @@ const UserHeader = ({ _id, name }: Header) => {
                 onClick={debounce(() => onFollowUser?.(_id), 1000)}
                 sx={{
                   color: ifFollowing(currentUser, _id)
-                    ? "rgb(235, 110, 105)"
+                    ? palette?.warning
                     : "default",
                   borderRadius: "15px",
                 }}

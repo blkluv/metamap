@@ -3,10 +3,11 @@ import { NavLink } from "react-router-dom";
 import ConfirmationDialog from "../Elements/ConfirmationDialog";
 import UserContext from "../../context/userContext";
 import PostContext from "../../context/postContext";
+import ThemeContext from "../../context/themeContext";
 import { Avatar, Box, CardMedia, ListItem, Typography } from "@mui/material";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
-import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
+import RemoveCircleOutlineIcon from "@mui/icons-material/RemoveCircleOutline";
 import { Post as PostProps } from "../../utils/interfaces";
 import { notify } from "../../utils/notifications";
 import moment from "moment";
@@ -22,6 +23,7 @@ const Post = ({
 }: PostProps) => {
   const { currentUser, onGetAvatar } = useContext(UserContext);
   const { onLikePost, onDeletePost } = useContext(PostContext);
+  const { palette } = useContext(ThemeContext);
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [avatar, setAvatar] = useState<any>(null);
 
@@ -58,14 +60,12 @@ const Post = ({
     <ListItem
       sx={{
         borderRadius: "25px",
-        background: "rgb(53,51,64)",
+        background: palette?.background.tertiary,
         marginBottom: "1rem",
         display: "flex",
         flexDirection: "column",
         padding: "1rem 1.5rem",
         alignItems: "flex-start",
-        WebkitBoxShadow: "0px 0px 16px -8px rgba(0, 0, 0, 0.68)",
-        boxShadow: "0px 0px 16px -8px rgba(0, 0, 0, 0.68)",
       }}
     >
       <Box
@@ -110,7 +110,7 @@ const Post = ({
                 }}
                 component="span"
                 variant="body2"
-                color="white"
+                color={palette?.text.tertiary}
                 fontSize={".9rem"}
                 fontWeight={500}
               >
@@ -129,8 +129,12 @@ const Post = ({
           </Box>
         </Box>
         {currentUser?._id === creator?._id ? (
-          <DeleteForeverIcon
-            sx={{ cursor: "pointer", color: "lightgrey" }}
+          <RemoveCircleOutlineIcon
+            sx={{
+              cursor: "pointer",
+              color: palette?.text.primary,
+              fontSize: "1.2rem",
+            }}
             onClick={() => handleOpenDialog()}
           />
         ) : (
@@ -142,7 +146,7 @@ const Post = ({
           sx={{ display: "block", margin: "0 0 .5rem 0" }}
           component="p"
           variant="body2"
-          color="lightgrey"
+          color={palette?.text.tertiary}
           fontSize={"1rem"}
         >
           {description}
@@ -169,7 +173,7 @@ const Post = ({
           alignItems: "center",
           margin: "1rem 0 0 0",
           flexWrap: "wrap",
-          color: "white",
+          color: palette?.text.primary,
         }}
       >
         {likes?.find((user) => user._id === currentUser?._id) ? (

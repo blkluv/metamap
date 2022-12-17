@@ -1,3 +1,4 @@
+import { useContext } from "react";
 import { Box } from "@mui/material";
 import ContentWindow from "./ContentWindow";
 import Sidebar from "../Navigation/Sidebar";
@@ -6,14 +7,17 @@ import Profile from "../Pages/Profile";
 import Settings from "../Pages/Settings";
 import User from "../Content/User";
 import Account from "../Pages/Account";
+import ThemeContext from "../../context/themeContext";
 
 const MainWindow = () => {
+  const { palette } = useContext(ThemeContext);
+
   return (
     <Box
       sx={{
         display: "flex",
         width: "100%",
-        background: "rgb(31,30,43)",
+        background: palette?.background.secondary,
         height: "auto",
       }}
     >

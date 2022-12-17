@@ -15,11 +15,13 @@ import MenuItem from "@mui/material/MenuItem";
 import { Link as RouterLink } from "react-router-dom";
 import { Link } from "@mui/material";
 import UserContext from "../../context/userContext";
+import ThemeContext from "../../context/themeContext";
 import Toggler from "../Elements/Switch";
 import { EventMenuItems } from "../../constants/menuItems";
 
 const ResponsiveAppBar = () => {
   const { currentUser, onLogout } = useContext(UserContext);
+  const { palette } = useContext(ThemeContext);
   const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
 
@@ -44,15 +46,15 @@ const ResponsiveAppBar = () => {
       position="static"
       color="inherit"
       sx={{
-        background: "rgb(35,35,48)",
-        color: "rgb(120,120,126)",
+        background: palette?.background.primary,
+        color: palette?.text.primary,
       }}
     >
       <Container maxWidth={false} sx={{ padding: { md: "0.5rem 2.5rem" } }}>
         <Toolbar disableGutters>
           <Typography
             sx={{ fontSize: 14, display: { xs: "none", md: "flex" } }}
-            color="rgb(120,120,126)"
+            color={palette?.text.primary}
           >
             {new Date().toLocaleString("en-GB")}
           </Typography>
@@ -84,6 +86,12 @@ const ResponsiveAppBar = () => {
               sx={{
                 display: { xs: "block", md: "none" },
               }}
+              MenuListProps={{
+                style: {
+                  background: palette?.background.primary,
+                  color: palette?.text.primary,
+                },
+              }}
             >
               {EventMenuItems.map((item) => (
                 <MenuItem key={item.id} onClick={handleCloseNavMenu}>
@@ -93,6 +101,7 @@ const ResponsiveAppBar = () => {
                     color="inherit"
                     sx={{
                       mr: 2,
+                      mb: 1.5,
                       fontWeight: 700,
                       fontSize: "1.1rem",
                       letterSpacing: ".1rem",
@@ -129,10 +138,10 @@ const ResponsiveAppBar = () => {
           <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}></Box>
           {currentUser ? (
             <Box sx={{ flexGrow: 0 }}>
-              <Tooltip title="Open settings">
+              <Tooltip title="Settings">
                 <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                   <Avatar
-                    alt="Guest"
+                    alt="User avatar"
                     src={currentUser?.avatar}
                     sx={{
                       height: { xs: "2rem", md: "2.5rem" },
@@ -142,6 +151,12 @@ const ResponsiveAppBar = () => {
                 </IconButton>
               </Tooltip>
               <Menu
+                MenuListProps={{
+                  style: {
+                    background: palette?.background.primary,
+                    color: palette?.text.primary,
+                  },
+                }}
                 sx={{ mt: "45px" }}
                 id="menu-appbar"
                 anchorEl={anchorElUser}
@@ -201,7 +216,7 @@ const ResponsiveAppBar = () => {
                 >
                   <Typography
                     textAlign="center"
-                    color={"rgb(235, 110, 105)"}
+                    color={palette?.warning}
                     sx={{ fontWeight: 500 }}
                   >
                     {"Logout"}
