@@ -156,16 +156,21 @@ export const UserProvider = ({ children }: React.PropsWithChildren) => {
     }
   };
 
-  const handleFollowUser = async (id: string) => {
-    const response = await UserService.followUser(id);
+  const handleFollowUser = async (id: string | undefined) => {
+    if (id) {
+      const response = await UserService.followUser(id);
 
-    if (response?.activeUser && response?.userToFollow) {
-      const updatedUsers = users.map((user) =>
-        user._id === response.userToFollow._id ? response.userToFollow : user
-      );
-      setUsers(updatedUsers);
-      setCurrentUser(response.activeUser);
-      localStorage.setItem("currentUser", JSON.stringify(response.activeUser));
+      if (response?.activeUser && response?.userToFollow) {
+        const updatedUsers = users.map((user) =>
+          user._id === response.userToFollow._id ? response.userToFollow : user
+        );
+        setUsers(updatedUsers);
+        setCurrentUser(response.activeUser);
+        localStorage.setItem(
+          "currentUser",
+          JSON.stringify(response.activeUser)
+        );
+      }
     }
   };
 

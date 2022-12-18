@@ -59,7 +59,7 @@ export const EventMenu = () => {
       sx={{
         width: "100%",
         background: palette?.background.primary,
-        color: palette?.text.primary,
+        color: palette?.text.tertiary,
       }}
     >
       <CardContent

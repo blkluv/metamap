@@ -63,7 +63,7 @@ export interface UsersContext {
   onResetPassword?: (email: string) => Promise<void>;
   onChangePassword?: (token: string, data: object) => Promise<void>;
   onDeleteUser?: () => Promise<void>;
-  onFollowUser?: (id: string) => Promise<void>;
+  onFollowUser?: (id: string | undefined) => Promise<void>;
   onUpdateUser?: (data: UserUpdateReq) => Promise<void>;
 }
 

@@ -99,7 +99,7 @@ const UserHeader = ({ _id, name }: Header) => {
           <>
             <Box sx={{ display: "flex", alignItems: "center" }}>
               <Button
-                onClick={debounce(() => onFollowUser?.(_id), 1000)}
+                onClick={debounce(() => onFollowUser?.(_id), 400)}
                 sx={{
                   color: ifFollowing(currentUser, _id)
                     ? palette?.warning

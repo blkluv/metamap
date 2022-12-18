@@ -2,36 +2,55 @@ import { useContext, useEffect, useState } from "react";
 import {
   Avatar,
   Box,
+  Button,
   Divider,
   FormLabel,
   Input,
   List,
+  TextField,
   Typography,
 } from "@mui/material";
+import EventHeader from "./EventHeader";
+import Post from "./Post";
+import Masonry from "@mui/lab/Masonry";
 import { useParams } from "react-router-dom";
+import { useForm } from "react-hook-form";
 import UserContext from "../../context/userContext";
 import EventContext from "../../context/eventContext";
-import Masonry from "@mui/lab/Masonry";
-import { Event, UserHeader, User as LoggedUser } from "../../utils/interfaces";
-import EventHeader from "./EventHeader";
 import PostContext from "../../context/postContext";
-import Post from "./Post";
+import ThemeContext from "../../context/themeContext";
+import { Event, UserHeader, User as LoggedUser } from "../../utils/interfaces";
 import convertImage from "../../utils/imageConverter";
 import CheckIcon from "@mui/icons-material/Check";
+import CloseIcon from "@mui/icons-material/Close";
+import EditIcon from "@mui/icons-material/Edit";
+import debounce from "../../utils/debounce";
 
 const User = () => {
   const { events } = useContext(EventContext);
+  const { palette } = useContext(ThemeContext);
   const { usersPosts, onGetUsersPosts } = useContext(PostContext);
-  const { user, currentUser, onGetUser, onUpdateUser } =
+  const { user, currentUser, onGetUser, onUpdateUser, onFollowUser } =
     useContext(UserContext);
   const { id } = useParams();
   const [file, setFile] = useState<File | null>(null);
+  const [editDescription, setEditDescription] = useState<boolean>(false);
 
   useEffect(() => {
     onGetUser?.(id);
     onGetUsersPosts?.(id);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [currentUser]);
+
+  const {
+    register: registerDescription,
+    handleSubmit: handleRegisterDescription,
+    reset: resetDescription,
+  } = useForm({
+    defaultValues: {
+      description: null,
+    },
+  });
 
   const getUsersEvents = (eventsArray: Event[]) => {
     return eventsArray.filter((event: Event) => event?.creator?.name === id);
@@ -49,6 +68,22 @@ const User = () => {
     } catch (err) {}
   };
 
+  const handleSubmitDescription = async (data: {
+    description: string | null;
+  }) => {
+    const description = data.description?.trim();
+    if (description) {
+      try {
+        await onUpdateUser?.({
+          dataType: "description",
+          data: String(description),
+        });
+      } catch (err) {}
+    }
+    resetDescription();
+    setEditDescription(!editDescription);
+  };
+
   const renderAvatar = (
     user: UserHeader | undefined | null,
     currentuser: LoggedUser | undefined | null,
@@ -60,6 +95,16 @@ const User = () => {
     }
     if (user?.avatar) return user?.avatar;
     return "";
+  };
+
+  const ifFollowing = (
+    currentuser: LoggedUser | null,
+    id: string | undefined
+  ) => {
+    if (currentUser && id) {
+      return currentuser?.following?.find((user) => user._id === id);
+    }
+    return null;
   };
 
   return (
@@ -77,6 +122,7 @@ const User = () => {
           width: { xs: "100%", md: "50%" },
           overflow: "scroll",
           marginBottom: { xs: "2rem", md: "-2rem", lg: "-2.5rem" },
+          color: palette?.text.tertiary,
         }}
       >
         <Box
@@ -136,28 +182,75 @@ const User = () => {
               ) : null}
             </Box>
             <Box sx={{ display: "flex", flexDirection: "column" }}>
-              <Typography
-                variant="h5"
-                component="div"
+              <Box
                 sx={{
-                  fontWeight: 500,
-                  fontSize: "1.2rem",
                   display: { sm: "none", md: "block", lg: "none" },
+                  alignContent: "left",
                 }}
               >
-                {user?.name}
-              </Typography>
-              <Typography
-                variant="h5"
-                component="div"
-                sx={{
-                  margin: ".5rem 0 1rem 0",
-                  fontSize: "1rem",
-                  display: { sm: "none", md: "block", lg: "none" },
-                }}
-              >
-                {user?.description}
-              </Typography>
+                <Typography
+                  variant="h5"
+                  component="div"
+                  sx={{
+                    fontWeight: 500,
+                    fontSize: "1.2rem",
+                    paddingLeft: 0.5,
+                  }}
+                >
+                  {user?.name}
+                </Typography>
+                {currentUser?.name !== id ? (
+                  <Button
+                    onClick={debounce(() => onFollowUser?.(user?._id), 400)}
+                    sx={{
+                      color: ifFollowing(currentUser, user?._id)
+                        ? palette?.warning
+                        : "default",
+                      borderRadius: "15px",
+                      fontSize: ".8rem",
+                      paddingLeft: 0,
+                      margin: 0,
+                    }}
+                  >
+                    {ifFollowing(currentUser, user?._id) ? (
+                      <CloseIcon fontSize="small" sx={{ width: "1.5rem" }} />
+                    ) : (
+                      <CheckIcon fontSize="small" sx={{ width: "1.5rem" }} />
+                    )}
+                    {ifFollowing(currentUser, user?._id)
+                      ? "Unfollow"
+                      : "Follow"}
+                  </Button>
+                ) : (
+                  <>
+                    {editDescription ? (
+                      <CheckIcon
+                        sx={{
+                          cursor: "pointer",
+                          opacity: "0.8",
+                          color: "yellowgreen",
+                          borderRadius: "50%",
+                          border: "1px solid yellowgreen",
+                          padding: "0 .1rem",
+                          marginTop: ".5rem",
+                        }}
+                        onClick={handleRegisterDescription(
+                          debounce(handleSubmitDescription, 400)
+                        )}
+                      />
+                    ) : (
+                      <EditIcon
+                        sx={{
+                          padding: "0 .1rem",
+                          marginTop: ".5rem",
+                          cursor: "pointer",
+                        }}
+                        onClick={() => setEditDescription(!editDescription)}
+                      />
+                    )}
+                  </>
+                )}
+              </Box>
             </Box>
           </Box>
           <Box
@@ -182,30 +275,170 @@ const User = () => {
               <Typography>Followers</Typography>
             </Box>
           </Box>
+          <Box
+            component="div"
+            sx={{
+              margin: ".5rem 0 1rem 0",
+              fontSize: "1rem",
+              display: { sm: "none", md: "block", lg: "none" },
+            }}
+          >
+            <>
+              {currentUser?.name === id ? (
+                <>
+                  {editDescription ? (
+                    <Box component="form">
+                      <TextField
+                        placeholder="Write something about yourself..."
+                        variant="standard"
+                        multiline={true}
+                        size="small"
+                        margin="dense"
+                        maxRows={3}
+                        InputProps={{ disableUnderline: true }}
+                        inputProps={{ style: { color: palette?.text.primary } }}
+                        fullWidth
+                        id="userDescription"
+                        autoComplete="userDescription"
+                        autoFocus
+                        {...registerDescription("description", {
+                          minLength: 3,
+                          maxLength: 800,
+                        })}
+                      />
+                    </Box>
+                  ) : (
+                    <Typography
+                      component="div"
+                      onClick={() => setEditDescription(true)}
+                    >
+                      {user?.description
+                        ? user.description
+                        : "Write something about yourself..."}
+                    </Typography>
+                  )}
+                </>
+              ) : (
+                <Typography component="div">{user?.description}</Typography>
+              )}
+            </>
+          </Box>
         </Box>
-        <Typography
-          variant="h5"
-          component="div"
+        <Box
           sx={{
-            marginTop: "1rem",
-            fontWeight: 500,
-            fontSize: "1.2rem",
-            display: { xs: "none", sm: "block", md: "none", lg: "block" },
+            display: { xs: "none", sm: "flex", md: "none", lg: "flex" },
+            alignItems: "center",
+            justifyContent: "space-between",
+            marginTop: ".5rem",
           }}
         >
-          {user?.name}
-        </Typography>
-        <Typography
-          variant="h5"
-          component="div"
+          <Typography
+            variant="h4"
+            component="div"
+            sx={{
+              fontWeight: 500,
+              fontSize: "1.2rem",
+              display: "flex",
+            }}
+          >
+            {user?.name}
+          </Typography>
+          {currentUser?.name !== id ? (
+            <Button
+              onClick={debounce(() => onFollowUser?.(user?._id), 400)}
+              sx={{
+                color: ifFollowing(currentUser, user?._id)
+                  ? palette?.warning
+                  : "default",
+                borderRadius: "15px",
+                fontSize: ".8rem",
+                padding: "0 .5rem",
+              }}
+            >
+              {ifFollowing(currentUser, user?._id) ? (
+                <CloseIcon fontSize="small" sx={{ width: "1.5rem" }} />
+              ) : (
+                <CheckIcon fontSize="small" sx={{ width: "1.5rem" }} />
+              )}
+              {ifFollowing(currentUser, user?._id) ? "Unfollow" : "Follow"}
+            </Button>
+          ) : (
+            <>
+              {editDescription ? (
+                <CheckIcon
+                  sx={{
+                    cursor: "pointer",
+                    opacity: "0.8",
+                    color: "yellowgreen",
+                    borderRadius: "50%",
+                    border: "1px solid yellowgreen",
+                    padding: "0 .1rem",
+                    marginTop: ".5rem",
+                  }}
+                  onClick={handleRegisterDescription(
+                    debounce(handleSubmitDescription, 400)
+                  )}
+                />
+              ) : (
+                <EditIcon
+                  sx={{
+                    padding: "0 .1rem",
+                    marginTop: ".5rem",
+                    cursor: "pointer",
+                  }}
+                  onClick={() => setEditDescription(!editDescription)}
+                />
+              )}
+            </>
+          )}
+        </Box>
+        <Box
           sx={{
             margin: ".5rem 0 1rem 0",
             fontSize: "1rem",
             display: { xs: "none", sm: "block", md: "none", lg: "block" },
           }}
         >
-          {user?.description}
-        </Typography>
+          <>
+            {currentUser?.name === id ? (
+              <>
+                {editDescription ? (
+                  <Box component="form">
+                    <TextField
+                      placeholder="Write something about yourself..."
+                      variant="standard"
+                      multiline={true}
+                      size="small"
+                      margin="dense"
+                      maxRows={3}
+                      InputProps={{ disableUnderline: true }}
+                      inputProps={{ style: { color: palette?.text.primary } }}
+                      fullWidth
+                      id="userDescription"
+                      autoComplete="userDescription"
+                      autoFocus
+                      {...registerDescription("description", {
+                        minLength: 3,
+                        maxLength: 800,
+                      })}
+                    />
+                  </Box>
+                ) : (
+                  <Typography
+                    component="div"
+                    onClick={() => setEditDescription(true)}
+                  >
+                    {user?.description
+                      ? user.description
+                      : "Write something about yourself..."}
+                  </Typography>
+                )}
+              </>
+            ) : (
+              <Typography component="div">{user?.description}</Typography>
+            )}
+          </>
+        </Box>
         <Divider
           variant="middle"
           sx={{ background: "rgb(120,120,126)", margin: ".5rem 0 1.5rem 0" }}

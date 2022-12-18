@@ -16,7 +16,7 @@ const Account = () => {
         padding: { xs: "1rem", md: "1rem 2rem 2rem 2rem", overflow: "hidden" },
         background: palette?.background.primary,
         height: "auto",
-        color: palette?.text.primary,
+        color: palette?.text.tertiary,
       }}
     >
       <Box sx={{ padding: "8px" }}>
