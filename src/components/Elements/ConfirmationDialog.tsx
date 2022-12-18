@@ -1,3 +1,4 @@
+import { useContext } from "react";
 import { Box } from "@mui/material";
 import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
@@ -5,6 +6,7 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogTitle from "@mui/material/DialogTitle";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import { ConfirmationDialogProps } from "../../utils/interfaces";
+import ThemeContext from "../../context/themeContext";
 
 const ConfirmationDialog = ({
   isOpen,
@@ -13,6 +15,8 @@ const ConfirmationDialog = ({
   onConfirm,
   confirmLabel,
 }: ConfirmationDialogProps) => {
+  const { palette } = useContext(ThemeContext);
+
   return (
     <Dialog
       open={isOpen}
@@ -20,15 +24,18 @@ const ConfirmationDialog = ({
       aria-labelledby="alert-dialog-title"
       aria-describedby="alert-dialog-description"
     >
-      <Box sx={{ background: "rgb(53,51,64)" }}>
-        <DialogTitle sx={{ color: "white" }} id="alert-dialog-title">
+      <Box sx={{ background: palette?.background.primary }}>
+        <DialogTitle
+          sx={{ color: palette?.text.primary }}
+          id="alert-dialog-title"
+        >
           {title}
         </DialogTitle>
         <DialogActions>
           <Button
             variant="outlined"
             sx={{
-              border: "1px solid rgb(68,68,80)",
+              border: `1px solid ${palette?.background.tertiary}`,
             }}
             onClick={onClose}
           >
@@ -39,8 +46,8 @@ const ConfirmationDialog = ({
             variant="outlined"
             startIcon={<DeleteForeverIcon />}
             sx={{
-              border: "1px solid rgb(68,68,80)",
-              color: "rgb(235, 110, 105)",
+              border: `1px solid ${palette?.background.tertiary}`,
+              color: palette?.warning,
             }}
           >
             {confirmLabel}
