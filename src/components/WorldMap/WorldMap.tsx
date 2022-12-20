@@ -18,7 +18,7 @@ import { PinCardProps } from "../../utils/interfaces";
 import { notify } from "../../utils/notifications";
 
 const WorldMap = () => {
-  const { selectedEvent } = useContext(EventContext);
+  const { selectedEvent, onGetEvents } = useContext(EventContext);
   const { currentUser } = useContext(UserContext);
   const { palette } = useContext(ThemeContext);
   const [newMarker, setNewMarker] = useState<PinCardProps | null>(null);
@@ -36,6 +36,16 @@ const WorldMap = () => {
   useEffect(() => {
     setKey(Math.random());
   }, [selectedEvent]);
+
+  useEffect(() => {
+    const loggedUser = localStorage.getItem("auth")
+      ? JSON.parse(localStorage.getItem("auth") as string)
+      : null;
+    if (loggedUser) {
+      onGetEvents?.();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <Box

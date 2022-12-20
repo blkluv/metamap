@@ -56,7 +56,10 @@ const ResponsiveAppBar = () => {
             sx={{ fontSize: 14, display: { xs: "none", md: "flex" } }}
             color={palette?.text.primary}
           >
-            {new Date().toLocaleString("en-GB")}
+            {new Date().toLocaleString("en-GB", {
+              dateStyle: "short",
+              timeStyle: "short",
+            })}
           </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
             <IconButton

@@ -80,6 +80,7 @@ export const EventProvider = ({ children }: React.PropsWithChildren) => {
       value={{
         events,
         selectedEvent,
+        onGetEvents: getEvents,
         onJoinEvent: handleJoinEvent,
         onLeaveEvent: handleLeaveEvent,
         onAddEvent: handleAddEvent,

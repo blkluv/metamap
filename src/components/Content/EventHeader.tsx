@@ -1,20 +1,31 @@
 import { useContext } from "react";
+import { NavLink } from "react-router-dom";
 import ListItem from "@mui/material/ListItem";
 import ListItemText from "@mui/material/ListItemText";
 import Typography from "@mui/material/Typography";
-import { EventHeader as Header } from "../../utils/interfaces";
 import EventContext from "../../context/eventContext";
 import UserContext from "../../context/userContext";
+import ThemeContext from "../../context/themeContext";
+import { EventHeader as Header } from "../../utils/interfaces";
 import { Box, Button, CardMedia } from "@mui/material";
 import CheckIcon from "@mui/icons-material/Check";
 import CloseIcon from "@mui/icons-material/Close";
 import GroupIcon from "@mui/icons-material/Group";
 import debounce from "../../utils/debounce";
 import preview from "../../images/preview.png";
-import ThemeContext from "../../context/themeContext";
 
 const EventHeader = ({
-  event: { _id, title, start, location, description, participants, logo },
+  event: {
+    _id,
+    title,
+    creator,
+    start,
+    end,
+    location,
+    description,
+    participants,
+    logo,
+  },
   variant,
 }: Header) => {
   const { selectedEvent, onSetSelectedEvent, onJoinEvent, onLeaveEvent } =
@@ -23,6 +34,16 @@ const EventHeader = ({
   const { palette } = useContext(ThemeContext);
 
   const ifJoined = participants?.find((user) => user._id === currentUser?._id);
+
+  const displayDate = (date: string | null) => {
+    if (date) {
+      return new Date(date).toLocaleString("en-GB", {
+        dateStyle: "short",
+        timeStyle: "short",
+      });
+    }
+    return null;
+  };
 
   return (
     <ListItem
@@ -64,15 +85,35 @@ const EventHeader = ({
       />
       <ListItemText
         primary={
-          <Typography
-            sx={{ display: "block", fontWeight: "500" }}
-            component="span"
-            variant="body2"
-            color={palette?.text.tertiary}
-            fontSize={"1rem"}
-          >
-            {title}
-          </Typography>
+          <>
+            <Typography
+              sx={{ display: "block", fontWeight: "500" }}
+              component="span"
+              variant="body2"
+              color={palette?.text.tertiary}
+              fontSize={"1.1rem"}
+            >
+              {title}
+            </Typography>
+            <Typography
+              sx={{ display: "block" }}
+              component="span"
+              variant="body2"
+              color={palette?.text.primary}
+              fontSize={".9rem"}
+            >
+              Hosted by:{" "}
+              <NavLink
+                to={`/dashboard/profile/${creator?.name}`}
+                style={{
+                  textDecoration: "none",
+                  color: palette?.text.tertiary,
+                }}
+              >
+                {creator?.name}
+              </NavLink>
+            </Typography>
+          </>
         }
         secondary={
           <>
@@ -82,7 +123,7 @@ const EventHeader = ({
               variant="body2"
               color={palette?.text.primary}
             >
-              {start + " — " + location}
+              {`${displayDate(start)} — ${displayDate(end)} (${location})`}
             </Typography>
             <Typography
               sx={{

@@ -86,6 +86,7 @@ export interface EventsContext {
   events: Event[];
   selectedEvent?: Event;
   onAddEvent?: (event: Event) => Promise<void>;
+  onGetEvents?: () => Promise<void>;
   onJoinEvent?: (id: string | undefined) => Promise<void>;
   onLeaveEvent?: (id: string | undefined) => Promise<void>;
   onSetSelectedEvent?: (id: string | undefined) => void;
