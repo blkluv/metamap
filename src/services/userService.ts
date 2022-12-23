@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import {
   User,
   UserResponse,
@@ -17,8 +17,8 @@ class UserService {
       const response = await this.http.get<UserHeader>(`/getuser/${id}`);
       return response.data;
     } catch (error: unknown) {
-      if (error instanceof Error) {
-        notify(error.message);
+      if (error instanceof AxiosError) {
+        notify(error.response?.data.message);
       } else if (typeof error === "string") {
         notify(error);
       }
@@ -30,8 +30,8 @@ class UserService {
       const response = await this.http.get<UserHeader[]>("/getusers");
       return response.data;
     } catch (error: unknown) {
-      if (error instanceof Error) {
-        notify(error.message);
+      if (error instanceof AxiosError) {
+        notify(error.response?.data.message);
       } else if (typeof error === "string") {
         notify(error);
       }
@@ -46,8 +46,8 @@ class UserService {
       }
       return response.data;
     } catch (error: unknown) {
-      if (error instanceof Error) {
-        notify(error.message);
+      if (error instanceof AxiosError) {
+        notify(error.response?.data.message);
       } else if (typeof error === "string") {
         notify(error);
       }
@@ -62,8 +62,8 @@ class UserService {
       }
       return response.data;
     } catch (error: unknown) {
-      if (error instanceof Error) {
-        notify(error.message);
+      if (error instanceof AxiosError) {
+        notify(error.response?.data.message);
       } else if (typeof error === "string") {
         notify(error);
       }
@@ -78,8 +78,8 @@ class UserService {
       }
       return response.data;
     } catch (error: unknown) {
-      if (error instanceof Error) {
-        notify(error.message);
+      if (error instanceof AxiosError) {
+        notify(error.response?.data.message);
       } else if (typeof error === "string") {
         notify(error);
       }
@@ -97,8 +97,8 @@ class UserService {
       }
       return response.data;
     } catch (error: unknown) {
-      if (error instanceof Error) {
-        notify(error.message);
+      if (error instanceof AxiosError) {
+        notify(error.response?.data.message);
       } else if (typeof error === "string") {
         notify(error);
       }
@@ -111,8 +111,8 @@ class UserService {
       notify(response.data.message);
       return response.data;
     } catch (error: unknown) {
-      if (error instanceof Error) {
-        notify(error.message);
+      if (error instanceof AxiosError) {
+        notify(error.response?.data.message);
       } else if (typeof error === "string") {
         notify(error);
       }
@@ -125,8 +125,8 @@ class UserService {
       notify(response.data.message);
       return response.data;
     } catch (error: unknown) {
-      if (error instanceof Error) {
-        notify(error.message);
+      if (error instanceof AxiosError) {
+        notify(error.response?.data.message);
       } else if (typeof error === "string") {
         notify(error);
       }
@@ -139,8 +139,8 @@ class UserService {
       notify(response.data.message);
       return response.data;
     } catch (error: unknown) {
-      if (error instanceof Error) {
-        notify(error.message);
+      if (error instanceof AxiosError) {
+        notify(error.response?.data.message);
       } else if (typeof error === "string") {
         notify(error);
       }
@@ -153,8 +153,8 @@ class UserService {
       notify("Account deleted.");
       return response.data;
     } catch (error: unknown) {
-      if (error instanceof Error) {
-        notify(error.message);
+      if (error instanceof AxiosError) {
+        notify(error.response?.data.message);
       } else if (typeof error === "string") {
         notify(error);
       }
@@ -166,8 +166,8 @@ class UserService {
       const response = await this.http.patch<FollowResponse>(`/follow/${id}`);
       return response.data;
     } catch (error: unknown) {
-      if (error instanceof Error) {
-        notify(error.message);
+      if (error instanceof AxiosError) {
+        notify(error.response?.data.message);
       } else if (typeof error === "string") {
         notify(error);
       }
@@ -179,8 +179,8 @@ class UserService {
       const response = await this.http.patch<User>("/update", data);
       return response.data;
     } catch (error: unknown) {
-      if (error instanceof Error) {
-        notify(error.message);
+      if (error instanceof AxiosError) {
+        notify(error.response?.data.message);
       } else if (typeof error === "string") {
         notify(error);
       }

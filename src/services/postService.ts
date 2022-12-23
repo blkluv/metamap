@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import { Post } from "../utils/interfaces";
 import { notify } from "../utils/notifications";
 
@@ -12,8 +12,8 @@ class PostService {
       const response = await this.http.get<Post[]>("/following");
       return response.data;
     } catch (error: unknown) {
-      if (error instanceof Error) {
-        notify(error.message);
+      if (error instanceof AxiosError) {
+        notify(error.response?.data.message);
       } else if (typeof error === "string") {
         notify(error);
       }
@@ -25,8 +25,8 @@ class PostService {
       const response = await this.http.get<Post[]>(`/user/${id}`);
       return response.data;
     } catch (error: unknown) {
-      if (error instanceof Error) {
-        notify(error.message);
+      if (error instanceof AxiosError) {
+        notify(error.response?.data.message);
       } else if (typeof error === "string") {
         notify(error);
       }
@@ -38,8 +38,8 @@ class PostService {
       const response = await this.http.post<Post>("/", post);
       return response.data;
     } catch (error: unknown) {
-      if (error instanceof Error) {
-        notify(error.message);
+      if (error instanceof AxiosError) {
+        notify(error.response?.data.message);
       } else if (typeof error === "string") {
         notify(error);
       }
@@ -51,8 +51,8 @@ class PostService {
       const response = await this.http.patch<Post>(`/like/${id}`);
       return response.data;
     } catch (error: unknown) {
-      if (error instanceof Error) {
-        notify(error.message);
+      if (error instanceof AxiosError) {
+        notify(error.response?.data.message);
       } else if (typeof error === "string") {
         notify(error);
       }
@@ -64,8 +64,8 @@ class PostService {
       const response = await this.http.delete(`/${id}`);
       return response.data;
     } catch (error: unknown) {
-      if (error instanceof Error) {
-        notify(error.message);
+      if (error instanceof AxiosError) {
+        notify(error.response?.data.message);
       } else if (typeof error === "string") {
         notify(error);
       }

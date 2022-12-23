@@ -10,10 +10,10 @@ import { notify } from "../../utils/notifications";
 import debounce from "../../utils/debounce";
 import ThemeContext from "../../context/themeContext";
 import styled from "@emotion/styled";
-import { TextField } from "@mui/material";
+import { TextField, Typography } from "@mui/material";
 
 const UpdatePassword = () => {
-  const { onUpdatePassword } = useContext(UserContext);
+  const { currentUser, onUpdatePassword } = useContext(UserContext);
   const { palette } = useContext(ThemeContext);
 
   const {
@@ -91,67 +91,72 @@ const UpdatePassword = () => {
         <Avatar sx={{ m: 1, bgcolor: palette?.warning }}>
           <LockOutlinedIcon />
         </Avatar>
-        <Box
-          component="form"
-          onSubmit={handleRegisterUpdatePassword(
-            debounce(handleUpdatePassword, 400)
-          )}
-          sx={{ mt: 1 }}
-        >
-          <CssTextField
-            margin="normal"
-            required
-            fullWidth
-            label="Old Password"
-            type="oldpassword"
-            id="oldpassword"
-            autoComplete="old-password"
-            placeholder="8 - 25 characters"
-            {...registerUpdatePassword("oldPassword", {
-              required: true,
-              minLength: 8,
-              maxLength: 25,
-            })}
-          />
-          <CssTextField
-            margin="normal"
-            required
-            fullWidth
-            label="New Password"
-            type="newpassword"
-            id="newpassword"
-            autoComplete="new-password"
-            placeholder="8 - 25 characters"
-            {...registerUpdatePassword("newPassword", {
-              required: true,
-              minLength: 8,
-              maxLength: 25,
-            })}
-          />
-          <CssTextField
-            margin="normal"
-            required
-            fullWidth
-            label="Confirm New Password"
-            type="confirmPassword"
-            id="confirmPassword"
-            autoComplete="confirm-password"
-            placeholder="8 - 25 characters"
-            {...registerUpdatePassword("confirmNewPassword", {
-              required: true,
-              minLength: 8,
-              maxLength: 25,
-            })}
-          />
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            sx={{ mt: 3, mb: 2 }}
+
+        {!currentUser?.name.startsWith("guest") ? (
+          <Box
+            component="form"
+            onSubmit={handleRegisterUpdatePassword(
+              debounce(handleUpdatePassword, 400)
+            )}
+            sx={{ mt: 1 }}
           >
-            Update password
-          </Button>
-        </Box>
+            <CssTextField
+              margin="normal"
+              required
+              fullWidth
+              label="Old Password"
+              type="oldpassword"
+              id="oldpassword"
+              autoComplete="old-password"
+              placeholder="8 - 25 characters"
+              {...registerUpdatePassword("oldPassword", {
+                required: true,
+                minLength: 8,
+                maxLength: 25,
+              })}
+            />
+            <CssTextField
+              margin="normal"
+              required
+              fullWidth
+              label="New Password"
+              type="newpassword"
+              id="newpassword"
+              autoComplete="new-password"
+              placeholder="8 - 25 characters"
+              {...registerUpdatePassword("newPassword", {
+                required: true,
+                minLength: 8,
+                maxLength: 25,
+              })}
+            />
+            <CssTextField
+              margin="normal"
+              required
+              fullWidth
+              label="Confirm New Password"
+              type="confirmPassword"
+              id="confirmPassword"
+              autoComplete="confirm-password"
+              placeholder="8 - 25 characters"
+              {...registerUpdatePassword("confirmNewPassword", {
+                required: true,
+                minLength: 8,
+                maxLength: 25,
+              })}
+            />
+            <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+              sx={{ mt: 3, mb: 2 }}
+            >
+              Update password
+            </Button>
+          </Box>
+        ) : (
+          <Typography>DEMO users cannot change their data.</Typography>
+        )}
       </Box>
     </Container>
   );

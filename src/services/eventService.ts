@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import { Event } from "../utils/interfaces";
 import { notify } from "../utils/notifications";
 
@@ -12,8 +12,8 @@ class EventService {
       const response = await this.http.get<Event[]>("/");
       return response.data;
     } catch (error: unknown) {
-      if (error instanceof Error) {
-        notify(error.message);
+      if (error instanceof AxiosError) {
+        notify(error.response?.data.message);
       } else if (typeof error === "string") {
         notify(error);
       }
@@ -26,8 +26,8 @@ class EventService {
       notify("New event added.");
       return response.data;
     } catch (error: unknown) {
-      if (error instanceof Error) {
-        notify(error.message);
+      if (error instanceof AxiosError) {
+        notify(error.response?.data.message);
       } else if (typeof error === "string") {
         notify(error);
       }
@@ -39,8 +39,8 @@ class EventService {
       const response = await this.http.patch<Event>(`/join/${id}`);
       return response.data;
     } catch (error: unknown) {
-      if (error instanceof Error) {
-        notify(error.message);
+      if (error instanceof AxiosError) {
+        notify(error.response?.data.message);
       } else if (typeof error === "string") {
         notify(error);
       }
@@ -52,8 +52,8 @@ class EventService {
       const response = await this.http.patch<Event>(`/leave/${id}`);
       return response.data;
     } catch (error: unknown) {
-      if (error instanceof Error) {
-        notify(error.message);
+      if (error instanceof AxiosError) {
+        notify(error.response?.data.message);
       } else if (typeof error === "string") {
         notify(error);
       }

@@ -146,7 +146,10 @@ export const UserProvider = ({ children }: React.PropsWithChildren) => {
   };
 
   const handleUpdatePassword = async (data: object) => {
-    await UserService.updatePassword(data);
+    const response = await UserService.updatePassword(data);
+    if (response?.token) {
+      localStorage.setItem("auth", JSON.stringify(response.token));
+    }
   };
 
   const handleDeleteUser = async () => {
