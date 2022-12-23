@@ -1,10 +1,9 @@
 import { useContext } from "react";
 import { Box, Divider, Typography } from "@mui/material";
-import UserContext from "../../context/userContext";
 import ThemeContext from "../../context/themeContext";
+import MenuAccordion from "../Navigation/Accordion";
 
 const Account = () => {
-  const { onDeleteUser } = useContext(UserContext);
   const { palette } = useContext(ThemeContext);
 
   return (
@@ -31,7 +30,7 @@ const Account = () => {
           variant="middle"
           sx={{ background: palette?.divider, margin: "1rem 0 1.5rem 0" }}
         />
-        <button onClick={() => onDeleteUser?.()}>Delete account</button>
+        <MenuAccordion />
       </Box>
     </Box>
   );

@@ -145,6 +145,10 @@ export const UserProvider = ({ children }: React.PropsWithChildren) => {
     await UserService.changePassword(token, data);
   };
 
+  const handleUpdatePassword = async (data: object) => {
+    await UserService.updatePassword(data);
+  };
+
   const handleDeleteUser = async () => {
     const deleteduser = await UserService.deleteUser();
     if (!deleteduser.user) {
@@ -204,6 +208,7 @@ export const UserProvider = ({ children }: React.PropsWithChildren) => {
           onLogout: handleLogout,
           onResetPassword: handleResetPassword,
           onChangePassword: handleChangePassword,
+          onUpdatePassword: handleUpdatePassword,
           onDeleteUser: handleDeleteUser,
           onFollowUser: handleFollowUser,
           onUpdateUser: handleUpdateUser,

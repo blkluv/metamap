@@ -24,7 +24,15 @@ const ConfirmationDialog = ({
       aria-labelledby="alert-dialog-title"
       aria-describedby="alert-dialog-description"
     >
-      <Box sx={{ background: palette?.background.primary }}>
+      <Box
+        sx={{
+          background: palette?.background.primary,
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
         <DialogTitle
           sx={{ color: palette?.text.primary }}
           id="alert-dialog-title"

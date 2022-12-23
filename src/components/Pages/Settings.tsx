@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { Box, Divider, Typography } from "@mui/material";
+import { Box } from "@mui/material";
 import ThemeContext from "../../context/themeContext";
 
 const Settings = () => {
@@ -17,19 +17,7 @@ const Settings = () => {
         color: palette?.text.tertiary,
       }}
     >
-      <Box sx={{ padding: "8px" }}>
-        <Typography
-          variant="h5"
-          component="div"
-          sx={{ fontWeight: "bold", mb: 1.5 }}
-        >
-          Settings
-        </Typography>
-        <Divider
-          variant="middle"
-          sx={{ background: palette?.divider, margin: "1rem 0 1.5rem 0" }}
-        />
-      </Box>
+      Settings
     </Box>
   );
 };

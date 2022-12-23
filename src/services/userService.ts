@@ -133,6 +133,20 @@ class UserService {
     }
   }
 
+  async updatePassword(data: object) {
+    try {
+      const response = await this.http.patch("/updatepassword", data);
+      notify(response.data.message);
+      return response.data;
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        notify(error.message);
+      } else if (typeof error === "string") {
+        notify(error);
+      }
+    }
+  }
+
   async deleteUser() {
     try {
       const response = await this.http.delete(`/deleteuser`);
