@@ -149,6 +149,8 @@ const ResponsiveAppBar = () => {
                     sx={{
                       height: { xs: "2rem", md: "2.5rem" },
                       width: { xs: "2rem", md: "2.5rem" },
+                      WebkitBoxShadow: "0px 0px 16px -8px rgba(0, 0, 0, 0.68)",
+                      boxShadow: "0px 0px 16px -8px rgba(0, 0, 0, 0.68)",
                     }}
                   />
                 </IconButton>

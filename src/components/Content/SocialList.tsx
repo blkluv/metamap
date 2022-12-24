@@ -12,7 +12,7 @@ const SocialList = ({ data }: SocialListProps) => {
       sx={{
         width: "100%",
         background: palette?.background.primary,
-        padding: 0,
+        padding: 1,
         marginBottom: { xs: "0", md: "-2rem", lg: "-3rem" },
         overflow: "scroll",
       }}

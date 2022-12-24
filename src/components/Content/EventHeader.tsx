@@ -60,6 +60,8 @@ const EventHeader = ({
             : { xs: "column", sm: "row", md: "column" },
         justifyContent: "center",
         alignItems: "flex-start",
+        WebkitBoxShadow: "0px 0px 16px -8px rgba(0, 0, 0, 0.68)",
+        boxShadow: "0px 0px 16px -8px rgba(0, 0, 0, 0.68)",
       }}
       selected={_id === selectedEvent?._id}
       onClick={() => onSetSelectedEvent?.(_id)}

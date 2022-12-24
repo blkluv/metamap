@@ -2,7 +2,9 @@ import { useContext } from "react";
 import { Box } from "@mui/material";
 import ThemeContext from "../../context/themeContext";
 import WorldMap from "../WorldMap/WorldMap";
+import Sponsored from "../Content/Sponsored";
 import Content from "./Content";
+import { Route, Routes } from "react-router-dom";
 
 const ContentWindow = () => {
   const { palette } = useContext(ThemeContext);
@@ -20,7 +22,10 @@ const ContentWindow = () => {
       }}
     >
       <Content />
-      <WorldMap />
+      <Routes>
+        <Route path="/*" element={<WorldMap />} />
+        <Route path="/" element={<Sponsored />} />
+      </Routes>
     </Box>
   );
 };

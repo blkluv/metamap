@@ -44,6 +44,8 @@ const UserHeader = ({ _id, name }: Header) => {
         justifyContent: "center",
         alignItems: "center",
         minHeight: "80px",
+        WebkitBoxShadow: "0px 0px 16px -8px rgba(0, 0, 0, 0.68)",
+        boxShadow: "0px 0px 16px -8px rgba(0, 0, 0, 0.68)",
       }}
     >
       <NavLink

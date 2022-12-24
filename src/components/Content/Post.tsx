@@ -66,6 +66,8 @@ const Post = ({
         flexDirection: "column",
         padding: "1rem 1.5rem",
         alignItems: "flex-start",
+        WebkitBoxShadow: "0px 0px 16px -8px rgba(0, 0, 0, 0.68)",
+        boxShadow: "0px 0px 16px -8px rgba(0, 0, 0, 0.68)",
       }}
     >
       <Box

@@ -37,7 +37,7 @@ const Feed = () => {
             width: "100%",
             borderRadius: "25px",
             background: palette?.background.primary,
-            padding: 0,
+            padding: 1,
             marginBottom: { xs: "0", md: "-2rem", lg: "-3rem" },
             overflow: "scroll",
           }}

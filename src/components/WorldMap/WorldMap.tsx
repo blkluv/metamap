@@ -54,6 +54,9 @@ const WorldMap = () => {
         minHeight: { xs: "90vh", md: "600px" },
         maxHeight: "fit-content",
         background: palette?.background.primary,
+        WebkitBoxShadow: "0px 0px 16px -8px rgba(0, 0, 0, 0.68)",
+        boxShadow: "0px 0px 16px -8px rgba(0, 0, 0, 0.68)",
+        borderRadius: "25px",
       }}
     >
       <Map
