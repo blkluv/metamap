@@ -147,6 +147,8 @@ const User = () => {
                     margin: "0 2rem 1rem 0",
                     height: { xs: "8rem", md: "7rem" },
                     width: { xs: "8rem", md: "7rem" },
+                    WebkitBoxShadow: "0px 0px 16px -8px rgba(0, 0, 0, 0.68)",
+                    boxShadow: "0px 0px 16px -8px rgba(0, 0, 0, 0.68)",
                     cursor:
                       user?._id === currentUser?._id ? "pointer" : "default",
                   }}
@@ -450,7 +452,7 @@ const User = () => {
           }}
         >
           {usersPosts.length > 0 ? (
-            <List>
+            <List sx={{ padding: 1 }}>
               {usersPosts.map((element: any) => (
                 <Post key={element._id} {...element} />
               ))}
@@ -463,16 +465,14 @@ const User = () => {
       <Box
         sx={{
           width: { xs: "100%", md: "50%" },
-          padding: 0,
+          padding: 1,
           marginBottom: { xs: "0", md: "-2rem", lg: "-2.5rem" },
           overflow: "scroll",
         }}
       >
         <Masonry columns={{ md: 2, sm: 1 }} spacing={2}>
-          {getUsersEvents(events).map((event: Event, index: number) => (
-            <div key={index}>
-              <EventHeader key={event._id} variant={"masonry"} event={event} />
-            </div>
+          {getUsersEvents(events).map((event: Event) => (
+            <EventHeader key={event._id} variant={"masonry"} event={event} />
           ))}
         </Masonry>
       </Box>

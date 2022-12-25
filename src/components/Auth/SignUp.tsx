@@ -11,11 +11,14 @@ import Container from "@mui/material/Container";
 import { Link as RouterLink } from "react-router-dom";
 import UserContext from "../../context/userContext";
 import { notify } from "../../utils/notifications";
-import { CssTextField } from "./AuthStyles";
 import debounce from "../../utils/debounce";
+import styled from "@emotion/styled";
+import { TextField } from "@mui/material";
+import ThemeContext from "../../context/themeContext";
 
 const SignUp = () => {
   const { onSignUp } = useContext(UserContext);
+  const { palette } = useContext(ThemeContext);
 
   const {
     register: registerSignUp,
@@ -51,15 +54,40 @@ const SignUp = () => {
     resetSignUp();
   };
 
+  const CssTextField = styled(TextField)({
+    input: {
+      color: palette?.text.tertiary,
+    },
+    label: { color: palette?.text.tertiary },
+    "& label.Mui-focused": {
+      color: palette?.text.tertiary,
+    },
+    "& .MuiInput-underline:after": {
+      borderBottomColor: palette?.text.tertiary,
+    },
+    "& .MuiOutlinedInput-root": {
+      "& fieldset": {
+        borderColor: "rgb(120,120,126)",
+      },
+      "&:hover fieldset": {
+        borderColor: palette?.text.tertiary,
+      },
+      "&.Mui-focused fieldset": {
+        borderColor: palette?.text.tertiary,
+      },
+    },
+  });
+
   return (
     <Container
       component="main"
       maxWidth="xs"
       sx={{
-        border: "1px solid rgb(120,120,126)",
         borderRadius: "25px",
         height: "fit-content",
-        background: "rgb(53,51,64)",
+        background: palette?.background.tertiary,
+        WebkitBoxShadow: "0px 0px 16px -8px rgba(0, 0, 0, 0.68)",
+        boxShadow: "0px 0px 16px -8px rgba(0, 0, 0, 0.68)",
       }}
     >
       <Box
@@ -68,10 +96,10 @@ const SignUp = () => {
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
-          color: "white",
+          color: palette?.text.tertiary,
         }}
       >
-        <Avatar sx={{ m: 1, bgcolor: "rgb(235, 110, 105)" }}>
+        <Avatar sx={{ m: 1, bgcolor: palette?.warning }}>
           <LockOutlinedIcon />
         </Avatar>
         <Typography component="h1" variant="h5">
@@ -163,7 +191,7 @@ const SignUp = () => {
                 to="/account/signin"
                 variant="body2"
                 replace
-                sx={{ color: "white", textDecoration: "none" }}
+                sx={{ color: palette?.text.tertiary, textDecoration: "none" }}
               >
                 Already have an account? Sign in
               </Link>

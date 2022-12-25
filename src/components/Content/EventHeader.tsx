@@ -83,7 +83,7 @@ const EventHeader = ({
           marginBottom: "0.5rem",
         }}
         image={logo ? logo : preview}
-        alt="Marker on the map"
+        alt="World map"
       />
       <ListItemText
         primary={

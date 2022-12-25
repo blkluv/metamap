@@ -10,14 +10,16 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { Link as RouterLink } from "react-router-dom";
 import UserContext from "../../context/userContext";
+import ThemeContext from "../../context/themeContext";
 import GoogleLoginButton from "./GoogleLogin";
-import { Divider } from "@mui/material";
-import { CssTextField } from "./AuthStyles";
+import { Divider, TextField } from "@mui/material";
 import { notify } from "../../utils/notifications";
 import debounce from "../../utils/debounce";
+import styled from "@emotion/styled";
 
 const SignIn = () => {
   const { onSignIn, onSignUpDemo } = useContext(UserContext);
+  const { palette } = useContext(ThemeContext);
 
   const {
     register: registerSignIn,
@@ -46,15 +48,40 @@ const SignIn = () => {
     resetSignIn();
   };
 
+  const CssTextField = styled(TextField)({
+    input: {
+      color: palette?.text.tertiary,
+    },
+    label: { color: palette?.text.tertiary },
+    "& label.Mui-focused": {
+      color: palette?.text.tertiary,
+    },
+    "& .MuiInput-underline:after": {
+      borderBottomColor: palette?.text.tertiary,
+    },
+    "& .MuiOutlinedInput-root": {
+      "& fieldset": {
+        borderColor: "rgb(120,120,126)",
+      },
+      "&:hover fieldset": {
+        borderColor: palette?.text.tertiary,
+      },
+      "&.Mui-focused fieldset": {
+        borderColor: palette?.text.tertiary,
+      },
+    },
+  });
+
   return (
     <Container
       component="main"
       maxWidth="xs"
       sx={{
-        border: "1px solid rgb(120,120,126)",
         borderRadius: "25px",
         height: "fit-content",
-        background: "rgb(53,51,64)",
+        background: palette?.background.tertiary,
+        WebkitBoxShadow: "0px 0px 16px -8px rgba(0, 0, 0, 0.68)",
+        boxShadow: "0px 0px 16px -8px rgba(0, 0, 0, 0.68)",
       }}
     >
       <Box
@@ -63,10 +90,10 @@ const SignIn = () => {
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
-          color: "white",
+          color: palette?.text.tertiary,
         }}
       >
-        <Avatar sx={{ m: 1, bgcolor: "rgb(235, 110, 105)" }}>
+        <Avatar sx={{ m: 1, bgcolor: palette?.warning }}>
           <LockOutlinedIcon />
         </Avatar>
         <Typography component="h1" variant="h5">
@@ -119,8 +146,13 @@ const SignIn = () => {
           <Button
             onClick={() => onSignUpDemo?.()}
             fullWidth
-            variant="contained"
-            sx={{ mt: 1, mb: 1, color: "black", background: "white" }}
+            variant="outlined"
+            sx={{
+              mt: 1,
+              mb: 1,
+              color: palette?.text.tertiary,
+              background: palette?.background.tertiary,
+            }}
           >
             DEMO
           </Button>
@@ -136,7 +168,7 @@ const SignIn = () => {
                 component={RouterLink}
                 to="/account/resetpassword"
                 variant="body2"
-                sx={{ color: "white", textDecoration: "none" }}
+                sx={{ color: palette?.text.tertiary, textDecoration: "none" }}
               >
                 Forgot password?
               </Link>
@@ -147,7 +179,7 @@ const SignIn = () => {
                 component={RouterLink}
                 to="/account/signup"
                 variant="body2"
-                sx={{ color: "white", textDecoration: "none" }}
+                sx={{ color: palette?.text.tertiary, textDecoration: "none" }}
               >
                 {"Don't have an account? Sign Up"}
               </Link>

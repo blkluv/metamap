@@ -15,7 +15,11 @@ const ContentWindow = () => {
         display: "flex",
         flexDirection: { xs: "column", md: "row" },
         width: "100%",
-        padding: { xs: "1rem", md: "1rem 2rem 2rem 2rem", overflow: "hidden" },
+        padding: {
+          xs: "1rem",
+          md: "1rem 2rem 1.5rem 2rem",
+          overflow: "hidden",
+        },
         background: palette?.background.primary,
         gridGap: "2rem",
         height: "auto",
