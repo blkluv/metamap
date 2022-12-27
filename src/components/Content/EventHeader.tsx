@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useMemo } from "react";
 import { NavLink } from "react-router-dom";
 import ListItem from "@mui/material/ListItem";
 import ListItemText from "@mui/material/ListItemText";
@@ -27,13 +27,17 @@ const EventHeader = ({
     logo,
   },
   variant,
+  popup,
 }: Header) => {
   const { selectedEvent, onSetSelectedEvent, onJoinEvent, onLeaveEvent } =
     useContext(EventContext);
   const { currentUser } = useContext(UserContext);
   const { palette } = useContext(ThemeContext);
 
-  const ifJoined = participants?.find((user) => user._id === currentUser?._id);
+  const ifJoined = useMemo(
+    () => participants?.find((user) => user._id === currentUser?._id),
+    [currentUser?._id, participants]
+  );
 
   const displayDate = (date: string | null) => {
     if (date) {
@@ -50,9 +54,11 @@ const EventHeader = ({
       alignItems="flex-start"
       sx={{
         cursor: "pointer",
-        borderRadius: "25px",
-        background: palette?.background.tertiary,
-        marginBottom: "1rem",
+        borderRadius: "15px",
+        background: popup
+          ? `${palette?.background.tertiary} !important`
+          : palette?.background.tertiary,
+        marginBottom: popup ? 0 : "1rem",
         display: "flex",
         flexDirection:
           variant === "list"

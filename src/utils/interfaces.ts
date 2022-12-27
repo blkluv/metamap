@@ -91,11 +91,13 @@ export interface EventsContext {
   onJoinEvent?: (id: string | undefined) => Promise<void>;
   onLeaveEvent?: (id: string | undefined) => Promise<void>;
   onSetSelectedEvent?: (id: string | undefined) => void;
+  onRemoveSelectedEvent?: () => void;
 }
 
 export interface EventHeader {
   event: Event;
   variant: string;
+  popup?: boolean;
 }
 
 // post

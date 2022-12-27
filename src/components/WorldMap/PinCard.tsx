@@ -1,6 +1,7 @@
 import { useContext, useState } from "react";
 import { useForm } from "react-hook-form";
 import EventContext from "../../context/eventContext";
+import ThemeContext from "../../context/themeContext";
 import {
   Box,
   Button,
@@ -19,8 +20,10 @@ import { Event, PinCardProps } from "../../utils/interfaces";
 import convertImage from "../../utils/imageConverter";
 import { Cancel } from "@mui/icons-material";
 import debounce from "../../utils/debounce";
+import styled from "@emotion/styled";
 
 const PinCard = ({ lng, lat, onClose }: PinCardProps) => {
+  const { palette } = useContext(ThemeContext);
   const { onAddEvent } = useContext(EventContext);
   const [logo, setLogo] = useState<File | null>(null);
 
@@ -81,8 +84,51 @@ const PinCard = ({ lng, lat, onClose }: PinCardProps) => {
     } catch (err) {}
   };
 
+  const CssSelect = styled(Select)({
+    "& > div": {
+      borderBottom: "1px solid rgb(120,120,126)",
+    },
+    label: { color: palette?.text.tertiary },
+    "& .MuiSvgIcon-root": {
+      color: palette?.text.tertiary,
+    },
+    "& .MuiSelect-select": {
+      color: palette?.text.tertiary,
+    },
+  });
+
+  const CssTextField = styled(TextField)({
+    input: {
+      color: palette?.text.tertiary,
+    },
+    label: { color: palette?.text.tertiary },
+    "& label.Mui-focused": {
+      color: palette?.text.tertiary,
+    },
+    "& .MuiInput-underline:after": {
+      borderBottomColor: palette?.text.tertiary,
+    },
+    "& .MuiOutlinedInput-root": {
+      "& fieldset": {
+        borderColor: "rgb(120,120,126)",
+      },
+      "&:hover fieldset": {
+        borderColor: palette?.text.tertiary,
+      },
+      "&.Mui-focused fieldset": {
+        borderColor: palette?.text.tertiary,
+      },
+    },
+  });
+
   return (
-    <Box sx={{ padding: ".5rem" }}>
+    <Box
+      sx={{
+        padding: ".8rem",
+        background: palette?.background.tertiary,
+        color: palette?.text.primary,
+      }}
+    >
       <Typography component="h3" variant="h6">
         New event
       </Typography>
@@ -120,10 +166,13 @@ const PinCard = ({ lng, lat, onClose }: PinCardProps) => {
         component="form"
         onSubmit={handleRegisterEvent(debounce(handleAddEvent, 400))}
       >
-        <TextField
-          sx={{ mt: 1, mb: 1, textTransform: "capitalize" }}
+        <CssTextField
+          sx={{
+            mt: 1,
+            mb: 1,
+            textTransform: "capitalize",
+          }}
           size="small"
-          variant="standard"
           id={"start"}
           autoComplete={"start"}
           type="datetime-local"
@@ -131,10 +180,9 @@ const PinCard = ({ lng, lat, onClose }: PinCardProps) => {
             required: true,
           })}
         />
-        <TextField
+        <CssTextField
           sx={{ mt: 1, mb: 1, textTransform: "capitalize" }}
           size="small"
-          variant="standard"
           id={"end"}
           autoComplete={"end"}
           type="datetime-local"
@@ -142,15 +190,25 @@ const PinCard = ({ lng, lat, onClose }: PinCardProps) => {
             required: true,
           })}
         />
-        <FormControl variant="standard" required sx={{ minWidth: 120 }}>
-          <InputLabel id="eventCategory">Category</InputLabel>
-          <Select
+        <FormControl variant="standard" sx={{ width: "100%" }}>
+          <InputLabel id="eventCategory" sx={{ color: palette?.text.tertiary }}>
+            Category
+          </InputLabel>
+          <CssSelect
             margin="dense"
             size="small"
             variant="standard"
             id="category"
             labelId="eventCategory"
             autoComplete="category"
+            MenuProps={{
+              PaperProps: {
+                sx: {
+                  bgcolor: palette?.background.tertiary,
+                  color: palette?.text.tertiary,
+                },
+              },
+            }}
             {...registerEvent("category", {
               required: true,
             })}
@@ -162,10 +220,9 @@ const PinCard = ({ lng, lat, onClose }: PinCardProps) => {
             <MenuItem value={"entertainment"}>Entertainment</MenuItem>
             <MenuItem value={"other"}>Other</MenuItem>
             <MenuItem value={"sport"}>Sport</MenuItem>
-          </Select>
+          </CssSelect>
         </FormControl>
-        <TextField
-          variant="standard"
+        <CssTextField
           multiline={true}
           margin="dense"
           size="small"
@@ -174,30 +231,26 @@ const PinCard = ({ lng, lat, onClose }: PinCardProps) => {
           id="title"
           label="Title"
           autoComplete="title"
-          autoFocus
           {...registerEvent("title", {
             required: true,
             minLength: 3,
             maxLength: 45,
           })}
         />
-        <TextField
-          variant="standard"
+        <CssTextField
           margin="dense"
           size="small"
           fullWidth
           id="location"
           label="Location"
           autoComplete="location"
-          autoFocus
           {...registerEvent("location", {
             required: true,
             minLength: 3,
             maxLength: 25,
           })}
         />
-        <TextField
-          variant="standard"
+        <CssTextField
           multiline={true}
           size="small"
           margin="dense"
@@ -206,7 +259,6 @@ const PinCard = ({ lng, lat, onClose }: PinCardProps) => {
           id="description"
           label="Description"
           autoComplete="description"
-          autoFocus
           {...registerEvent("description", {
             required: true,
             minLength: 5,
@@ -219,16 +271,21 @@ const PinCard = ({ lng, lat, onClose }: PinCardProps) => {
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
-            marginRight: "0.5rem",
             marginBottom: "0.5rem",
             cursor: "pointer",
             color: "inherit",
           }}
         >
           <Button
+            variant="outlined"
             component="span"
             fullWidth
-            sx={{ fontSize: "0.9rem", fontWeight: "500", mt: 1, mb: 0.5 }}
+            sx={{
+              fontSize: "0.9rem",
+              fontWeight: "500",
+              mt: 1,
+              mb: 0.5,
+            }}
           >
             Photo
           </Button>

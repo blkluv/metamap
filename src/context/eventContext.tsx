@@ -66,6 +66,10 @@ export const EventProvider = ({ children }: React.PropsWithChildren) => {
     }
   };
 
+  const handleRemoveSelectedEvent = () => {
+    setSelectedEvent(undefined);
+  };
+
   useEffect(() => {
     const loggedUser = localStorage.getItem("auth")
       ? JSON.parse(localStorage.getItem("auth") as string)
@@ -85,6 +89,7 @@ export const EventProvider = ({ children }: React.PropsWithChildren) => {
         onLeaveEvent: handleLeaveEvent,
         onAddEvent: handleAddEvent,
         onSetSelectedEvent: handleSetSelectedEvent,
+        onRemoveSelectedEvent: handleRemoveSelectedEvent,
       }}
     >
       {children}

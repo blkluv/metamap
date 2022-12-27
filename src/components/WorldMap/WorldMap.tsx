@@ -16,6 +16,8 @@ import "maplibre-gl/dist/maplibre-gl.css";
 import { Box } from "@mui/material";
 import { PinCardProps } from "../../utils/interfaces";
 import { notify } from "../../utils/notifications";
+import EventHeader from "../Content/EventHeader";
+import "./popupStyles.css";
 
 const WorldMap = () => {
   const { selectedEvent, onGetEvents } = useContext(EventContext);
@@ -85,7 +87,7 @@ const WorldMap = () => {
 
         <FullscreenControl />
         <Markers key={key} />
-        {newMarker && (
+        {newMarker ? (
           <Popup
             style={{ padding: 0, margin: 0 }}
             longitude={newMarker.lng}
@@ -95,7 +97,25 @@ const WorldMap = () => {
           >
             <PinCard {...newMarker} onClose={setNewMarker} />
           </Popup>
-        )}
+        ) : null}
+        {selectedEvent ? (
+          <Popup
+            key={key + 1}
+            style={{ background: "transparent" }}
+            //@ts-ignore
+            longitude={selectedEvent?.coordinates?.lng}
+            //@ts-ignore
+            latitude={selectedEvent?.coordinates?.lat}
+            anchor="top-left"
+          >
+            <EventHeader
+              key={selectedEvent._id}
+              variant={"masonry"}
+              popup
+              event={selectedEvent}
+            />
+          </Popup>
+        ) : null}
       </Map>
     </Box>
   );
