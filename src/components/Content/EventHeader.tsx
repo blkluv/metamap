@@ -13,6 +13,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import GroupIcon from "@mui/icons-material/Group";
 import debounce from "../../utils/debounce";
 import preview from "../../images/preview.png";
+import BusinessContext from "../../context/businessContext";
 
 const EventHeader = ({
   event: {
@@ -31,6 +32,7 @@ const EventHeader = ({
 }: Header) => {
   const { selectedEvent, onSetSelectedEvent, onJoinEvent, onLeaveEvent } =
     useContext(EventContext);
+  const { onRemoveSelectedBusiness } = useContext(BusinessContext);
   const { currentUser } = useContext(UserContext);
   const { palette } = useContext(ThemeContext);
 
@@ -49,6 +51,11 @@ const EventHeader = ({
     return null;
   };
 
+  const handleSelect = () => {
+    onRemoveSelectedBusiness?.();
+    onSetSelectedEvent?.(_id);
+  };
+
   return (
     <ListItem
       alignItems="flex-start"
@@ -61,37 +68,38 @@ const EventHeader = ({
         marginBottom: popup ? 0 : "1rem",
         display: "flex",
         flexDirection:
-          variant === "list"
-            ? { xs: "column", sm: "row" }
-            : { xs: "column", sm: "row", md: "column" },
+          variant === "list" ? { xs: "column", sm: "row" } : { xs: "column" },
         justifyContent: "center",
         alignItems: "flex-start",
         WebkitBoxShadow: "0px 0px 16px -8px rgba(0, 0, 0, 0.68)",
         boxShadow: "0px 0px 16px -8px rgba(0, 0, 0, 0.68)",
       }}
       selected={_id === selectedEvent?._id}
-      onClick={() => onSetSelectedEvent?.(_id)}
+      onClick={() => (variant === "list" ? handleSelect() : null)}
     >
+      {variant === "masonry" ? (
+        <Typography component="h3" variant="h6" color={palette?.text.tertiary}>
+          Event
+        </Typography>
+      ) : null}
       <CardMedia
         component="img"
         sx={{
           height:
             variant === "list"
               ? { xs: "100%", sm: 155 }
-              : { xs: "100%", sm: 155, md: "100%" },
-          width:
-            variant === "list"
-              ? { xs: "100%", sm: 155 }
-              : { xs: "100%", sm: 155, md: "100%" },
+              : { xs: "100%", sm: "100%", md: "100%" },
+          width: variant === "list" ? { xs: "100%", sm: 155 } : { xs: "100%" },
           borderRadius: "10px",
           marginRight: variant === "list" ? "1rem" : { sm: "1rem", md: 0 },
           marginTop: "0.5rem",
           marginBottom: "0.5rem",
         }}
         image={logo ? logo : preview}
-        alt="World map"
+        alt="Event logo"
       />
       <ListItemText
+        disableTypography
         primary={
           <>
             <Typography

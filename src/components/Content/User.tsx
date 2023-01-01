@@ -17,17 +17,26 @@ import { useParams } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import UserContext from "../../context/userContext";
 import EventContext from "../../context/eventContext";
+import BusinessContext from "../../context/businessContext";
 import PostContext from "../../context/postContext";
 import ThemeContext from "../../context/themeContext";
-import { Event, UserHeader, User as LoggedUser } from "../../utils/interfaces";
+import {
+  Event,
+  UserHeader,
+  User as LoggedUser,
+  Business,
+  // UserItems,
+} from "../../utils/interfaces";
 import convertImage from "../../utils/imageConverter";
 import CheckIcon from "@mui/icons-material/Check";
 import CloseIcon from "@mui/icons-material/Close";
 import EditIcon from "@mui/icons-material/Edit";
 import debounce from "../../utils/debounce";
+import BusinessHeader from "./BusinessHeader";
 
 const User = () => {
   const { events } = useContext(EventContext);
+  const { businesses } = useContext(BusinessContext);
   const { palette } = useContext(ThemeContext);
   const { usersPosts, onGetUsersPosts } = useContext(PostContext);
   const { user, currentUser, onGetUser, onUpdateUser, onFollowUser } =
@@ -52,8 +61,10 @@ const User = () => {
     },
   });
 
-  const getUsersEvents = (eventsArray: Event[]) => {
-    return eventsArray.filter((event: Event) => event?.creator?.name === id);
+  const getUsersItems = (itemsArray: any) => {
+    return itemsArray.filter(
+      (item: Event | Business) => item?.creator?.name === id
+    );
   };
 
   const handleSubmitAvatar = async () => {
@@ -260,7 +271,7 @@ const User = () => {
           >
             <Box sx={{ m: 2 }}>
               <Typography sx={{ fontWeight: 500, fontSize: "1.2rem" }}>
-                {getUsersEvents(events).length}
+                {getUsersItems([...events, ...businesses]).length}
               </Typography>
               <Typography>Events</Typography>
             </Box>
@@ -470,10 +481,18 @@ const User = () => {
           overflow: "scroll",
         }}
       >
-        <Masonry columns={{ md: 2, sm: 1 }} spacing={2}>
-          {getUsersEvents(events).map((event: Event) => (
-            <EventHeader key={event._id} variant={"masonry"} event={event} />
-          ))}
+        <Masonry columns={{ md: 2, sm: 2, sx: 1 }} spacing={2}>
+          {getUsersItems([...events, ...businesses]).map((item: any) => {
+            return item.type === "event" ? (
+              <EventHeader key={item._id} variant={"masonry"} event={item} />
+            ) : (
+              <BusinessHeader
+                key={item._id}
+                variant={"masonry"}
+                business={item}
+              />
+            );
+          })}
         </Masonry>
       </Box>
     </Box>

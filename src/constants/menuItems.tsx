@@ -1,7 +1,7 @@
 import HomeIcon from "@mui/icons-material/Home";
 import SettingsIcon from "@mui/icons-material/Settings";
 import GroupIcon from "@mui/icons-material/Group";
-import EmojiEventsIcon from "@mui/icons-material/EmojiEvents";
+import StoreIcon from "@mui/icons-material/Store";
 import RoomIcon from "@mui/icons-material/Room";
 
 export const EventMenuItems = [
@@ -21,10 +21,10 @@ export const EventMenuItems = [
   },
   {
     id: 3,
-    label: "Places",
-    icon: <EmojiEventsIcon />,
+    label: "Business",
+    icon: <StoreIcon />,
     color: "rgb(120,120,126)",
-    link: "places",
+    link: "business",
   },
   {
     id: 4,

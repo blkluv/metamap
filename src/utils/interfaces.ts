@@ -71,6 +71,7 @@ export interface UsersContext {
 // event
 export interface Event {
   _id?: string;
+  type?: string;
   title: string | null;
   start: string | null;
   end: string | null;
@@ -100,6 +101,48 @@ export interface EventHeader {
   popup?: boolean;
 }
 
+// business
+export interface Business {
+  phone?: string | null;
+  email?: string | null;
+  website?: string | null;
+  _id?: string;
+  type?: string;
+  name: string | null;
+  category: string | null;
+  address: string | null;
+  openingtime: string | null;
+  contact?: {
+    phone: string | null;
+    email: string | null;
+    website: string | null;
+  };
+  coordinates?: { lng: number; lat: number };
+  description: string | null;
+  logo?: any;
+  likes?: UserHeader[];
+  creator?: UserHeader;
+  owners?: UserHeader;
+  comments?: [];
+}
+
+export interface BusinessHeader {
+  business: Business;
+  variant: string;
+  popup?: boolean;
+}
+
+export interface BusinessesContext {
+  businesses: Business[];
+  selectedBusiness?: Business;
+  onAddBusiness?: (business: Business) => Promise<void>;
+  onGetBusinesses?: () => Promise<void>;
+  onLikeBusiness?: (id: string | undefined) => Promise<void>;
+  onDeleteBusiness?: (id: string | undefined) => Promise<void>;
+  onSetSelectedBusiness?: (id: string | undefined) => void;
+  onRemoveSelectedBusiness?: () => void;
+}
+
 // post
 export interface Post {
   _id?: string;
@@ -113,6 +156,7 @@ export interface Post {
 export interface PinCardProps {
   lng: number;
   lat: number;
+  type?: string | null;
   onClose?: React.Dispatch<React.SetStateAction<PinCardProps | null>>;
 }
 
@@ -155,6 +199,10 @@ export interface ThemesContext {
 }
 
 // other
+export interface UserItems {
+  items: any;
+}
+
 export interface DateTimePickerProps {
   label: string;
 }

@@ -183,7 +183,7 @@ const Post = ({
             sx={{
               fontSize: "1.5rem",
               cursor: "pointer",
-              color: "rgb(235, 110, 105)",
+              color: palette?.warning,
             }}
             onClick={debounce(() => handleLikePost(), 400)}
           />

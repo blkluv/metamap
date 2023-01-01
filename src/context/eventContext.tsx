@@ -1,6 +1,7 @@
-import { useState, useEffect, createContext } from "react";
+import { useState, useEffect, createContext, useContext } from "react";
 import { Event, EventsContext } from "../utils/interfaces";
 import EventService from "../services/eventService";
+import UserContext from "./userContext";
 
 const INITIAL_STATE: EventsContext = {
   events: [],
@@ -20,6 +21,7 @@ const EventContext = createContext(INITIAL_STATE);
 export const EventProvider = ({ children }: React.PropsWithChildren) => {
   const [events, setEvents] = useState<Event[]>([]);
   const [selectedEvent, setSelectedEvent] = useState<Event | undefined>();
+  const { currentUser } = useContext(UserContext);
 
   const getEvents = async () => {
     const events = await EventService.getEvents();
@@ -38,10 +40,10 @@ export const EventProvider = ({ children }: React.PropsWithChildren) => {
   const handleJoinEvent = async (id: string | undefined) => {
     const updatedEvent = await EventService.joinEvent(id);
     if (updatedEvent) {
+      setSelectedEvent(updatedEvent);
       const updatedEvents = events.map((event) =>
         event._id === updatedEvent._id ? updatedEvent : event
       );
-
       setEvents(updatedEvents);
     }
   };
@@ -49,10 +51,10 @@ export const EventProvider = ({ children }: React.PropsWithChildren) => {
   const handleLeaveEvent = async (id: string | undefined) => {
     const updatedEvent = await EventService.leaveEvent(id);
     if (updatedEvent) {
+      setSelectedEvent(updatedEvent);
       const updatedEvents = events.map((event) =>
         event._id === updatedEvent._id ? updatedEvent : event
       );
-
       setEvents(updatedEvents);
     }
   };
@@ -77,7 +79,7 @@ export const EventProvider = ({ children }: React.PropsWithChildren) => {
     if (loggedUser) {
       getEvents();
     }
-  }, []);
+  }, [currentUser]);
 
   return (
     <EventContext.Provider

@@ -1,19 +1,19 @@
 import { useContext, useEffect } from "react";
 import List from "@mui/material/List";
-import EventHeader from "./EventHeader";
-import { Event } from "../../utils/interfaces";
-import EventContext from "../../context/eventContext";
+import { Business } from "../../utils/interfaces";
+import BusinessContext from "../../context/businessContext";
 import { Box, Divider } from "@mui/material";
-import EventMenu from "../Navigation/EventMenu";
 import ThemeContext from "../../context/themeContext";
+import BusinessHeader from "./BusinessHeader";
+import BusinessMenu from "../Navigation/BusinessMenu";
 
-const Events = () => {
-  const { events, onRemoveSelectedEvent } = useContext(EventContext);
+const Businesses = () => {
+  const { businesses, onRemoveSelectedBusiness } = useContext(BusinessContext);
   const { palette } = useContext(ThemeContext);
 
   useEffect(() => {
     return () => {
-      onRemoveSelectedEvent?.();
+      onRemoveSelectedBusiness?.();
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -27,12 +27,12 @@ const Events = () => {
         height: "100%",
       }}
     >
-      <EventMenu />
+      <BusinessMenu />
       <Divider
         variant="middle"
         sx={{ background: "rgb(120,120,126)", margin: "1rem 0 1.5rem 0" }}
       />
-      {events.length > 0 ? (
+      {businesses.length > 0 ? (
         <List
           sx={{
             width: "100%",
@@ -43,15 +43,19 @@ const Events = () => {
             overflow: "scroll",
           }}
         >
-          {events.map((event: Event) => (
-            <EventHeader key={event._id} variant={"list"} event={event} />
+          {businesses.map((business: Business) => (
+            <BusinessHeader
+              key={business._id}
+              variant={"list"}
+              business={business}
+            />
           ))}
         </List>
       ) : (
-        <p>No events to display.</p>
+        <p>No businesses to display.</p>
       )}
     </Box>
   );
 };
 
-export default Events;
+export default Businesses;

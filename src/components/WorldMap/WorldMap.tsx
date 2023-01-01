@@ -6,9 +6,9 @@ import Map, {
   Popup,
   MapLayerMouseEvent,
 } from "react-map-gl";
-import PinCard from "./PinCard";
 import Markers from "./Markers";
 import EventContext from "../../context/eventContext";
+import BusinessContext from "../../context/businessContext";
 import UserContext from "../../context/userContext";
 import ThemeContext from "../../context/themeContext";
 import maplibregl from "maplibre-gl";
@@ -17,10 +17,12 @@ import { Box } from "@mui/material";
 import { PinCardProps } from "../../utils/interfaces";
 import { notify } from "../../utils/notifications";
 import EventHeader from "../Content/EventHeader";
-import "./popupStyles.css";
+import BusinessHeader from "../Content/BusinessHeader";
+import PopupController from "./PopupController";
 
 const WorldMap = () => {
-  const { selectedEvent, onGetEvents } = useContext(EventContext);
+  const { selectedEvent } = useContext(EventContext);
+  const { selectedBusiness } = useContext(BusinessContext);
   const { currentUser } = useContext(UserContext);
   const { palette } = useContext(ThemeContext);
   const [newMarker, setNewMarker] = useState<PinCardProps | null>(null);
@@ -29,25 +31,15 @@ const WorldMap = () => {
   const handleDoubleClick = (e: MapLayerMouseEvent) => {
     if (currentUser) {
       const { lng, lat } = e.lngLat;
-      setNewMarker({ lng, lat });
+      setNewMarker({ lng, lat, type: null });
     } else {
-      notify("Only registered users can add events.");
+      notify("Only registered users can add markers.");
     }
   };
 
   useEffect(() => {
     setKey(Math.random());
-  }, [selectedEvent]);
-
-  useEffect(() => {
-    const loggedUser = localStorage.getItem("auth")
-      ? JSON.parse(localStorage.getItem("auth") as string)
-      : null;
-    if (loggedUser) {
-      onGetEvents?.();
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [selectedEvent, selectedBusiness]);
 
   return (
     <Box
@@ -84,36 +76,45 @@ const WorldMap = () => {
             enableHighAccuracy: true,
           }}
         />
-
         <FullscreenControl />
         <Markers key={key} />
         {newMarker ? (
-          <Popup
-            style={{ padding: 0, margin: 0 }}
-            longitude={newMarker.lng}
-            latitude={newMarker.lat}
-            anchor="top-left"
-            onClose={() => setNewMarker(null)}
-          >
-            <PinCard {...newMarker} onClose={setNewMarker} />
-          </Popup>
+          <PopupController newMarker={newMarker} setNewMarker={setNewMarker} />
         ) : null}
-        {selectedEvent ? (
+        {selectedEvent || selectedBusiness ? (
           <Popup
             key={key + 1}
             style={{ background: "transparent" }}
             //@ts-ignore
-            longitude={selectedEvent?.coordinates?.lng}
+            longitude={
+              selectedEvent
+                ? selectedEvent?.coordinates?.lng
+                : selectedBusiness?.coordinates?.lng
+            }
             //@ts-ignore
-            latitude={selectedEvent?.coordinates?.lat}
+            latitude={
+              selectedEvent
+                ? selectedEvent?.coordinates?.lat
+                : selectedBusiness?.coordinates?.lat
+            }
             anchor="top-left"
           >
-            <EventHeader
-              key={selectedEvent._id}
-              variant={"masonry"}
-              popup
-              event={selectedEvent}
-            />
+            {selectedEvent ? (
+              <EventHeader
+                key={selectedEvent._id}
+                variant={"masonry"}
+                popup
+                event={selectedEvent}
+              />
+            ) : null}
+            {selectedBusiness ? (
+              <BusinessHeader
+                key={selectedBusiness._id}
+                variant={"masonry"}
+                popup
+                business={selectedBusiness}
+              />
+            ) : null}
           </Popup>
         ) : null}
       </Map>

@@ -1,6 +1,6 @@
 import { useContext, useState } from "react";
 import { useForm } from "react-hook-form";
-import EventContext from "../../context/eventContext";
+import BusinessContext from "../../context/businessContext";
 import ThemeContext from "../../context/themeContext";
 import {
   Box,
@@ -16,71 +16,80 @@ import {
   Typography,
 } from "@mui/material";
 import { notify } from "../../utils/notifications";
-import { Event, PinCardProps } from "../../utils/interfaces";
+import { Business, PinCardProps } from "../../utils/interfaces";
 import convertImage from "../../utils/imageConverter";
 import { Cancel } from "@mui/icons-material";
 import debounce from "../../utils/debounce";
 import styled from "@emotion/styled";
 
-const PinCard = ({ lng, lat, onClose }: PinCardProps) => {
+const BusinessPin = ({ lng, lat, onClose }: PinCardProps) => {
   const { palette } = useContext(ThemeContext);
-  const { onAddEvent } = useContext(EventContext);
+  const { onAddBusiness } = useContext(BusinessContext);
   const [logo, setLogo] = useState<File | null>(null);
 
   const {
-    register: registerEvent,
-    handleSubmit: handleRegisterEvent,
-    reset: resetEventForm,
+    register: registerBusiness,
+    handleSubmit: handleRegisterBusiness,
+    reset: resetBusinessForm,
   } = useForm({
     defaultValues: {
-      title: null,
+      name: null,
       description: null,
-      start: null,
-      end: null,
       category: null,
-      location: null,
+      address: null,
+      openingtime: null,
+      phone: null,
+      email: null,
+      website: null,
     },
   });
 
-  const handleAddEvent = async (data: Event) => {
-    const title = data.title?.trim();
-    const start = data.start?.trim();
-    const end = data.end?.trim();
+  const handleAddBusiness = async (data: Business) => {
+    const name = data.name?.trim();
     const description = data.description?.trim();
     const category = data.category?.trim();
-    const location = data.location?.trim();
+    const address = data.address?.trim();
+    const openingtime = data.openingtime?.trim();
+    const phone = data.phone?.trim();
+    const email = data.email?.trim();
+    const website = data.website?.trim();
 
-    if (!description || !title || !start || !end || !category || !location) {
+    if (
+      !description ||
+      !name ||
+      !openingtime ||
+      !address ||
+      !category ||
+      !phone ||
+      !email ||
+      !website
+    ) {
       return notify("Please complete all fields.");
     }
 
-    const eventData: Event = {
-      title,
-      description,
-      start,
-      end,
+    const businessData: Business = {
+      name,
       category,
-      location,
+      address,
+      openingtime,
+      contact: {
+        phone,
+        email,
+        website,
+      },
+      description,
       coordinates: { lng, lat },
     };
 
-    if (
-      eventData.start &&
-      eventData.end &&
-      eventData?.start >= eventData?.end
-    ) {
-      return notify("The end of the event must be later than its beginning.");
-    }
-
     if (logo) {
-      eventData.logo = await convertImage(logo, 320, 320);
+      businessData.logo = await convertImage(logo, 320, 320);
     }
 
     try {
-      onAddEvent?.(eventData);
+      onAddBusiness?.(businessData);
       setLogo(null);
       onClose?.(null);
-      resetEventForm();
+      resetBusinessForm();
     } catch (err) {}
   };
 
@@ -130,7 +139,7 @@ const PinCard = ({ lng, lat, onClose }: PinCardProps) => {
       }}
     >
       <Typography component="h3" variant="h6">
-        New event
+        New business
       </Typography>
       {logo && (
         <Box sx={{ position: "relative" }}>
@@ -145,7 +154,7 @@ const PinCard = ({ lng, lat, onClose }: PinCardProps) => {
               marginTop: "1rem",
               marginBottom: "1rem",
             }}
-            alt={"Event image"}
+            alt={"Business image"}
           />
           <Cancel
             sx={{
@@ -161,37 +170,15 @@ const PinCard = ({ lng, lat, onClose }: PinCardProps) => {
           />
         </Box>
       )}
-
       <Box
         component="form"
-        onSubmit={handleRegisterEvent(debounce(handleAddEvent, 400))}
+        onSubmit={handleRegisterBusiness(debounce(handleAddBusiness, 400))}
       >
-        <CssTextField
-          sx={{
-            mt: 1,
-            mb: 1,
-            textTransform: "capitalize",
-          }}
-          size="small"
-          id={"start"}
-          autoComplete={"start"}
-          type="datetime-local"
-          {...registerEvent("start", {
-            required: true,
-          })}
-        />
-        <CssTextField
-          sx={{ mt: 1, mb: 1, textTransform: "capitalize" }}
-          size="small"
-          id={"end"}
-          autoComplete={"end"}
-          type="datetime-local"
-          {...registerEvent("end", {
-            required: true,
-          })}
-        />
         <FormControl variant="standard" sx={{ width: "100%" }}>
-          <InputLabel id="eventCategory" sx={{ color: palette?.text.tertiary }}>
+          <InputLabel
+            id="businessCategory"
+            sx={{ color: palette?.text.tertiary }}
+          >
             Category
           </InputLabel>
           <CssSelect
@@ -199,7 +186,7 @@ const PinCard = ({ lng, lat, onClose }: PinCardProps) => {
             size="small"
             variant="standard"
             id="category"
-            labelId="eventCategory"
+            labelId="businessCategory"
             autoComplete="category"
             MenuProps={{
               PaperProps: {
@@ -209,17 +196,21 @@ const PinCard = ({ lng, lat, onClose }: PinCardProps) => {
                 },
               },
             }}
-            {...registerEvent("category", {
+            {...registerBusiness("category", {
               required: true,
             })}
           >
-            <MenuItem value={"art"}>Art</MenuItem>
-            <MenuItem value={"business"}>Business</MenuItem>
             <MenuItem value={"community"}>Community</MenuItem>
             <MenuItem value={"education"}>Education</MenuItem>
             <MenuItem value={"entertainment"}>Entertainment</MenuItem>
+            <MenuItem value={"finance"}>Finance</MenuItem>
+            <MenuItem value={"food"}>Food</MenuItem>
+            <MenuItem value={"health"}>Health</MenuItem>
             <MenuItem value={"other"}>Other</MenuItem>
             <MenuItem value={"sport"}>Sport</MenuItem>
+            <MenuItem value={"tech"}>Tech</MenuItem>
+            <MenuItem value={"trade"}>Trade</MenuItem>
+            <MenuItem value={"travel"}>Travel</MenuItem>
           </CssSelect>
         </FormControl>
         <CssTextField
@@ -228,23 +219,75 @@ const PinCard = ({ lng, lat, onClose }: PinCardProps) => {
           size="small"
           maxRows={2}
           fullWidth
-          id="title"
-          label="Title"
-          autoComplete="title"
-          {...registerEvent("title", {
+          id="name"
+          label="Name"
+          autoComplete="name"
+          {...registerBusiness("name", {
             required: true,
-            minLength: 3,
-            maxLength: 45,
+            minLength: 5,
+            maxLength: 40,
           })}
         />
         <CssTextField
           margin="dense"
           size="small"
           fullWidth
-          id="location"
-          label="Location"
-          autoComplete="location"
-          {...registerEvent("location", {
+          id="address"
+          label="Address"
+          autoComplete="address"
+          {...registerBusiness("address", {
+            required: true,
+            minLength: 3,
+            maxLength: 25,
+          })}
+        />
+        <CssTextField
+          size="small"
+          margin="dense"
+          fullWidth
+          id="openingtime"
+          label="Opening time"
+          autoComplete="openingtime"
+          {...registerBusiness("openingtime", {
+            required: true,
+            minLength: 3,
+            maxLength: 25,
+          })}
+        />
+        <CssTextField
+          margin="dense"
+          size="small"
+          fullWidth
+          id="phone"
+          label="Phone"
+          autoComplete="phone"
+          {...registerBusiness("phone", {
+            required: true,
+            minLength: 3,
+            maxLength: 25,
+          })}
+        />
+        <CssTextField
+          margin="dense"
+          size="small"
+          fullWidth
+          id="email"
+          label="Email"
+          autoComplete="email"
+          {...registerBusiness("email", {
+            required: true,
+            minLength: 3,
+            maxLength: 25,
+          })}
+        />
+        <CssTextField
+          margin="dense"
+          size="small"
+          fullWidth
+          id="website"
+          label="Website"
+          autoComplete="website"
+          {...registerBusiness("website", {
             required: true,
             minLength: 3,
             maxLength: 25,
@@ -259,7 +302,7 @@ const PinCard = ({ lng, lat, onClose }: PinCardProps) => {
           id="description"
           label="Description"
           autoComplete="description"
-          {...registerEvent("description", {
+          {...registerBusiness("description", {
             required: true,
             minLength: 5,
             maxLength: 800,
@@ -305,4 +348,4 @@ const PinCard = ({ lng, lat, onClose }: PinCardProps) => {
   );
 };
 
-export default PinCard;
+export default BusinessPin;
