@@ -1,22 +1,37 @@
-import { useContext, useEffect } from "react";
-import List from "@mui/material/List";
-import { Business } from "../../utils/interfaces";
+import { useContext, useEffect, useState } from "react";
 import BusinessContext from "../../context/businessContext";
 import { Box, Divider } from "@mui/material";
-import ThemeContext from "../../context/themeContext";
-import BusinessHeader from "./BusinessHeader";
 import BusinessMenu from "../Navigation/BusinessMenu";
+import BusinessesList from "./BusinessesList";
+import { Business } from "../../utils/interfaces";
 
 const Businesses = () => {
-  const { businesses, onRemoveSelectedBusiness } = useContext(BusinessContext);
-  const { palette } = useContext(ThemeContext);
+  const { businesses, selectedBusiness, onRemoveSelectedBusiness } =
+    useContext(BusinessContext);
+  const [filteredItems, setFilteredItems] = useState(null);
 
   useEffect(() => {
+    if (filteredItems) {
+      setFilteredItems((filteredItems) =>
+        // @ts-ignore
+        filteredItems.map((item: Business) =>
+          item?._id === selectedBusiness?._id ? selectedBusiness : item
+        )
+      );
+    }
     return () => {
       onRemoveSelectedBusiness?.();
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [businesses]);
+
+  const handleFilter = (data: any) => {
+    if (data) {
+      setFilteredItems(data);
+    } else {
+      setFilteredItems(null);
+    }
+  };
 
   return (
     <Box
@@ -27,33 +42,12 @@ const Businesses = () => {
         height: "100%",
       }}
     >
-      <BusinessMenu />
+      <BusinessMenu items={businesses} handleFilter={handleFilter} />
       <Divider
         variant="middle"
         sx={{ background: "rgb(120,120,126)", margin: "1rem 0 1.5rem 0" }}
       />
-      {businesses.length > 0 ? (
-        <List
-          sx={{
-            width: "100%",
-            background: palette?.background.primary,
-            color: "white",
-            padding: 1,
-            marginBottom: { xs: "0", md: "-5rem", lg: "-3rem" },
-            overflow: "scroll",
-          }}
-        >
-          {businesses.map((business: Business) => (
-            <BusinessHeader
-              key={business._id}
-              variant={"list"}
-              business={business}
-            />
-          ))}
-        </List>
-      ) : (
-        <p>No businesses to display.</p>
-      )}
+      <BusinessesList items={filteredItems ? filteredItems : businesses} />
     </Box>
   );
 };

@@ -1,22 +1,37 @@
-import { useContext, useEffect } from "react";
-import List from "@mui/material/List";
-import EventHeader from "./EventHeader";
-import { Event } from "../../utils/interfaces";
+import { useContext, useEffect, useState } from "react";
 import EventContext from "../../context/eventContext";
 import { Box, Divider } from "@mui/material";
 import EventMenu from "../Navigation/EventMenu";
-import ThemeContext from "../../context/themeContext";
+import EventsList from "./EventsList";
+import { Event } from "../../utils/interfaces";
 
 const Events = () => {
-  const { events, onRemoveSelectedEvent } = useContext(EventContext);
-  const { palette } = useContext(ThemeContext);
+  const { events, selectedEvent, onRemoveSelectedEvent } =
+    useContext(EventContext);
+  const [filteredItems, setFilteredItems] = useState(null);
 
   useEffect(() => {
+    if (filteredItems) {
+      setFilteredItems((filteredItems) =>
+        // @ts-ignore
+        filteredItems.map((item: Event) =>
+          item?._id === selectedEvent?._id ? selectedEvent : item
+        )
+      );
+    }
     return () => {
       onRemoveSelectedEvent?.();
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [events]);
+
+  const handleFilter = (data: any) => {
+    if (data) {
+      setFilteredItems(data);
+    } else {
+      setFilteredItems(null);
+    }
+  };
 
   return (
     <Box
@@ -27,29 +42,12 @@ const Events = () => {
         height: "100%",
       }}
     >
-      <EventMenu />
+      <EventMenu items={events} handleFilter={handleFilter} />
       <Divider
         variant="middle"
         sx={{ background: "rgb(120,120,126)", margin: "1rem 0 1.5rem 0" }}
       />
-      {events.length > 0 ? (
-        <List
-          sx={{
-            width: "100%",
-            background: palette?.background.primary,
-            color: "white",
-            padding: 1,
-            marginBottom: { xs: "0", md: "-5rem", lg: "-3rem" },
-            overflow: "scroll",
-          }}
-        >
-          {events.map((event: Event) => (
-            <EventHeader key={event._id} variant={"list"} event={event} />
-          ))}
-        </List>
-      ) : (
-        <p>No events to display.</p>
-      )}
+      <EventsList items={filteredItems ? filteredItems : events} />
     </Box>
   );
 };

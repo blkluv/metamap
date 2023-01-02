@@ -1,58 +1,34 @@
 import { useContext } from "react";
 import { Box } from "@mui/material";
-import { styled, alpha } from "@mui/material/styles";
 import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
-import InputBase from "@mui/material/InputBase";
-import SearchIcon from "@mui/icons-material/Search";
 import TravelExploreIcon from "@mui/icons-material/TravelExplore";
 import CheckIcon from "@mui/icons-material/Check";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
+import UserContext from "../../context/userContext";
 import ThemeContext from "../../context/themeContext";
+import { Business, ItemMenuProps } from "../../utils/interfaces";
+import SearchField from "../Elements/SearchField";
 
-export const BusinessMenu = () => {
+export const BusinessMenu = ({ items, handleFilter }: ItemMenuProps) => {
+  const { currentUser } = useContext(UserContext);
   const { palette } = useContext(ThemeContext);
 
-  const Search = styled("div")(({ theme }) => ({
-    position: "relative",
-    borderRadius: theme.shape.borderRadius,
-    backgroundColor: alpha(theme.palette.common.white, 0.15),
-    "&:hover": {
-      backgroundColor: alpha(theme.palette.common.white, 0.25),
-    },
-    marginRight: theme.spacing(1),
-    marginLeft: 0,
-    width: "100%",
-    [theme.breakpoints.up("sm")]: {
-      marginLeft: theme.spacing(1),
-      width: "auto",
-    },
-  }));
+  const handleOwnedBusinesses = (data: Business[]) => {
+    const owned = data.filter((item: Business | null) => {
+      return item?.owners?.find((user) => user._id === currentUser?._id);
+    });
+    handleFilter(owned);
+  };
 
-  const SearchIconWrapper = styled("div")(({ theme }) => ({
-    padding: theme.spacing(0, 2),
-    height: "100%",
-    position: "absolute",
-    pointerEvents: "none",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-  }));
-
-  const StyledInputBase = styled(InputBase)(({ theme }) => ({
-    color: "inherit",
-    "& .MuiInputBase-input": {
-      padding: theme.spacing(1, 1, 1, 0),
-      paddingLeft: `calc(1em + ${theme.spacing(4)})`,
-      transition: theme.transitions.create("width"),
-      width: "100%",
-      [theme.breakpoints.up("md")]: {
-        width: "15ch",
-      },
-    },
-  }));
+  const handleLikedBusinesses = (data: Business[]) => {
+    const liked = data.filter((item: Business | null) => {
+      return item?.likes?.find((user) => user._id === currentUser?._id);
+    });
+    handleFilter(liked);
+  };
 
   return (
     <Box
@@ -91,22 +67,7 @@ export const BusinessMenu = () => {
           flexWrap: "wrap",
         }}
       >
-        <Search
-          sx={{
-            marginLeft: "0 !important",
-            marginRight: "0.5rem !important",
-            marginTop: "0.5rem !important",
-            background: palette?.background.tertiary,
-          }}
-        >
-          <SearchIconWrapper>
-            <SearchIcon />
-          </SearchIconWrapper>
-          <StyledInputBase
-            placeholder="Search…"
-            inputProps={{ "aria-label": "search" }}
-          />
-        </Search>
+        <SearchField data={items} filter={handleFilter} />
         <Button
           variant="contained"
           startIcon={<TravelExploreIcon />}
@@ -118,8 +79,9 @@ export const BusinessMenu = () => {
             marginRight: "0.5rem !important",
             marginTop: "0.5rem !important",
           }}
+          onClick={() => handleFilter(items)}
         >
-          Discover
+          All
         </Button>
         <Button
           variant="outlined"
@@ -130,6 +92,7 @@ export const BusinessMenu = () => {
             marginRight: "0.5rem !important",
             marginTop: "0.5rem !important",
           }}
+          onClick={() => handleOwnedBusinesses(items)}
         >
           Owned
         </Button>
@@ -143,6 +106,7 @@ export const BusinessMenu = () => {
             marginTop: "0.5rem !important",
             color: palette?.warning,
           }}
+          onClick={() => handleLikedBusinesses(items)}
         >
           Liked
         </Button>

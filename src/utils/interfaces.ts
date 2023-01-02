@@ -101,6 +101,15 @@ export interface EventHeader {
   popup?: boolean;
 }
 
+export interface EventsListProps {
+  items: Event[];
+}
+
+export interface ItemMenuProps {
+  items: any[];
+  handleFilter: React.Dispatch<React.SetStateAction<any[] | null>>;
+}
+
 // business
 export interface Business {
   phone?: string | null;
@@ -122,7 +131,7 @@ export interface Business {
   logo?: any;
   likes?: UserHeader[];
   creator?: UserHeader;
-  owners?: UserHeader;
+  owners?: UserHeader[];
   comments?: [];
 }
 
@@ -130,6 +139,10 @@ export interface BusinessHeader {
   business: Business;
   variant: string;
   popup?: boolean;
+}
+
+export interface BusinessesListProps {
+  items: Business[];
 }
 
 export interface BusinessesContext {
@@ -230,4 +243,9 @@ export interface ConfirmationDialogProps {
   isOpen: boolean;
   onConfirm: () => void;
   onClose: () => void;
+}
+
+export interface SearchFieldProps {
+  data: any[];
+  filter: React.Dispatch<React.SetStateAction<any[] | null>>;
 }
