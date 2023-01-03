@@ -4,10 +4,13 @@ import { Box, Divider } from "@mui/material";
 import EventMenu from "../Navigation/EventMenu";
 import EventsList from "./EventsList";
 import { Event } from "../../utils/interfaces";
+import BusinessContext from "../../context/businessContext";
 
 const Events = () => {
   const { events, selectedEvent, onRemoveSelectedEvent } =
     useContext(EventContext);
+  const { selectedBusiness, onRemoveSelectedBusiness } =
+    useContext(BusinessContext);
   const [filteredItems, setFilteredItems] = useState(null);
 
   useEffect(() => {
@@ -24,6 +27,14 @@ const Events = () => {
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [events]);
+
+  useEffect(() => {
+    if (selectedEvent || selectedBusiness) {
+      onRemoveSelectedEvent?.();
+      onRemoveSelectedBusiness?.();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [filteredItems]);
 
   const handleFilter = (data: any) => {
     if (data) {

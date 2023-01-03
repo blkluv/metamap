@@ -6,33 +6,28 @@ import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
-import SearchIcon from "@mui/icons-material/Search";
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import CheckIcon from "@mui/icons-material/Check";
 import VisibilityIcon from "@mui/icons-material/Visibility";
-import { Search, SearchIconWrapper, StyledInputBase } from "./SocialMenuStyles";
+import SearchField from "../Elements/SearchField";
+import { UserHeader } from "../../utils/interfaces";
 
 export const SocialMenu = ({ handleFilter, users }: any) => {
   const { currentUser } = useContext(UserContext);
   const { palette } = useContext(ThemeContext);
 
-  const followers = currentUser?.followers;
-  const following = currentUser?.followers;
+  const handleFollowing = (data: UserHeader[]) => {
+    const followedUsers = data.filter((item: UserHeader | null) => {
+      return item?.following?.find((user) => user._id === currentUser?._id);
+    });
+    handleFilter(followedUsers);
+  };
 
-  const filterData = (e: { target: { value: string } }) => {
-    if (e.target.value.length >= 3) {
-      const searchData = e.target.value;
-      const newFilter = users?.filter((value: any) => {
-        return value.name.toLowerCase().includes(searchData.toLowerCase());
-      });
-      if (searchData === "") {
-        handleFilter([]);
-      } else {
-        handleFilter(newFilter);
-      }
-    } else {
-      handleFilter([]);
-    }
+  const handleFollowers = (data: UserHeader[]) => {
+    const followedUsers = data.filter((item: UserHeader | null) => {
+      return item?.followers?.find((user) => user._id === currentUser?._id);
+    });
+    handleFilter(followedUsers);
   };
 
   return (
@@ -53,7 +48,7 @@ export const SocialMenu = ({ handleFilter, users }: any) => {
           component="div"
           sx={{ fontWeight: "bold", mb: 1.5 }}
         >
-          Social
+          Community
         </Typography>
         <Typography
           variant="body2"
@@ -72,23 +67,7 @@ export const SocialMenu = ({ handleFilter, users }: any) => {
           flexWrap: "wrap",
         }}
       >
-        <Search
-          sx={{
-            marginLeft: "0 !important",
-            marginRight: "0.5rem !important",
-            marginTop: "0.5rem !important",
-            background: palette?.background.tertiary,
-          }}
-        >
-          <SearchIconWrapper>
-            <SearchIcon />
-          </SearchIconWrapper>
-          <StyledInputBase
-            placeholder="Search…"
-            inputProps={{ "aria-label": "search" }}
-            onChange={filterData}
-          />
-        </Search>
+        <SearchField data={users} filter={handleFilter} />
         <Button
           variant="contained"
           startIcon={<PersonAddIcon />}
@@ -100,12 +79,12 @@ export const SocialMenu = ({ handleFilter, users }: any) => {
             marginRight: "0.5rem !important",
             marginTop: "0.5rem !important",
           }}
+          onClick={() => handleFilter(null)}
         >
-          Suggested
+          Clear
         </Button>
         <Button
-          // @ts-ignore
-          onClick={() => handleFilter([...following])}
+          onClick={() => handleFollowers(users)}
           variant="outlined"
           startIcon={<CheckIcon />}
           sx={{
@@ -118,7 +97,7 @@ export const SocialMenu = ({ handleFilter, users }: any) => {
           Following
         </Button>
         <Button
-          onClick={() => handleFilter([...followers])}
+          onClick={() => handleFollowing(users)}
           variant="outlined"
           startIcon={<VisibilityIcon />}
           sx={{

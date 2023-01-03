@@ -6,7 +6,7 @@ import SocialList from "./SocialList";
 import ThemeContext from "../../context/themeContext";
 
 const Social = () => {
-  const { currentUser, users, onGetUsers } = useContext(UserContext);
+  const { users, onGetUsers } = useContext(UserContext);
   const { palette } = useContext(ThemeContext);
   const [filteredData, setFilteredData] = useState([]);
 
@@ -32,7 +32,7 @@ const Social = () => {
           margin: "1rem 0 1.5rem 0",
         }}
       />
-      {currentUser && users ? <SocialList data={filteredData} /> : <></>}
+      <SocialList data={filteredData ? filteredData : []} />
     </Box>
   );
 };

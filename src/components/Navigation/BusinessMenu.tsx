@@ -48,7 +48,7 @@ export const BusinessMenu = ({ items, handleFilter }: ItemMenuProps) => {
           component="div"
           sx={{ fontWeight: "bold", mb: 1.5 }}
         >
-          Places
+          Business
         </Typography>
         <Typography
           variant="body2"

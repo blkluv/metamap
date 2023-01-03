@@ -28,7 +28,7 @@ export const EventMenuItems = [
   },
   {
     id: 4,
-    label: "Social",
+    label: "Community",
     icon: <GroupIcon />,
     color: "rgb(120,120,126)",
     link: "social",
