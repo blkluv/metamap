@@ -40,7 +40,7 @@ const MenuAccordion = () => {
           aria-controls="panel1a-content"
           id="panel1a-header"
         >
-          <Typography sx={{ fontWeight: 700 }}>Change Password</Typography>
+          <Typography sx={{ fontWeight: 500 }}>Change Password</Typography>
         </AccordionSummary>
         <AccordionDetails>
           <UpdatePassword />
@@ -57,7 +57,7 @@ const MenuAccordion = () => {
           aria-controls="panel2a-content"
           id="panel2a-header"
         >
-          <Typography sx={{ color: palette?.warning, fontWeight: 700 }}>
+          <Typography sx={{ color: palette?.warning, fontWeight: 500 }}>
             Danger Zone
           </Typography>
         </AccordionSummary>

@@ -91,6 +91,7 @@ export const BusinessMenu = ({ items, handleFilter }: ItemMenuProps) => {
             marginLeft: "0 !important",
             marginRight: "0.5rem !important",
             marginTop: "0.5rem !important",
+            color: palette?.blue,
           }}
           onClick={() => handleOwnedBusinesses(items)}
         >

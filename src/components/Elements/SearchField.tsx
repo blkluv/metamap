@@ -3,7 +3,7 @@ import ThemeContext from "../../context/themeContext";
 import { styled, alpha } from "@mui/material/styles";
 import InputBase from "@mui/material/InputBase";
 import SearchIcon from "@mui/icons-material/Search";
-import { SearchFieldProps } from "../../utils/interfaces";
+import { Event, SearchFieldProps, UserHeader } from "../../utils/interfaces";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -50,7 +50,7 @@ const SearchField = ({ data, filter }: SearchFieldProps) => {
   const handleFilter = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.value.trim().length >= 1) {
       const searchData = e.target.value.trim();
-      const newFilter = data.filter((item: any | null) => {
+      const newFilter = data?.filter((item: UserHeader | Event) => {
         return item?.[item.type === "event" ? "title" : "name"]
           ?.toLowerCase()
           .includes(searchData.toLowerCase());

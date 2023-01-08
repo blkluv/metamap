@@ -177,7 +177,7 @@ const EventHeader = ({
                     : debounce(() => onJoinEvent?.(_id), 400)
                 }
                 sx={{
-                  color: ifJoined ? palette?.warning : "",
+                  color: ifJoined ? palette?.warning : palette?.blue,
                   paddingLeft: 0,
                   borderRadius: "15px",
                   fontSize: ".8rem",

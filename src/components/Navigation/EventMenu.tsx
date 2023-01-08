@@ -16,16 +16,16 @@ export const EventMenu = ({ items, handleFilter }: ItemMenuProps) => {
   const { currentUser } = useContext(UserContext);
   const { palette } = useContext(ThemeContext);
 
-  const handleJoinedEvents = (data: Event[]) => {
-    const joined = data.filter((item: Event | null) => {
+  const handleJoinedEvents = (data: Event[] | null | undefined) => {
+    const joined = data?.filter((item: Event | null) => {
       return item?.participants?.find((user) => user._id === currentUser?._id);
     });
     handleFilter(joined);
   };
 
-  const handleEndingEvents = (data: Event[]) => {
+  const handleEndingEvents = (data: Event[] | null | undefined) => {
     const currentMoment = new Date();
-    const ending = data.filter((item: Event | null) => {
+    const ending = data?.filter((item: Event | null) => {
       return (
         //@ts-ignore
         new Date(item?.end) - 86400000 <= currentMoment &&
@@ -97,6 +97,7 @@ export const EventMenu = ({ items, handleFilter }: ItemMenuProps) => {
             marginLeft: "0 !important",
             marginRight: "0.5rem !important",
             marginTop: "0.5rem !important",
+            color: palette?.blue,
           }}
           onClick={() => handleJoinedEvents(items)}
         >

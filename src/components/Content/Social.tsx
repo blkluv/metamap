@@ -12,8 +12,7 @@ const Social = () => {
 
   useEffect(() => {
     onGetUsers?.();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [onGetUsers]);
 
   return (
     <Box

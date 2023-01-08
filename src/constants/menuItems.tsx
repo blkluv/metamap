@@ -1,8 +1,22 @@
 import HomeIcon from "@mui/icons-material/Home";
-import SettingsIcon from "@mui/icons-material/Settings";
 import GroupIcon from "@mui/icons-material/Group";
 import StoreIcon from "@mui/icons-material/Store";
 import RoomIcon from "@mui/icons-material/Room";
+import ChatIcon from "@mui/icons-material/Chat";
+import { styled } from "@mui/system";
+import { Badge } from "@mui/material";
+
+const StyledBadge = styled(Badge)(() => ({
+  "& .MuiBadge-badge": {
+    backgroundColor: "#44b700",
+    color: "#44b700",
+    width: ".6rem",
+    height: ".6rem",
+    borderRadius: "50%",
+    WebkitBoxShadow: "0px 0px 16px -8px rgba(0, 0, 0, 0.68)",
+    boxShadow: "0px 0px 16px -8px rgba(0, 0, 0, 0.68)",
+  },
+}));
 
 export const EventMenuItems = [
   {
@@ -35,9 +49,17 @@ export const EventMenuItems = [
   },
   {
     id: 5,
-    label: "Settings",
-    icon: <SettingsIcon />,
+    label: "Chat",
+    icon: (
+      <StyledBadge
+        overlap="circular"
+        anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+        variant="dot"
+      >
+        <ChatIcon sx={{ fontSize: "1.2rem" }} />
+      </StyledBadge>
+    ),
     color: "rgb(120,120,126)",
-    link: "settings",
+    link: "chat",
   },
 ];

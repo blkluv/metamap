@@ -7,6 +7,7 @@ import { BusinessProvider } from "./context/businessContext";
 import { UserProvider } from "./context/userContext";
 import { PostProvider } from "./context/postContext";
 import { ThemeProvider } from "./context/themeContext";
+import { ChatProvider } from "./context/chatContext";
 import { Toaster } from "react-hot-toast";
 import AuthRoutes from "./components/Auth/AuthRoutes";
 import { UserResponse } from "./utils/interfaces";
@@ -25,35 +26,40 @@ const App = () => {
         <PostProvider>
           <BusinessProvider>
             <EventProvider>
-              <CssBaseline />
-              <Routes>
-                <Route
-                  path="/"
-                  element={
-                    <Navigate
-                      to={currentUser ? "/dashboard/" : "/account/signin"}
-                    />
-                  }
-                />
-                <Route
-                  element={
-                    <ProtectedRoutes
-                      logged={true}
-                      redirect={"/account/signin"}
-                    />
-                  }
-                >
-                  <Route path="/dashboard/*" element={<Wrapper />} />
-                </Route>
-                <Route
-                  element={
-                    <ProtectedRoutes logged={false} redirect={"/dashboard/"} />
-                  }
-                >
-                  <Route path="/account/*" element={<AuthRoutes />} />
-                </Route>
-                <Route path="*" element={<Navigate to="/" />} />
-              </Routes>
+              <ChatProvider>
+                <CssBaseline />
+                <Routes>
+                  <Route
+                    path="/"
+                    element={
+                      <Navigate
+                        to={currentUser ? "/dashboard/" : "/account/signin"}
+                      />
+                    }
+                  />
+                  <Route
+                    element={
+                      <ProtectedRoutes
+                        logged={true}
+                        redirect={"/account/signin"}
+                      />
+                    }
+                  >
+                    <Route path="/dashboard/*" element={<Wrapper />} />
+                  </Route>
+                  <Route
+                    element={
+                      <ProtectedRoutes
+                        logged={false}
+                        redirect={"/dashboard/"}
+                      />
+                    }
+                  >
+                    <Route path="/account/*" element={<AuthRoutes />} />
+                  </Route>
+                  <Route path="*" element={<Navigate to="/" />} />
+                </Routes>
+              </ChatProvider>
               <Toaster />
             </EventProvider>
           </BusinessProvider>

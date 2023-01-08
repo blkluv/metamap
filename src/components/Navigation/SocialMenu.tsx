@@ -6,8 +6,8 @@ import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
-import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import CheckIcon from "@mui/icons-material/Check";
+import CloseIcon from "@mui/icons-material/Close";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import SearchField from "../Elements/SearchField";
 import { UserHeader } from "../../utils/interfaces";
@@ -70,7 +70,7 @@ export const SocialMenu = ({ handleFilter, users }: any) => {
         <SearchField data={users} filter={handleFilter} />
         <Button
           variant="contained"
-          startIcon={<PersonAddIcon />}
+          startIcon={<CloseIcon />}
           disableElevation
           sx={{
             color: palette?.text.primary,
@@ -92,6 +92,7 @@ export const SocialMenu = ({ handleFilter, users }: any) => {
             marginLeft: "0 !important",
             marginRight: "0.5rem !important",
             marginTop: "0.5rem !important",
+            color: palette?.blue,
           }}
         >
           Following

@@ -6,6 +6,9 @@ export interface UserHeader {
   following?: UserHeader[];
   followers?: UserHeader[];
   avatar?: any;
+  userId?: string;
+  type?: string;
+  title?: string;
 }
 
 export interface User {
@@ -18,6 +21,12 @@ export interface User {
   newsletter?: boolean;
   description?: string;
   avatar?: any;
+}
+
+export interface UserHeaderSimpleProps {
+  user: UserHeader;
+  isOnline: boolean;
+  onClick: (user: UserHeader) => void;
 }
 
 export interface UserUpdateReq {
@@ -53,6 +62,7 @@ export interface UsersContext {
   user?: UserHeader | null;
   users: UserHeader[] | null;
   onGetUser?: (id: string | undefined) => Promise<void>;
+  onGetSingleUser?: (id: string | undefined) => Promise<UserHeader | undefined>;
   onGetAvatar?: (id: string | undefined) => Promise<string | null>;
   onGetUsers?: () => Promise<void>;
   onSignIn?: (user: User) => Promise<void>;
@@ -72,6 +82,7 @@ export interface UsersContext {
 export interface Event {
   _id?: string;
   type?: string;
+  name?: string;
   title: string | null;
   start: string | null;
   end: string | null;
@@ -106,8 +117,8 @@ export interface EventsListProps {
 }
 
 export interface ItemMenuProps {
-  items: any[];
-  handleFilter: React.Dispatch<React.SetStateAction<any[] | null>>;
+  items: any;
+  handleFilter: (data: any) => void;
 }
 
 // business
@@ -211,6 +222,53 @@ export interface ThemesContext {
   onChangeTheme?: () => void;
 }
 
+// chat
+export interface ChatMessage {
+  _id?: string;
+  sender?: string;
+  senderId?: string;
+  text: string;
+  createdAt?: string | number;
+}
+
+export interface ChatContext {
+  socket?: any;
+  messages: ChatMessage[];
+  onlineUsers?: UserHeader[] | undefined;
+  setArrivalMessage?: (message: ChatMessage) => void;
+  setMessages?: any;
+  conversations: any[];
+  currentConversation?: any;
+  onSetCurrentConversation?: (conversation: ChatConversation) => void;
+  onGetMessages?: (id: string | undefined) => Promise<void>;
+  onGetConversations?: (id: string | undefined) => Promise<void>;
+  onGetMembersConversation?: (
+    firstUserId: string | undefined,
+    secondUserId: string | undefined
+  ) => Promise<void>;
+  onAddConversation?: (conversation: any) => Promise<void>;
+  onAddMessage?: (message: any) => Promise<void>;
+}
+
+export interface ChatMessageProps {
+  message: ChatMessage;
+  own: boolean;
+}
+
+export interface ChatConversation {
+  _id: string;
+  members: (string | undefined)[];
+  createdAt?: string | number;
+}
+
+export interface ChatConversationProps {
+  conversation: ChatConversation;
+}
+
+export interface OnlineUsersProps {
+  onlineUsers: UserHeader[] | undefined;
+}
+
 // other
 export interface UserItems {
   items: any;
@@ -246,6 +304,6 @@ export interface ConfirmationDialogProps {
 }
 
 export interface SearchFieldProps {
-  data: any[];
-  filter: React.Dispatch<React.SetStateAction<any[] | null>>;
+  data: any;
+  filter: (data: any) => void;
 }

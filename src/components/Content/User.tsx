@@ -362,7 +362,7 @@ const User = () => {
               sx={{
                 color: ifFollowing(currentUser, user?._id)
                   ? palette?.warning
-                  : "default",
+                  : palette?.blue,
                 borderRadius: "15px",
                 fontSize: ".8rem",
                 padding: "0 .5rem",

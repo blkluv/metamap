@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import { useCallback, useContext, useEffect, useState, memo } from "react";
 import { NavLink } from "react-router-dom";
 import ListItem from "@mui/material/ListItem";
 import Typography from "@mui/material/Typography";
@@ -16,11 +16,6 @@ const UserHeader = ({ _id, name }: Header) => {
   const { palette } = useContext(ThemeContext);
   const [avatar, setAvatar] = useState<any>(null);
 
-  useEffect(() => {
-    getAvatar(name);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
   const ifFollowing = (currentuser: User | null, id: string) => {
     if (currentUser) {
       return currentuser?.following?.find((user) => user._id === id);
@@ -28,10 +23,19 @@ const UserHeader = ({ _id, name }: Header) => {
     return null;
   };
 
-  const getAvatar = async (id: any) => {
-    const avatar = await onGetAvatar?.(id);
-    return setAvatar(avatar);
-  };
+  const getAvatar = useCallback(
+    async (id: string) => {
+      const avatar = await onGetAvatar?.(id);
+      return setAvatar(avatar);
+    },
+    [onGetAvatar]
+  );
+
+  useEffect(() => {
+    if (currentUser) {
+      getAvatar(currentUser?.name);
+    }
+  }, [getAvatar, currentUser?.name, currentUser]);
 
   return (
     <ListItem
@@ -105,7 +109,9 @@ const UserHeader = ({ _id, name }: Header) => {
         <Button
           onClick={debounce(() => onFollowUser?.(_id), 400)}
           sx={{
-            color: ifFollowing(currentUser, _id) ? palette?.warning : "default",
+            color: ifFollowing(currentUser, _id)
+              ? palette?.warning
+              : palette?.blue,
             borderRadius: "15px",
           }}
         >
@@ -121,4 +127,6 @@ const UserHeader = ({ _id, name }: Header) => {
   );
 };
 
-export default UserHeader;
+const MemoizedUserHeader = memo(UserHeader);
+
+export default MemoizedUserHeader;

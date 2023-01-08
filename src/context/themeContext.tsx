@@ -23,7 +23,7 @@ export const ThemeProvider = ({ children }: React.PropsWithChildren) => {
           primary: "white",
           divider: "rgb(120,120,126)",
           warning: "rgb(235, 110, 105)",
-          blue: "",
+          blue: "#2196f3",
           green: "yellowgreen",
           background: {
             primary: "rgb(245,240,250)",
@@ -44,7 +44,7 @@ export const ThemeProvider = ({ children }: React.PropsWithChildren) => {
           primary: "rgb(31,30,43)",
           divider: "rgb(120,120,126)",
           warning: "rgb(235, 110, 105)",
-          blue: "",
+          blue: "#2196f3",
           green: "yellowgreen",
           background: {
             primary: "rgb(35,35,48)",

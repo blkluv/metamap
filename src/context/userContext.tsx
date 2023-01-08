@@ -1,4 +1,10 @@
-import { useState, useEffect, createContext } from "react";
+import {
+  useState,
+  useEffect,
+  createContext,
+  useCallback,
+  useMemo,
+} from "react";
 import { GoogleOAuthProvider, googleLogout } from "@react-oauth/google";
 import {
   UserHeader,
@@ -72,6 +78,7 @@ export const UserProvider = ({ children }: React.PropsWithChildren) => {
 
   const handleGetUser = async (id: string | undefined) => {
     const user = await UserService.getUser(id);
+
     if (user) {
       setUser(user);
     } else {
@@ -79,19 +86,31 @@ export const UserProvider = ({ children }: React.PropsWithChildren) => {
     }
   };
 
-  const handleGetAvatar = async (id: string | undefined) => {
+  const handleGetSingleUser = async (id: string | undefined) => {
     const user = await UserService.getUser(id);
-    if (user) return String(user.avatar);
-    return null;
+    return user;
   };
 
-  const handleGetUsers = async () => {
+  const memoizedHandleGetAvatar = useMemo(
+    () => async (id: string | undefined) => {
+      const user = await UserService.getUser(id);
+      if (user) return String(user.avatar);
+      return null;
+    },
+    []
+  );
+
+  const handleGetAvatar = useCallback(memoizedHandleGetAvatar, [
+    memoizedHandleGetAvatar,
+  ]);
+
+  const handleGetUsers = useCallback(async () => {
     const users = await UserService.getUsers();
     if (users) {
       localStorage.setItem("users", JSON.stringify(users));
       setUsers(users);
     }
-  };
+  }, []);
 
   const handleSignUp = async (user: User) => {
     const currentUser = await UserService.signUp(user);
@@ -202,6 +221,7 @@ export const UserProvider = ({ children }: React.PropsWithChildren) => {
           user,
           users,
           onGetUser: handleGetUser,
+          onGetSingleUser: handleGetSingleUser,
           onGetAvatar: handleGetAvatar,
           onGetUsers: handleGetUsers,
           onSignUp: handleSignUp,

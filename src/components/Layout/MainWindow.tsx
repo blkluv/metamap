@@ -4,7 +4,7 @@ import ContentWindow from "./ContentWindow";
 import Sidebar from "../Navigation/Sidebar";
 import { Route, Routes } from "react-router-dom";
 import Profile from "../Pages/Profile";
-import Settings from "../Pages/Settings";
+import Chat from "../Pages/Chat";
 import User from "../Content/User";
 import Account from "../Pages/Account";
 import ThemeContext from "../../context/themeContext";
@@ -28,7 +28,7 @@ const MainWindow = () => {
           <Route path=":id" element={<User />} />
         </Route>
         <Route path="/account" element={<Account />} />
-        <Route path="/settings" element={<Settings />} />
+        <Route path="/chat" element={<Chat />} />
       </Routes>
     </Box>
   );
