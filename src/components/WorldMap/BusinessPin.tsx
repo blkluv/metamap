@@ -110,6 +110,9 @@ const BusinessPin = ({ lng, lat, onClose }: PinCardProps) => {
     input: {
       color: palette?.text.tertiary,
     },
+    textarea: {
+      color: palette?.text.tertiary,
+    },
     label: { color: palette?.text.tertiary },
     "& label.Mui-focused": {
       color: palette?.text.tertiary,
@@ -163,8 +166,9 @@ const BusinessPin = ({ lng, lat, onClose }: PinCardProps) => {
               right: "5px",
               cursor: "pointer",
               opacity: "0.8",
-              background: "white",
               borderRadius: "50%",
+              background: palette?.background.tertiary,
+              color: palette?.text.tertiary,
             }}
             onClick={() => setLogo(null)}
           />

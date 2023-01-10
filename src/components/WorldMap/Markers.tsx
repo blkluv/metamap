@@ -46,7 +46,7 @@ const Markers = () => {
                   color:
                     _id === selectedEvent?._id || _id === selectedBusiness?._id
                       ? palette?.warning
-                      : palette?.text.tertiary,
+                      : palette?.text.primary,
                 }}
               />
             ) : null}
@@ -57,7 +57,7 @@ const Markers = () => {
                   color:
                     _id === selectedEvent?._id || _id === selectedBusiness?._id
                       ? palette?.warning
-                      : palette?.text.tertiary,
+                      : palette?.text.primary,
                 }}
               />
             ) : null}

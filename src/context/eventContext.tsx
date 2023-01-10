@@ -72,6 +72,17 @@ export const EventProvider = ({ children }: React.PropsWithChildren) => {
     setSelectedEvent(undefined);
   };
 
+  const handleRateEvent = async (id: string | undefined, rating: number) => {
+    const updatedEvent = await EventService.rateEvent(id, rating);
+    if (updatedEvent) {
+      const updatedBusinesses = events.map((event) =>
+        event._id === updatedEvent._id ? updatedEvent : event
+      );
+      setEvents(updatedBusinesses);
+      setSelectedEvent(updatedEvent);
+    }
+  };
+
   useEffect(() => {
     const loggedUser = localStorage.getItem("auth")
       ? JSON.parse(localStorage.getItem("auth") as string)
@@ -90,6 +101,7 @@ export const EventProvider = ({ children }: React.PropsWithChildren) => {
         onJoinEvent: handleJoinEvent,
         onLeaveEvent: handleLeaveEvent,
         onAddEvent: handleAddEvent,
+        onRateEvent: handleRateEvent,
         onSetSelectedEvent: handleSetSelectedEvent,
         onRemoveSelectedEvent: handleRemoveSelectedEvent,
       }}

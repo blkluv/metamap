@@ -1,3 +1,20 @@
+// rating
+export interface Rate {
+  _id: string;
+  rating: number;
+}
+
+export interface RatingProps {
+  rating: {
+    rates: [Rate];
+    ratesNumber: number;
+    average: number;
+  };
+  handleRate?: (data: number) => void;
+  readOnly?: boolean;
+  margin?: string;
+}
+
 // user
 export interface UserHeader {
   _id: string;
@@ -93,6 +110,11 @@ export interface Event {
   logo?: any;
   creator?: UserHeader;
   participants?: UserHeader[];
+  rating?: {
+    rates: [Rate];
+    ratesNumber: number;
+    average: number;
+  };
 }
 
 export interface EventsContext {
@@ -101,6 +123,7 @@ export interface EventsContext {
   onAddEvent?: (event: Event) => Promise<void>;
   onGetEvents?: () => Promise<void>;
   onJoinEvent?: (id: string | undefined) => Promise<void>;
+  onRateEvent?: (id: string | undefined, rating: number) => Promise<void>;
   onLeaveEvent?: (id: string | undefined) => Promise<void>;
   onSetSelectedEvent?: (id: string | undefined) => void;
   onRemoveSelectedEvent?: () => void;
@@ -141,6 +164,11 @@ export interface Business {
   description: string | null;
   logo?: any;
   likes?: UserHeader[];
+  rating?: {
+    rates: [Rate];
+    ratesNumber: number;
+    average: number;
+  };
   creator?: UserHeader;
   owners?: UserHeader[];
   comments?: [];
@@ -162,6 +190,7 @@ export interface BusinessesContext {
   onAddBusiness?: (business: Business) => Promise<void>;
   onGetBusinesses?: () => Promise<void>;
   onLikeBusiness?: (id: string | undefined) => Promise<void>;
+  onRateBusiness?: (id: string | undefined, rating: number) => Promise<void>;
   onDeleteBusiness?: (id: string | undefined) => Promise<void>;
   onSetSelectedBusiness?: (id: string | undefined) => void;
   onRemoveSelectedBusiness?: () => void;

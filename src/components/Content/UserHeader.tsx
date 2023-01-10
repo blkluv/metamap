@@ -32,10 +32,8 @@ const UserHeader = ({ _id, name }: Header) => {
   );
 
   useEffect(() => {
-    if (currentUser) {
-      getAvatar(currentUser?.name);
-    }
-  }, [getAvatar, currentUser?.name, currentUser]);
+    getAvatar(name);
+  }, [getAvatar, name]);
 
   return (
     <ListItem

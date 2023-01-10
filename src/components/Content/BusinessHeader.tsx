@@ -18,6 +18,7 @@ import debounce from "../../utils/debounce";
 import preview from "../../images/preview.png";
 import { notify } from "../../utils/notifications";
 import EventContext from "../../context/eventContext";
+import Rating from "../Elements/Rating";
 
 const BusinessHeader = ({
   business: {
@@ -27,6 +28,7 @@ const BusinessHeader = ({
     creator,
     address,
     likes,
+    rating,
     description,
     openingtime,
     logo,
@@ -34,23 +36,39 @@ const BusinessHeader = ({
   variant,
   popup,
 }: Header) => {
-  const { selectedBusiness, onSetSelectedBusiness, onLikeBusiness } =
-    useContext(BusinessContext);
+  const {
+    selectedBusiness,
+    onSetSelectedBusiness,
+    onLikeBusiness,
+    onRateBusiness,
+  } = useContext(BusinessContext);
   const { onRemoveSelectedEvent } = useContext(EventContext);
   const { currentUser } = useContext(UserContext);
   const { palette } = useContext(ThemeContext);
 
   const handleLikeBusiness = () => {
+    if (currentUser?.name.startsWith("guest")) {
+      notify("DEMO users cannot like anything.");
+      return;
+    }
     if (creator?._id === currentUser?._id) {
       notify("You can't like your own business.");
-    } else {
-      onLikeBusiness?.(_id);
+      return;
     }
+    onLikeBusiness?.(_id);
   };
 
   const handleSelect = () => {
     onRemoveSelectedEvent?.();
     onSetSelectedBusiness?.(_id);
+  };
+
+  const handleRate = (newRating: number) => {
+    if (creator?._id === currentUser?._id) {
+      notify("You can't rate your own business.");
+    } else {
+      onRateBusiness?.(_id, newRating);
+    }
   };
 
   return (
@@ -99,21 +117,64 @@ const BusinessHeader = ({
         disableTypography
         primary={
           <>
-            <Typography
-              sx={{ display: "block", fontWeight: "500" }}
-              component="span"
-              variant="body2"
-              color={palette?.text.tertiary}
-              fontSize={"1.1rem"}
-            >
-              {name}
-            </Typography>
+            <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+              <Box
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                  flexWrap: "wrap",
+                  color: palette?.text.primary,
+                }}
+              >
+                <Typography
+                  sx={{ display: "block", fontWeight: "500", mb: ".5rem" }}
+                  component="span"
+                  variant="body2"
+                  color={palette?.text.tertiary}
+                  fontSize={"1rem"}
+                >
+                  {name}
+                </Typography>
+              </Box>
+              <Box
+                sx={{
+                  display: "flex",
+                  marginLeft: "1.5rem",
+                  color: palette?.text.tertiary,
+                }}
+              >
+                <Typography
+                  sx={{ display: "block", marginRight: ".3rem" }}
+                  component="span"
+                  variant="body2"
+                  fontSize={".9rem"}
+                >
+                  {likes?.length ? likes.length : ""}
+                </Typography>
+                {likes?.find((user) => user._id === currentUser?._id) ? (
+                  <FavoriteIcon
+                    sx={{
+                      fontSize: "1.2rem",
+                      cursor: "pointer",
+                      color: palette?.warning,
+                    }}
+                    onClick={debounce(() => handleLikeBusiness(), 400)}
+                  />
+                ) : (
+                  <FavoriteBorderIcon
+                    sx={{ fontSize: "1.2rem", cursor: "pointer" }}
+                    onClick={debounce(() => handleLikeBusiness(), 400)}
+                  />
+                )}
+              </Box>
+            </Box>
             <Typography
               sx={{ display: "block" }}
               component="span"
               variant="body2"
               color={palette?.text.primary}
-              fontSize={".9rem"}
+              fontSize={".8rem"}
             >
               Owners:{" "}
               <NavLink
@@ -131,7 +192,12 @@ const BusinessHeader = ({
         secondary={
           <>
             <Typography
-              sx={{ display: "block", marginTop: "0.2rem", fontSize: ".8rem" }}
+              sx={{
+                display: "block",
+                marginTop: "0.2rem",
+                fontSize: ".8rem",
+                mb: ".8rem",
+              }}
               component="span"
               variant="body2"
               color={palette?.text.primary}
@@ -142,6 +208,7 @@ const BusinessHeader = ({
               sx={{
                 display: "flex",
                 marginTop: "0.2rem",
+                marginBottom: ".8rem",
                 fontSize: ".8rem",
                 flexWrap: "wrap",
               }}
@@ -152,13 +219,13 @@ const BusinessHeader = ({
                   display: "flex",
                   justifyContent: "center",
                   alignItems: "center",
-                  margin: "0 .3rem .2rem 0",
+                  margin: ".1rem .7rem .3rem 0",
                 }}
               >
                 <HomeIcon
                   sx={{
                     fontSize: "1.2rem",
-                    marginRight: ".1rem",
+                    marginRight: ".2rem",
                   }}
                 />
                 {`${address}`}
@@ -168,13 +235,13 @@ const BusinessHeader = ({
                   display: "flex",
                   justifyContent: "center",
                   alignItems: "center",
-                  margin: "0 .3rem .2rem 0",
+                  margin: ".1rem .7rem .3rem 0",
                 }}
               >
                 <PhoneAndroidIcon
                   sx={{
                     fontSize: "1.2rem",
-                    marginRight: ".1rem",
+                    marginRight: ".2rem",
                   }}
                 />{" "}
                 {`${contact?.phone}`}
@@ -184,13 +251,13 @@ const BusinessHeader = ({
                   display: "flex",
                   justifyContent: "center",
                   alignItems: "center",
-                  margin: "0 .3rem .2rem 0",
+                  margin: ".1rem .7rem .3rem 0",
                 }}
               >
                 <AlternateEmailIcon
                   sx={{
                     fontSize: "1.2rem",
-                    marginRight: ".1rem",
+                    marginRight: ".2rem",
                   }}
                 />{" "}
                 {`${contact?.email}`}
@@ -200,13 +267,13 @@ const BusinessHeader = ({
                   display: "flex",
                   justifyContent: "center",
                   alignItems: "center",
-                  margin: "0 .3rem .2rem 0",
+                  margin: ".1rem .7rem .3rem 0",
                 }}
               >
                 <LanguageIcon
                   sx={{
                     fontSize: "1.2rem",
-                    marginRight: ".1rem",
+                    marginRight: ".2rem",
                   }}
                 />{" "}
                 {`${contact?.website}`}
@@ -224,39 +291,7 @@ const BusinessHeader = ({
             >
               {description}
             </Typography>
-            <Box
-              sx={{
-                display: "flex",
-                alignItems: "center",
-                margin: "1rem 0 0 0",
-                flexWrap: "wrap",
-                color: palette?.text.primary,
-              }}
-            >
-              {likes?.find((user) => user._id === currentUser?._id) ? (
-                <FavoriteIcon
-                  sx={{
-                    fontSize: "1.5rem",
-                    cursor: "pointer",
-                    color: palette?.warning,
-                  }}
-                  onClick={debounce(() => handleLikeBusiness(), 400)}
-                />
-              ) : (
-                <FavoriteBorderIcon
-                  sx={{ fontSize: "1.5rem", cursor: "pointer" }}
-                  onClick={debounce(() => handleLikeBusiness(), 400)}
-                />
-              )}
-              <Typography
-                sx={{ display: "block", marginLeft: ".5rem" }}
-                component="span"
-                variant="body2"
-                fontSize={".9rem"}
-              >
-                {likes?.length ? likes.length : ""}
-              </Typography>
-            </Box>
+            {rating ? <Rating rating={rating} handleRate={handleRate} /> : null}
           </>
         }
       />

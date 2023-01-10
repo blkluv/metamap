@@ -96,7 +96,7 @@ const UpdatePassword = () => {
           <Box
             component="form"
             onSubmit={handleRegisterUpdatePassword(
-              debounce(handleUpdatePassword, 400)
+              debounce(handleUpdatePassword, 200)
             )}
             sx={{ mt: 1 }}
           >

@@ -50,6 +50,17 @@ export const BusinessProvider = ({ children }: React.PropsWithChildren) => {
     }
   };
 
+  const handleRateBusiness = async (id: string | undefined, rating: number) => {
+    const updatedBusiness = await BusinessService.rateBusiness(id, rating);
+    if (updatedBusiness) {
+      const updatedBusinesses = businesses.map((business) =>
+        business._id === updatedBusiness._id ? updatedBusiness : business
+      );
+      setBusinesses(updatedBusinesses);
+      setSelectedBusiness(updatedBusiness);
+    }
+  };
+
   const handleSetSelectedBusiness = (id: string | undefined) => {
     if (id === selectedBusiness?._id) {
       setSelectedBusiness(undefined);
@@ -79,6 +90,7 @@ export const BusinessProvider = ({ children }: React.PropsWithChildren) => {
         selectedBusiness,
         onGetBusinesses: getBusinesses,
         onLikeBusiness: handleLikeBusiness,
+        onRateBusiness: handleRateBusiness,
         onAddBusiness: handleAddBusiness,
         onSetSelectedBusiness: handleSetSelectedBusiness,
         onRemoveSelectedBusiness: handleRemoveSelectedBusiness,

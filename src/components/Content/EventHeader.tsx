@@ -14,6 +14,8 @@ import GroupIcon from "@mui/icons-material/Group";
 import debounce from "../../utils/debounce";
 import preview from "../../images/preview.png";
 import BusinessContext from "../../context/businessContext";
+import Rating from "../Elements/Rating";
+import { notify } from "../../utils/notifications";
 
 const EventHeader = ({
   event: {
@@ -26,12 +28,18 @@ const EventHeader = ({
     description,
     participants,
     logo,
+    rating,
   },
   variant,
   popup,
 }: Header) => {
-  const { selectedEvent, onSetSelectedEvent, onJoinEvent, onLeaveEvent } =
-    useContext(EventContext);
+  const {
+    selectedEvent,
+    onSetSelectedEvent,
+    onJoinEvent,
+    onLeaveEvent,
+    onRateEvent,
+  } = useContext(EventContext);
   const { onRemoveSelectedBusiness } = useContext(BusinessContext);
   const { currentUser } = useContext(UserContext);
   const { palette } = useContext(ThemeContext);
@@ -54,6 +62,38 @@ const EventHeader = ({
   const handleSelect = () => {
     onRemoveSelectedBusiness?.();
     onSetSelectedEvent?.(_id);
+  };
+
+  const handleRate = (newRating: number) => {
+    if (creator?._id === currentUser?._id) {
+      notify("You can't rate your own event.");
+    } else {
+      onRateEvent?.(_id, newRating);
+    }
+  };
+
+  const handleJoinEvent = () => {
+    if (currentUser?.name.startsWith("guest")) {
+      notify("DEMO users cannot join anything.");
+      return;
+    }
+    if (creator?._id === currentUser?._id) {
+      notify("You can't join your own event.");
+      return;
+    }
+    onJoinEvent?.(_id);
+  };
+
+  const handleLeaveEvent = () => {
+    if (currentUser?.name.startsWith("guest")) {
+      notify("DEMO users cannot leave anything.");
+      return;
+    }
+    if (creator?._id === currentUser?._id) {
+      notify("You can't join your own event.");
+      return;
+    }
+    onLeaveEvent?.(_id);
   };
 
   return (
@@ -103,11 +143,11 @@ const EventHeader = ({
         primary={
           <>
             <Typography
-              sx={{ display: "block", fontWeight: "500" }}
+              sx={{ display: "block", fontWeight: "500", mb: ".5rem" }}
               component="span"
               variant="body2"
               color={palette?.text.tertiary}
-              fontSize={"1.1rem"}
+              fontSize={"1rem"}
             >
               {title}
             </Typography>
@@ -116,7 +156,7 @@ const EventHeader = ({
               component="span"
               variant="body2"
               color={palette?.text.primary}
-              fontSize={".9rem"}
+              fontSize={".8rem"}
             >
               Hosted by:{" "}
               <NavLink
@@ -134,12 +174,28 @@ const EventHeader = ({
         secondary={
           <>
             <Typography
+              sx={{ display: "block", marginTop: "0.4rem", fontSize: ".8rem" }}
+              component="span"
+              variant="body2"
+              color={palette?.text.primary}
+            >
+              {`Starts: ${displayDate(start)}`}
+            </Typography>
+            <Typography
               sx={{ display: "block", marginTop: "0.2rem", fontSize: ".8rem" }}
               component="span"
               variant="body2"
               color={palette?.text.primary}
             >
-              {`${displayDate(start)} — ${displayDate(end)} (${location})`}
+              {`Ends: ${displayDate(end)}`}
+            </Typography>
+            <Typography
+              sx={{ display: "block", marginTop: "0.2rem", fontSize: ".8rem" }}
+              component="span"
+              variant="body2"
+              color={palette?.text.primary}
+            >
+              {`Location: ${location}`}
             </Typography>
             <Typography
               sx={{
@@ -165,7 +221,7 @@ const EventHeader = ({
                 <GroupIcon sx={{ fontSize: "1.2rem" }} />
                 <Typography
                   component="div"
-                  sx={{ margin: "0 1rem 0 0.3rem", fontSize: ".8rem" }}
+                  sx={{ margin: "0 .5rem 0 0.3rem", fontSize: ".8rem" }}
                 >
                   {participants?.length}
                 </Typography>
@@ -173,8 +229,8 @@ const EventHeader = ({
               <Button
                 onClick={
                   ifJoined
-                    ? debounce(() => onLeaveEvent?.(_id), 400)
-                    : debounce(() => onJoinEvent?.(_id), 400)
+                    ? debounce(handleLeaveEvent, 400)
+                    : debounce(handleJoinEvent, 400)
                 }
                 sx={{
                   color: ifJoined ? palette?.warning : palette?.blue,
@@ -191,6 +247,13 @@ const EventHeader = ({
                 {ifJoined ? "Leave" : "Join"}
               </Button>
             </Box>
+            {rating ? (
+              <Rating
+                rating={rating}
+                margin={".5rem 0 0 0"}
+                handleRate={handleRate}
+              />
+            ) : null}
           </>
         }
       />
