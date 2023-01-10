@@ -74,6 +74,17 @@ export const BusinessProvider = ({ children }: React.PropsWithChildren) => {
     setSelectedBusiness(undefined);
   };
 
+  const handleDeleteBusiness = async (id: string | undefined) => {
+    const deletedBusiness = await BusinessService.deleteBusiness(id);
+    if (!deletedBusiness) {
+      const updatedBusinesses = businesses.filter(
+        (business) => business._id !== id
+      );
+      setBusinesses(updatedBusinesses);
+      setSelectedBusiness(undefined);
+    }
+  };
+
   useEffect(() => {
     const loggedUser = localStorage.getItem("auth")
       ? JSON.parse(localStorage.getItem("auth") as string)
@@ -94,6 +105,7 @@ export const BusinessProvider = ({ children }: React.PropsWithChildren) => {
         onAddBusiness: handleAddBusiness,
         onSetSelectedBusiness: handleSetSelectedBusiness,
         onRemoveSelectedBusiness: handleRemoveSelectedBusiness,
+        onDeleteBusiness: handleDeleteBusiness,
       }}
     >
       {children}

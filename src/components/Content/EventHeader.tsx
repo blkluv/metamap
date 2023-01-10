@@ -1,4 +1,4 @@
-import { useContext, useMemo } from "react";
+import { useContext, useMemo, useState } from "react";
 import { NavLink } from "react-router-dom";
 import ListItem from "@mui/material/ListItem";
 import ListItemText from "@mui/material/ListItemText";
@@ -11,11 +11,13 @@ import { Box, Button, CardMedia } from "@mui/material";
 import CheckIcon from "@mui/icons-material/Check";
 import CloseIcon from "@mui/icons-material/Close";
 import GroupIcon from "@mui/icons-material/Group";
+import RemoveCircleOutlineIcon from "@mui/icons-material/RemoveCircleOutline";
 import debounce from "../../utils/debounce";
 import preview from "../../images/preview.png";
 import BusinessContext from "../../context/businessContext";
 import Rating from "../Elements/Rating";
 import { notify } from "../../utils/notifications";
+import ConfirmationDialog from "../Elements/ConfirmationDialog";
 
 const EventHeader = ({
   event: {
@@ -39,10 +41,12 @@ const EventHeader = ({
     onJoinEvent,
     onLeaveEvent,
     onRateEvent,
+    onDeleteEvent,
   } = useContext(EventContext);
   const { onRemoveSelectedBusiness } = useContext(BusinessContext);
   const { currentUser } = useContext(UserContext);
   const { palette } = useContext(ThemeContext);
+  const [isOpen, setIsOpen] = useState<boolean>(false);
 
   const ifJoined = useMemo(
     () => participants?.find((user) => user._id === currentUser?._id),
@@ -96,6 +100,17 @@ const EventHeader = ({
     onLeaveEvent?.(_id);
   };
 
+  const handleOpenDialog = () => {
+    setIsOpen(true);
+  };
+  const handleCloseDialog = () => {
+    setIsOpen(false);
+  };
+  const handleConfirmDialog = async () => {
+    await onDeleteEvent?.(_id);
+    setIsOpen(false);
+  };
+
   return (
     <ListItem
       alignItems="flex-start"
@@ -118,9 +133,32 @@ const EventHeader = ({
       onClick={() => (variant === "list" ? handleSelect() : null)}
     >
       {variant === "masonry" ? (
-        <Typography component="h3" variant="h6" color={palette?.text.tertiary}>
-          Event
-        </Typography>
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            width: "100%",
+          }}
+        >
+          <Typography
+            component="h3"
+            variant="h6"
+            color={palette?.text.tertiary}
+          >
+            Event
+          </Typography>
+          {currentUser?._id === creator?._id ? (
+            <RemoveCircleOutlineIcon
+              sx={{
+                cursor: "pointer",
+                color: palette?.text.primary,
+                fontSize: "1.2rem",
+              }}
+              onClick={() => handleOpenDialog()}
+            />
+          ) : null}
+        </Box>
       ) : null}
       <CardMedia
         component="img"
@@ -256,6 +294,13 @@ const EventHeader = ({
             ) : null}
           </>
         }
+      />
+      <ConfirmationDialog
+        title={"Delete this event?"}
+        confirmLabel={"delete"}
+        isOpen={isOpen}
+        onClose={handleCloseDialog}
+        onConfirm={handleConfirmDialog}
       />
     </ListItem>
   );

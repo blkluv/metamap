@@ -127,6 +127,7 @@ export interface EventsContext {
   onLeaveEvent?: (id: string | undefined) => Promise<void>;
   onSetSelectedEvent?: (id: string | undefined) => void;
   onRemoveSelectedEvent?: () => void;
+  onDeleteEvent?: (id: string | undefined) => Promise<void>;
 }
 
 export interface EventHeader {

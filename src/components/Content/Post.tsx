@@ -139,9 +139,7 @@ const Post = ({
             }}
             onClick={() => handleOpenDialog()}
           />
-        ) : (
-          <></>
-        )}
+        ) : null}
       </Box>
       <Box sx={{ width: "100%" }}>
         <Typography

@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { NavLink } from "react-router-dom";
 import ListItem from "@mui/material/ListItem";
 import ListItemText from "@mui/material/ListItemText";
@@ -12,6 +12,7 @@ import FavoriteIcon from "@mui/icons-material/Favorite";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import PhoneAndroidIcon from "@mui/icons-material/PhoneAndroid";
 import AlternateEmailIcon from "@mui/icons-material/AlternateEmail";
+import RemoveCircleOutlineIcon from "@mui/icons-material/RemoveCircleOutline";
 import HomeIcon from "@mui/icons-material/Home";
 import LanguageIcon from "@mui/icons-material/Language";
 import debounce from "../../utils/debounce";
@@ -19,6 +20,7 @@ import preview from "../../images/preview.png";
 import { notify } from "../../utils/notifications";
 import EventContext from "../../context/eventContext";
 import Rating from "../Elements/Rating";
+import ConfirmationDialog from "../Elements/ConfirmationDialog";
 
 const BusinessHeader = ({
   business: {
@@ -41,10 +43,12 @@ const BusinessHeader = ({
     onSetSelectedBusiness,
     onLikeBusiness,
     onRateBusiness,
+    onDeleteBusiness,
   } = useContext(BusinessContext);
   const { onRemoveSelectedEvent } = useContext(EventContext);
   const { currentUser } = useContext(UserContext);
   const { palette } = useContext(ThemeContext);
+  const [isOpen, setIsOpen] = useState<boolean>(false);
 
   const handleLikeBusiness = () => {
     if (currentUser?.name.startsWith("guest")) {
@@ -71,6 +75,17 @@ const BusinessHeader = ({
     }
   };
 
+  const handleOpenDialog = () => {
+    setIsOpen(true);
+  };
+  const handleCloseDialog = () => {
+    setIsOpen(false);
+  };
+  const handleConfirmDialog = async () => {
+    await onDeleteBusiness?.(_id);
+    setIsOpen(false);
+  };
+
   return (
     <ListItem
       alignItems="flex-start"
@@ -93,9 +108,32 @@ const BusinessHeader = ({
       onClick={() => (variant === "list" ? handleSelect() : null)}
     >
       {variant === "masonry" ? (
-        <Typography component="h3" variant="h6" color={palette?.text.tertiary}>
-          Business
-        </Typography>
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            width: "100%",
+          }}
+        >
+          <Typography
+            component="h3"
+            variant="h6"
+            color={palette?.text.tertiary}
+          >
+            Business
+          </Typography>
+          {currentUser?._id === creator?._id ? (
+            <RemoveCircleOutlineIcon
+              sx={{
+                cursor: "pointer",
+                color: palette?.text.primary,
+                fontSize: "1.2rem",
+              }}
+              onClick={() => handleOpenDialog()}
+            />
+          ) : null}
+        </Box>
       ) : null}
       <CardMedia
         component="img"
@@ -103,7 +141,7 @@ const BusinessHeader = ({
           height:
             variant === "list"
               ? { xs: "100%", sm: 155 }
-              : { xs: "100%", sm: 155, md: "100%" },
+              : { xs: "100%", sm: "100%", md: "100%" },
           width: variant === "list" ? { xs: "100%", sm: 155 } : { xs: "100%" },
           borderRadius: "10px",
           marginRight: variant === "list" ? "1rem" : { sm: "1rem", md: 0 },
@@ -294,6 +332,13 @@ const BusinessHeader = ({
             {rating ? <Rating rating={rating} handleRate={handleRate} /> : null}
           </>
         }
+      />
+      <ConfirmationDialog
+        title={"Delete this business?"}
+        confirmLabel={"delete"}
+        isOpen={isOpen}
+        onClose={handleCloseDialog}
+        onConfirm={handleConfirmDialog}
       />
     </ListItem>
   );
