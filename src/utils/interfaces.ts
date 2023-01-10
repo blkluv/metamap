@@ -269,7 +269,7 @@ export interface ChatContext {
   setMessages?: any;
   conversations: any[];
   currentConversation?: any;
-  onSetCurrentConversation?: (conversation: ChatConversation) => void;
+  onSetCurrentConversation?: (conversation: ChatConversation | null) => void;
   onGetMessages?: (id: string | undefined) => Promise<void>;
   onGetConversations?: (id: string | undefined) => Promise<void>;
   onGetMembersConversation?: (

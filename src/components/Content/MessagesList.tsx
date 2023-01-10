@@ -1,12 +1,11 @@
 import { useContext, useEffect, useRef } from "react";
-import { Box, Typography } from "@mui/material";
+import { Box } from "@mui/material";
 import ChatContext from "../../context/chatContext";
-import ThemeContext from "../../context/themeContext";
 import UserContext from "../../context/userContext";
 import Message from "../Elements/Message";
+import ChatTimeline from "../Elements/ChatTimeline";
 
 const MessagesList = () => {
-  const { palette } = useContext(ThemeContext);
   const { messages, currentConversation, onGetMessages } =
     useContext(ChatContext);
   const { currentUser } = useContext(UserContext);
@@ -42,9 +41,7 @@ const MessagesList = () => {
           ))}
         </>
       ) : (
-        <Typography sx={{ color: palette?.text.tertiary }}>
-          Open a conversation...
-        </Typography>
+        <ChatTimeline />
       )}
     </Box>
   );

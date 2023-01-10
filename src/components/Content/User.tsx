@@ -25,7 +25,6 @@ import {
   UserHeader,
   User as LoggedUser,
   Business,
-  // UserItems,
 } from "../../utils/interfaces";
 import convertImage from "../../utils/imageConverter";
 import CheckIcon from "@mui/icons-material/Check";

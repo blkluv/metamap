@@ -10,11 +10,13 @@ import MessagesList from "../Content/MessagesList";
 const Chat = () => {
   const { palette } = useContext(ThemeContext);
   const { onGetUsers } = useContext(UserContext);
-  const { onlineUsers } = useContext(ChatContext);
+  const { onlineUsers, onSetCurrentConversation } = useContext(ChatContext);
 
   useEffect(() => {
     onGetUsers?.();
-  }, [onGetUsers]);
+
+    return () => onSetCurrentConversation?.(null);
+  }, [onGetUsers, onSetCurrentConversation]);
 
   return (
     <Box
