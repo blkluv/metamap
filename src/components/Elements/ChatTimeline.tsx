@@ -32,7 +32,7 @@ const ChatTimeline = () => {
             sx={{ bgcolor: "secondary.main", height: "1.5rem" }}
           />
           <TimelineDot sx={{ background: palette?.text.secondary }}>
-            <CheckIcon />
+            <CheckIcon sx={{ color: palette?.text.primary }} />
           </TimelineDot>
           <TimelineConnector
             sx={{ bgcolor: "secondary.main", height: "1.5rem" }}

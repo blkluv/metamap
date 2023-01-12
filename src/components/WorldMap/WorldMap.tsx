@@ -19,6 +19,7 @@ import { notify } from "../../utils/notifications";
 import EventHeader from "../Content/EventHeader";
 import BusinessHeader from "../Content/BusinessHeader";
 import PopupController from "./PopupController";
+import Geocoder from "./Coder";
 
 const WorldMap = () => {
   const { selectedEvent } = useContext(EventContext);
@@ -27,6 +28,12 @@ const WorldMap = () => {
   const { palette } = useContext(ThemeContext);
   const [newMarker, setNewMarker] = useState<PinCardProps | null>(null);
   const [key, setKey] = useState<number>(Math.random());
+
+  const [viewState, setViewState] = useState({
+    longitude: 24,
+    latitude: 50,
+    zoom: 4,
+  });
 
   const handleDoubleClick = (e: MapLayerMouseEvent) => {
     if (currentUser) {
@@ -55,11 +62,8 @@ const WorldMap = () => {
     >
       <Map
         mapLib={maplibregl}
-        initialViewState={{
-          longitude: 24,
-          latitude: 50,
-          zoom: 4,
-        }}
+        {...viewState}
+        onMove={(evt) => setViewState(evt.viewState)}
         style={{
           width: "100%",
           height: "100%",
@@ -69,6 +73,7 @@ const WorldMap = () => {
         doubleClickZoom={false}
         onDblClick={handleDoubleClick}
       >
+        <Geocoder />
         <NavigationControl />
         <GeolocateControl
           trackUserLocation={true}

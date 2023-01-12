@@ -42,7 +42,7 @@ const Markers = () => {
             {type === "event" ? (
               <RoomIcon
                 sx={{
-                  fontSize: "1.8rem",
+                  fontSize: "2.5rem",
                   color:
                     _id === selectedEvent?._id || _id === selectedBusiness?._id
                       ? palette?.warning
@@ -53,7 +53,7 @@ const Markers = () => {
             {type === "business" ? (
               <StoreIcon
                 sx={{
-                  fontSize: "1.8rem",
+                  fontSize: "2.2rem",
                   color:
                     _id === selectedEvent?._id || _id === selectedBusiness?._id
                       ? palette?.warning
