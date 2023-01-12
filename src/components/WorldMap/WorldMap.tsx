@@ -1,4 +1,4 @@
-import { useState, useEffect, useContext } from "react";
+import { useState, useEffect, useContext, useRef } from "react";
 import Map, {
   NavigationControl,
   GeolocateControl,
@@ -35,6 +35,16 @@ const WorldMap = () => {
     zoom: 4,
   });
 
+  const geoMap = useRef<any>();
+
+  const flyToLocation = (ref: any, coordinates: any) => {
+    ref.current.flyTo({
+      center: coordinates,
+      duration: 5000,
+      offset: [-100, -200],
+    });
+  };
+
   const handleDoubleClick = (e: MapLayerMouseEvent) => {
     if (currentUser) {
       const { lng, lat } = e.lngLat;
@@ -46,6 +56,18 @@ const WorldMap = () => {
 
   useEffect(() => {
     setKey(Math.random());
+    if (selectedBusiness) {
+      flyToLocation(geoMap, [
+        selectedBusiness.coordinates?.lng,
+        selectedBusiness.coordinates?.lat,
+      ]);
+    }
+    if (selectedEvent) {
+      flyToLocation(geoMap, [
+        selectedEvent.coordinates?.lng,
+        selectedEvent.coordinates?.lat,
+      ]);
+    }
   }, [selectedEvent, selectedBusiness]);
 
   return (
@@ -61,6 +83,7 @@ const WorldMap = () => {
       }}
     >
       <Map
+        ref={geoMap}
         mapLib={maplibregl}
         {...viewState}
         onMove={(evt) => setViewState(evt.viewState)}
