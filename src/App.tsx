@@ -7,7 +7,7 @@ import { BusinessProvider } from "./context/businessContext";
 import { UserProvider } from "./context/userContext";
 import { PostProvider } from "./context/postContext";
 import { ThemeProvider } from "./context/themeContext";
-import { ChatProvider } from "./context/chatContext";
+import { CommunicationProvider } from "./context/communicationContext";
 import { Toaster } from "react-hot-toast";
 import AuthRoutes from "./components/Auth/AuthRoutes";
 import { UserResponse } from "./utils/interfaces";
@@ -23,10 +23,10 @@ const App = () => {
   return (
     <ThemeProvider>
       <UserProvider>
-        <PostProvider>
-          <BusinessProvider>
-            <EventProvider>
-              <ChatProvider>
+        <CommunicationProvider>
+          <PostProvider>
+            <BusinessProvider>
+              <EventProvider>
                 <CssBaseline />
                 <Routes>
                   <Route
@@ -59,11 +59,11 @@ const App = () => {
                   </Route>
                   <Route path="*" element={<Navigate to="/" />} />
                 </Routes>
-              </ChatProvider>
-              <Toaster />
-            </EventProvider>
-          </BusinessProvider>
-        </PostProvider>
+                <Toaster />
+              </EventProvider>
+            </BusinessProvider>
+          </PostProvider>
+        </CommunicationProvider>
       </UserProvider>
     </ThemeProvider>
   );

@@ -4,13 +4,14 @@ import { Box } from "@mui/system";
 import ThemeContext from "../../context/themeContext";
 import SendIcon from "@mui/icons-material/Send";
 import { useForm } from "react-hook-form";
-import ChatContext from "../../context/chatContext";
+import CommunicationContext from "../../context/communicationContext";
 import UserContext from "../../context/userContext";
 
 const ChatMessageForm = () => {
   const { palette } = useContext(ThemeContext);
   const { currentUser } = useContext(UserContext);
-  const { socket, onAddMessage, currentConversation } = useContext(ChatContext);
+  const { socket, onAddMessage, currentConversation } =
+    useContext(CommunicationContext);
 
   const {
     register: registerMessage,
@@ -29,11 +30,11 @@ const ChatMessageForm = () => {
       const message = {
         sender: currentUser?._id,
         text,
-        conversationId: currentConversation._id,
+        conversationId: currentConversation?._id,
       };
 
-      const receiverId = currentConversation.members.find(
-        (member: string) => member !== currentUser?._id
+      const receiverId = currentConversation?.members.find(
+        (member: string | undefined) => member !== currentUser?._id
       );
       socket.current?.emit("sendMessage", {
         senderId: currentUser?._id,

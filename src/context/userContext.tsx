@@ -4,6 +4,7 @@ import {
   createContext,
   useCallback,
   useMemo,
+  useRef,
 } from "react";
 import { GoogleOAuthProvider, googleLogout } from "@react-oauth/google";
 import {
@@ -13,7 +14,9 @@ import {
   UserUpdateReq,
 } from "../utils/interfaces";
 import UserService from "../services/userService";
+import CommunicationService from "../services/communicationService";
 import { useLocation, useNavigate } from "react-router-dom";
+import { io } from "socket.io-client";
 import jwt_decode from "jwt-decode";
 
 const INITIAL_STATE: UsersContext = {
@@ -45,9 +48,7 @@ export const UserProvider = ({ children }: React.PropsWithChildren) => {
       ? JSON.parse(localStorage.getItem("currentUser") as string)
       : null
   );
-
   const [user, setUser] = useState<UserHeader | null>();
-
   const [users, setUsers] = useState<UserHeader[]>(
     localStorage.getItem("users")
       ? JSON.parse(localStorage.getItem("users") as string)
@@ -61,6 +62,11 @@ export const UserProvider = ({ children }: React.PropsWithChildren) => {
       return null;
     }
   };
+
+  const socket = useRef<any>();
+  useEffect(() => {
+    socket.current = io("localhost:5500");
+  }, []);
 
   useEffect(() => {
     const currentuser = JSON.parse(localStorage.getItem("auth") as string);
@@ -105,11 +111,22 @@ export const UserProvider = ({ children }: React.PropsWithChildren) => {
   ]);
 
   const handleGetUsers = useCallback(async () => {
-    const users = await UserService.getUsers();
-    if (users) {
+    const updatedUsers = await UserService.getUsers();
+    if (updatedUsers) {
       localStorage.setItem("users", JSON.stringify(users));
-      setUsers(users);
+      setUsers(updatedUsers);
+      const existingUser = updatedUsers.find(
+        (user) => user._id === currentUser?._id
+      );
+      const updatedUser = {
+        ...currentUser,
+        following: existingUser?.following,
+        followers: existingUser?.followers,
+      };
+      // @ts-ignore
+      setCurrentUser((currentUser) => ({ ...currentUser, ...updatedUser }));
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleSignUp = async (user: User) => {
@@ -118,6 +135,7 @@ export const UserProvider = ({ children }: React.PropsWithChildren) => {
       localStorage.setItem("auth", JSON.stringify(currentUser.token));
       localStorage.setItem("currentUser", JSON.stringify(currentUser.user));
       setCurrentUser(currentUser.user);
+      socket.current?.emit("globalDataUpdate", Math.random());
     }
   };
 
@@ -127,6 +145,7 @@ export const UserProvider = ({ children }: React.PropsWithChildren) => {
       localStorage.setItem("auth", JSON.stringify(currentUser.token));
       localStorage.setItem("currentUser", JSON.stringify(currentUser.user));
       setCurrentUser(currentUser.user);
+      socket.current?.emit("globalDataUpdate", Math.random());
     }
   };
 
@@ -145,6 +164,7 @@ export const UserProvider = ({ children }: React.PropsWithChildren) => {
       localStorage.setItem("auth", JSON.stringify(currentUser.token));
       localStorage.setItem("currentUser", JSON.stringify(currentUser.user));
       setCurrentUser(currentUser.user);
+      socket.current?.emit("globalDataUpdate", Math.random());
     }
   };
 
@@ -187,6 +207,31 @@ export const UserProvider = ({ children }: React.PropsWithChildren) => {
       const response = await UserService.followUser(id);
 
       if (response?.activeUser && response?.userToFollow) {
+        if (
+          response?.userToFollow.followers?.find(
+            (user) => user._id === response?.activeUser?._id
+          )
+        ) {
+          let notification = {
+            receiverId: response?.userToFollow._id,
+            text: "started following you.",
+            read: false,
+            type: "social",
+          };
+
+          CommunicationService.addNotification?.(notification);
+
+          socket.current?.emit("sendNotification", {
+            senderId: currentUser?._id,
+            senderName: currentUser?.name,
+            receiverId: response?.userToFollow._id,
+            text: "started following you.",
+            type: "social",
+          });
+        }
+
+        socket.current?.emit("dataUpdate", response?.userToFollow._id);
+
         const updatedUsers = users.map((user) =>
           user._id === response.userToFollow._id ? response.userToFollow : user
         );

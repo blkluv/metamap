@@ -37,12 +37,18 @@ const WorldMap = () => {
 
   const geoMap = useRef<any>();
 
-  const flyToLocation = (ref: any, coordinates: any) => {
-    ref.current.flyTo({
-      center: coordinates,
-      duration: 5000,
-      offset: [-100, -200],
-    });
+  const flyToLocation = (
+    ref: any,
+    coordinates: [number | undefined, number | undefined]
+  ) => {
+    if (ref.current) {
+      ref.current.flyTo({
+        center: coordinates,
+        duration: 5000,
+        offset: [-100, -200],
+        zoom: 7,
+      });
+    }
   };
 
   const handleDoubleClick = (e: MapLayerMouseEvent) => {

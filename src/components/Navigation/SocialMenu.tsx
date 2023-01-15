@@ -17,15 +17,15 @@ export const SocialMenu = ({ handleFilter, users }: any) => {
   const { palette } = useContext(ThemeContext);
 
   const handleFollowing = (data: UserHeader[]) => {
-    const followedUsers = data.filter((item: UserHeader | null) => {
-      return item?.following?.find((user) => user._id === currentUser?._id);
+    const followingUsers = data.filter((item: UserHeader | null) => {
+      return currentUser?.following?.find((user) => user._id === item?._id);
     });
-    handleFilter(followedUsers);
+    handleFilter(followingUsers);
   };
 
   const handleFollowers = (data: UserHeader[]) => {
     const followedUsers = data.filter((item: UserHeader | null) => {
-      return item?.followers?.find((user) => user._id === currentUser?._id);
+      return currentUser?.followers?.find((user) => user._id === item?._id);
     });
     handleFilter(followedUsers);
   };
@@ -84,7 +84,7 @@ export const SocialMenu = ({ handleFilter, users }: any) => {
           Clear
         </Button>
         <Button
-          onClick={() => handleFollowers(users)}
+          onClick={() => handleFollowing(users)}
           variant="outlined"
           startIcon={<CheckIcon />}
           sx={{
@@ -98,7 +98,7 @@ export const SocialMenu = ({ handleFilter, users }: any) => {
           Following
         </Button>
         <Button
-          onClick={() => handleFollowing(users)}
+          onClick={() => handleFollowers(users)}
           variant="outlined"
           startIcon={<VisibilityIcon />}
           sx={{

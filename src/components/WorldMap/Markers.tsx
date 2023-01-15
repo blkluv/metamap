@@ -6,7 +6,7 @@ import ThemeContext from "../../context/themeContext";
 import StoreIcon from "@mui/icons-material/Store";
 import RoomIcon from "@mui/icons-material/Room";
 
-const Markers = () => {
+const Markers = ({ setPopup }: any) => {
   const { events, selectedEvent, onSetSelectedEvent, onRemoveSelectedEvent } =
     useContext(EventContext);
   const {
@@ -32,10 +32,12 @@ const Markers = () => {
                 ? () => {
                     onRemoveSelectedBusiness?.();
                     onSetSelectedEvent?.(_id);
+                    setPopup(true);
                   }
                 : () => {
                     onRemoveSelectedEvent?.();
                     onSetSelectedBusiness?.(_id);
+                    setPopup(true);
                   }
             }
           >

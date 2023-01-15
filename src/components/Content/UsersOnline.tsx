@@ -1,14 +1,14 @@
 import { useContext, useEffect, useState } from "react";
 import { Box } from "@mui/material";
 import UserContext from "../../context/userContext";
-import ChatContext from "../../context/chatContext";
+import CommunicationContext from "../../context/communicationContext";
 import UserHeaderSimple from "./UserHeaderSimple";
 import SearchField from "../Elements/SearchField";
 import { OnlineUsersProps, UserHeader } from "../../utils/interfaces";
 
 const UsersOnline = ({ onlineUsers }: OnlineUsersProps) => {
   const { currentUser } = useContext(UserContext);
-  const { onGetMembersConversation } = useContext(ChatContext);
+  const { onGetMembersConversation } = useContext(CommunicationContext);
   const [online, setOnline] = useState<(string | null | undefined)[]>([]);
   const [filteredItems, setFilteredItems] = useState<
     UserHeader[] | null | undefined

@@ -1,7 +1,6 @@
 import { useContext } from "react";
 import ThemeContext from "../../context/themeContext";
 import { Box, CardMedia, Typography } from "@mui/material";
-// import debounce from "../../utils/debounce";
 import ad from "../../images/ad.jpg";
 
 const Sponsored = () => {
@@ -11,7 +10,7 @@ const Sponsored = () => {
     <Box
       sx={{
         borderRadius: "25px",
-        background: palette?.background.tertiary,
+        background: palette?.background.primary,
         marginBottom: "1rem",
         display: "flex",
         flexDirection: "column",
@@ -19,6 +18,7 @@ const Sponsored = () => {
         alignItems: "flex-start",
         width: { xs: "100%", md: "40%" },
         height: "fit-content",
+        border: `1px solid ${palette?.background.tertiary}`,
         WebkitBoxShadow: "0px 0px 16px -8px rgba(0, 0, 0, 0.68)",
         boxShadow: "0px 0px 16px -8px rgba(0, 0, 0, 0.68)",
       }}

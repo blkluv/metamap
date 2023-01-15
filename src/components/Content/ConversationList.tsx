@@ -1,11 +1,12 @@
 import { useContext, useEffect } from "react";
 import { ChatConversation } from "../../utils/interfaces";
 import Conversation from "./Conversation";
-import ChatContext from "../../context/chatContext";
+import CommunicationContext from "../../context/communicationContext";
 import UserContext from "../../context/userContext";
 
 const ConversationList = () => {
-  const { conversations, onGetConversations } = useContext(ChatContext);
+  const { conversations, onGetConversations } =
+    useContext(CommunicationContext);
   const { currentUser } = useContext(UserContext);
 
   useEffect(() => {

@@ -252,7 +252,7 @@ export interface ThemesContext {
   onChangeTheme?: () => void;
 }
 
-// chat
+// communication
 export interface ChatMessage {
   _id?: string;
   sender?: string;
@@ -261,34 +261,57 @@ export interface ChatMessage {
   createdAt?: string | number;
 }
 
-export interface ChatContext {
-  socket?: any;
-  messages: ChatMessage[];
-  onlineUsers?: UserHeader[] | undefined;
-  setArrivalMessage?: (message: ChatMessage) => void;
-  setMessages?: any;
-  conversations: any[];
-  currentConversation?: any;
-  onSetCurrentConversation?: (conversation: ChatConversation | null) => void;
-  onGetMessages?: (id: string | undefined) => Promise<void>;
-  onGetConversations?: (id: string | undefined) => Promise<void>;
-  onGetMembersConversation?: (
-    firstUserId: string | undefined,
-    secondUserId: string | undefined
-  ) => Promise<void>;
-  onAddConversation?: (conversation: any) => Promise<void>;
-  onAddMessage?: (message: any) => Promise<void>;
+export interface Notification {
+  _id?: string;
+  senderId?: string;
+  senderName?: string;
+  receiverId?: string;
+  read?: boolean;
+  type?: string;
+  text: string;
+  createdAt?: string | number;
 }
 
-export interface ChatMessageProps {
-  message: ChatMessage;
-  own: boolean;
+export interface NotificationProps {
+  notification: Notification;
 }
 
 export interface ChatConversation {
   _id: string;
   members: (string | undefined)[];
   createdAt?: string | number;
+}
+
+export interface CommunicationContext {
+  socket?: any;
+  messages: ChatMessage[];
+  dataUpdate?: number | null;
+  notifications: Notification[];
+  onlineUsers?: UserHeader[] | undefined;
+  setArrivalMessage?: (message: ChatMessage) => void;
+  setMessages?: (messages: ChatMessage[]) => void;
+  setNotifications?: (notifications: Notification[]) => void;
+  conversations: ChatConversation[];
+  currentConversation?: ChatConversation | null;
+  onSetCurrentConversation?: (conversation: ChatConversation | null) => void;
+  onGetMessages?: (id: string | undefined) => Promise<void>;
+  onGetConversations?: (id: string | undefined) => Promise<void>;
+  onGetNotifications?: (id: string | undefined) => Promise<void>;
+  onSendNotification?: (notification: Notification) => void;
+  onGetMembersConversation?: (
+    firstUserId: string | undefined,
+    secondUserId: string | undefined
+  ) => Promise<void>;
+  onAddConversation?: (conversation: ChatConversation) => Promise<void>;
+  onAddMessage?: (message: ChatMessage) => Promise<void>;
+  onAddNotification?: (notification: Notification) => Promise<void>;
+  onReadNotification?: (id: string | undefined) => Promise<void>;
+  onDeleteNotification?: (id: string | undefined) => Promise<void>;
+}
+
+export interface ChatMessageProps {
+  message: ChatMessage;
+  own: boolean;
 }
 
 export interface ChatConversationProps {

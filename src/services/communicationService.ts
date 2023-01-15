@@ -1,9 +1,9 @@
 import axios, { AxiosError } from "axios";
 import { notify } from "../utils/notifications";
 
-const BASE_URL = "http://localhost:5000/chat";
+const BASE_URL = "http://localhost:5000/communication";
 
-class ChatService {
+class CommunicationService {
   http = axios.create({ baseURL: BASE_URL });
 
   async getMessages(id: string | undefined) {
@@ -50,6 +50,19 @@ class ChatService {
     }
   }
 
+  async getNotifications(id: string | undefined) {
+    try {
+      const response = await this.http.get<any>(`/notifications/${id}`);
+      return response.data;
+    } catch (error: unknown) {
+      if (error instanceof AxiosError) {
+        notify(error.response?.data.message);
+      } else if (typeof error === "string") {
+        notify(error);
+      }
+    }
+  }
+
   async addMessage(message: object) {
     try {
       const response = await this.http.post<any>("/message/", message);
@@ -78,6 +91,48 @@ class ChatService {
       }
     }
   }
+
+  async addNotification(notification: object) {
+    try {
+      const response = await this.http.post<any>(
+        "/notification/",
+        notification
+      );
+      return response.data;
+    } catch (error: unknown) {
+      if (error instanceof AxiosError) {
+        notify(error.response?.data.message);
+      } else if (typeof error === "string") {
+        notify(error);
+      }
+    }
+  }
+
+  async readNotification(id: string | undefined) {
+    try {
+      const response = await this.http.patch<any>(`/notification/read/${id}`);
+      return response.data;
+    } catch (error: unknown) {
+      if (error instanceof AxiosError) {
+        notify(error.response?.data.message);
+      } else if (typeof error === "string") {
+        notify(error);
+      }
+    }
+  }
+
+  async deleteNotification(id: string | undefined) {
+    try {
+      const response = await this.http.delete(`/notification/${id}`);
+      return response.data;
+    } catch (error: unknown) {
+      if (error instanceof AxiosError) {
+        notify(error.response?.data.message);
+      } else if (typeof error === "string") {
+        notify(error);
+      }
+    }
+  }
 }
 
-export default new ChatService();
+export default new CommunicationService();

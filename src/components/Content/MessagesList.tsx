@@ -1,6 +1,6 @@
 import { useContext, useEffect, useRef } from "react";
 import { Box } from "@mui/material";
-import ChatContext from "../../context/chatContext";
+import ChatContext from "../../context/communicationContext";
 import UserContext from "../../context/userContext";
 import Message from "../Elements/Message";
 import ChatTimeline from "../Elements/ChatTimeline";

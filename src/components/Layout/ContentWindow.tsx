@@ -3,6 +3,7 @@ import { Box } from "@mui/material";
 import ThemeContext from "../../context/themeContext";
 import WorldMap from "../WorldMap/WorldMap";
 import Sponsored from "../Content/Sponsored";
+import Notifications from "../Content/Notifications";
 import Content from "./Content";
 import { Route, Routes } from "react-router-dom";
 
@@ -28,7 +29,8 @@ const ContentWindow = () => {
       <Content />
       <Routes>
         <Route path="/*" element={<WorldMap />} />
-        <Route path="/" element={<Sponsored />} />
+        <Route path="/social" element={<Sponsored />} />
+        <Route path="/" element={<Notifications />} />
       </Routes>
     </Box>
   );

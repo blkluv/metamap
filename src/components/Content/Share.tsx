@@ -100,7 +100,7 @@ const Share = () => {
             margin="dense"
             maxRows={3}
             InputProps={{ disableUnderline: true }}
-            inputProps={{ style: { color: palette?.text.primary } }}
+            inputProps={{ style: { color: palette?.text.tertiary } }}
             fullWidth
             id="postShareDescription"
             autoComplete="postShareDescription"

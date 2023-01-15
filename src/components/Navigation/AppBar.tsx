@@ -18,6 +18,7 @@ import UserContext from "../../context/userContext";
 import ThemeContext from "../../context/themeContext";
 import Toggler from "../Elements/Switch";
 import { EventMenuItems } from "../../constants/menuItems";
+import NotificationIcon from "../Content/NotificationIcon";
 
 const ResponsiveAppBar = () => {
   const { currentUser, onLogout } = useContext(UserContext);
@@ -139,6 +140,7 @@ const ResponsiveAppBar = () => {
             GeoEvents
           </Link>
           <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}></Box>
+          <NotificationIcon />
           {currentUser ? (
             <Box sx={{ flexGrow: 0 }}>
               <Tooltip title="Settings">
@@ -147,8 +149,8 @@ const ResponsiveAppBar = () => {
                     alt="User avatar"
                     src={currentUser?.avatar}
                     sx={{
-                      height: { xs: "2rem", md: "2.5rem" },
-                      width: { xs: "2rem", md: "2.5rem" },
+                      height: { xs: "1.8rem", md: "2rem" },
+                      width: { xs: "1.8rem", md: "2rem" },
                       WebkitBoxShadow: "0px 0px 16px -8px rgba(0, 0, 0, 0.68)",
                       boxShadow: "0px 0px 16px -8px rgba(0, 0, 0, 0.68)",
                     }}

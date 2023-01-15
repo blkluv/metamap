@@ -2,7 +2,7 @@ import { useContext, useEffect } from "react";
 import { Box } from "@mui/material";
 import ThemeContext from "../../context/themeContext";
 import UserContext from "../../context/userContext";
-import ChatContext from "../../context/chatContext";
+import CommunicationContext from "../../context/communicationContext";
 import ChatAccordion from "../Content/ChatAccordion";
 import ChatMessageForm from "../Elements/ChatMessageForm";
 import MessagesList from "../Content/MessagesList";
@@ -10,7 +10,8 @@ import MessagesList from "../Content/MessagesList";
 const Chat = () => {
   const { palette } = useContext(ThemeContext);
   const { onGetUsers } = useContext(UserContext);
-  const { onlineUsers, onSetCurrentConversation } = useContext(ChatContext);
+  const { onlineUsers, onSetCurrentConversation } =
+    useContext(CommunicationContext);
 
   useEffect(() => {
     onGetUsers?.();
