@@ -12,7 +12,7 @@ import ThemeContext from "../../context/themeContext";
 import styled from "@emotion/styled";
 import { TextField, Typography } from "@mui/material";
 
-const UpdatePassword = () => {
+const UpdatePassword = ({ transparent }: { transparent?: boolean }) => {
   const { currentUser, onUpdatePassword } = useContext(UserContext);
   const { palette } = useContext(ThemeContext);
 
@@ -78,7 +78,9 @@ const UpdatePassword = () => {
       maxWidth="xs"
       sx={{
         height: "fit-content",
-        background: palette?.background.tertiary,
+        background: transparent
+          ? palette?.background.primary
+          : palette?.background.tertiary,
       }}
     >
       <Box

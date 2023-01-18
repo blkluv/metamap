@@ -15,6 +15,7 @@ const Search = styled("div")(({ theme }) => ({
   marginRight: theme.spacing(1),
   marginLeft: 0,
   width: "100%",
+  height: "2.3rem",
   [theme.breakpoints.up("sm")]: {
     marginLeft: theme.spacing(1),
     width: "auto",
@@ -44,7 +45,7 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   },
 }));
 
-const SearchField = ({ data, filter }: SearchFieldProps) => {
+const SearchField = ({ data, filter, vertical }: SearchFieldProps) => {
   const { palette } = useContext(ThemeContext);
 
   const handleFilter = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -68,9 +69,9 @@ const SearchField = ({ data, filter }: SearchFieldProps) => {
   return (
     <Search
       sx={{
-        marginLeft: "0 !important",
-        marginRight: "0.5rem !important",
-        marginTop: "0.5rem !important",
+        margin: vertical
+          ? "0 .5rem 1.5rem 0 !important"
+          : ".5rem .5rem 0 0 !important",
         background: palette?.background.tertiary,
       }}
     >

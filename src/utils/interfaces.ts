@@ -361,5 +361,6 @@ export interface ConfirmationDialogProps {
 
 export interface SearchFieldProps {
   data: any;
+  vertical?: boolean;
   filter: (data: any) => void;
 }

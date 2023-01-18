@@ -21,19 +21,27 @@ const ChatAccordion = ({ onlineUsers }: OnlineUsersProps) => {
         display: "flex",
         flexDirection: "column",
         maxHeight: "85vh",
-        padding: "0 .5rem",
+        padding: ".5rem .5rem 0 .5rem",
         overflow: "scroll",
-        minWidth: { xs: "100%", md: "350px" },
+        minWidth: { xs: "100%", md: "400px" },
       }}
     >
       <Accordion
         sx={{
-          background: palette?.background.tertiary,
           color: palette?.text.tertiary,
+          borderRadius: "25px !important",
+          background: palette?.background.primary,
+          border: `1px solid ${palette?.background.tertiary}`,
+          WebkitBoxShadow: "0px 0px 16px -8px rgba(0, 0, 0, 0.68)",
+          boxShadow: "0px 0px 16px -8px rgba(0, 0, 0, 0.68)",
+          marginBottom: "0.5rem",
+          "&:before": {
+            display: "none",
+          },
         }}
       >
         <AccordionSummary
-          expandIcon={<ExpandMoreIcon />}
+          expandIcon={<ExpandMoreIcon sx={{ color: palette?.text.tertiary }} />}
           aria-controls="panel1a-content"
           id="panel1a-header"
         >
@@ -46,12 +54,20 @@ const ChatAccordion = ({ onlineUsers }: OnlineUsersProps) => {
       </Accordion>
       <Accordion
         sx={{
-          background: palette?.background.tertiary,
           color: palette?.text.tertiary,
+          borderRadius: "25px !important",
+          background: palette?.background.primary,
+          border: `1px solid ${palette?.background.tertiary}`,
+          WebkitBoxShadow: "0px 0px 16px -8px rgba(0, 0, 0, 0.68)",
+          boxShadow: "0px 0px 16px -8px rgba(0, 0, 0, 0.68)",
+          marginBottom: "0.5rem",
+          "&:before": {
+            display: "none",
+          },
         }}
       >
         <AccordionSummary
-          expandIcon={<ExpandMoreIcon />}
+          expandIcon={<ExpandMoreIcon sx={{ color: palette?.text.tertiary }} />}
           aria-controls="panel2a-content"
           id="panel2a-header"
         >

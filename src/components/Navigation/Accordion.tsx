@@ -31,29 +31,45 @@ const MenuAccordion = () => {
     <Box>
       <Accordion
         sx={{
-          background: palette?.background.tertiary,
           color: palette?.text.tertiary,
+          borderRadius: "25px !important",
+          background: palette?.background.primary,
+          border: `1px solid ${palette?.background.tertiary}`,
+          WebkitBoxShadow: "0px 0px 16px -8px rgba(0, 0, 0, 0.68)",
+          boxShadow: "0px 0px 16px -8px rgba(0, 0, 0, 0.68)",
+          marginBottom: "0.5rem",
+          "&:before": {
+            display: "none",
+          },
         }}
       >
         <AccordionSummary
-          expandIcon={<ExpandMoreIcon />}
+          expandIcon={<ExpandMoreIcon sx={{ color: palette?.text.tertiary }} />}
           aria-controls="panel1a-content"
           id="panel1a-header"
         >
           <Typography sx={{ fontWeight: 500 }}>Change Password</Typography>
         </AccordionSummary>
         <AccordionDetails>
-          <UpdatePassword />
+          <UpdatePassword transparent />
         </AccordionDetails>
       </Accordion>
       <Accordion
         sx={{
-          background: palette?.background.tertiary,
           color: palette?.text.tertiary,
+          borderRadius: "25px !important",
+          background: palette?.background.primary,
+          border: `1px solid ${palette?.background.tertiary}`,
+          WebkitBoxShadow: "0px 0px 16px -8px rgba(0, 0, 0, 0.68)",
+          boxShadow: "0px 0px 16px -8px rgba(0, 0, 0, 0.68)",
+          marginBottom: "0.5rem",
+          "&:before": {
+            display: "none",
+          },
         }}
       >
         <AccordionSummary
-          expandIcon={<ExpandMoreIcon />}
+          expandIcon={<ExpandMoreIcon sx={{ color: palette?.text.tertiary }} />}
           aria-controls="panel2a-content"
           id="panel2a-header"
         >
@@ -64,7 +80,6 @@ const MenuAccordion = () => {
         <AccordionDetails>
           <Box
             sx={{
-              border: `1px solid ${palette?.background.tertiary}`,
               margin: 0,
               color: palette?.warning,
               cursor: "pointer",
@@ -72,7 +87,8 @@ const MenuAccordion = () => {
             }}
             onClick={() => handleOpenDialog()}
           >
-            Delete account <CloseIcon />
+            Delete account{" "}
+            <CloseIcon sx={{ marginLeft: ".5rem", fontSize: "1.4rem" }} />
           </Box>
         </AccordionDetails>
       </Accordion>

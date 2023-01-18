@@ -38,7 +38,11 @@ const UsersOnline = ({ onlineUsers }: OnlineUsersProps) => {
 
   return (
     <Box>
-      <SearchField data={currentUser?.following} filter={handleFilter} />
+      <SearchField
+        data={currentUser?.following}
+        filter={handleFilter}
+        vertical
+      />
       {renderItems(filteredItems)?.map((user: UserHeader) => (
         <UserHeaderSimple
           key={user._id}
