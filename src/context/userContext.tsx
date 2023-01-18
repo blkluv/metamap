@@ -115,16 +115,6 @@ export const UserProvider = ({ children }: React.PropsWithChildren) => {
     if (updatedUsers) {
       localStorage.setItem("users", JSON.stringify(users));
       setUsers(updatedUsers);
-      const existingUser = updatedUsers.find(
-        (user) => user._id === currentUser?._id
-      );
-      const updatedUser = {
-        ...currentUser,
-        following: existingUser?.following,
-        followers: existingUser?.followers,
-      };
-      // @ts-ignore
-      setCurrentUser((currentUser) => ({ ...currentUser, ...updatedUser }));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -135,7 +125,6 @@ export const UserProvider = ({ children }: React.PropsWithChildren) => {
       localStorage.setItem("auth", JSON.stringify(currentUser.token));
       localStorage.setItem("currentUser", JSON.stringify(currentUser.user));
       setCurrentUser(currentUser.user);
-      socket.current?.emit("globalDataUpdate", Math.random());
     }
   };
 
@@ -145,7 +134,6 @@ export const UserProvider = ({ children }: React.PropsWithChildren) => {
       localStorage.setItem("auth", JSON.stringify(currentUser.token));
       localStorage.setItem("currentUser", JSON.stringify(currentUser.user));
       setCurrentUser(currentUser.user);
-      socket.current?.emit("globalDataUpdate", Math.random());
     }
   };
 
@@ -164,7 +152,6 @@ export const UserProvider = ({ children }: React.PropsWithChildren) => {
       localStorage.setItem("auth", JSON.stringify(currentUser.token));
       localStorage.setItem("currentUser", JSON.stringify(currentUser.user));
       setCurrentUser(currentUser.user);
-      socket.current?.emit("globalDataUpdate", Math.random());
     }
   };
 
@@ -207,34 +194,38 @@ export const UserProvider = ({ children }: React.PropsWithChildren) => {
       const response = await UserService.followUser(id);
 
       if (response?.activeUser && response?.userToFollow) {
-        if (
-          response?.userToFollow.followers?.find(
-            (user) => user._id === response?.activeUser?._id
-          )
-        ) {
-          let notification = {
-            receiverId: response?.userToFollow._id,
-            text: "started following you.",
-            read: false,
-            type: "social",
-          };
+        const ifFollowerAlreadyExists = response?.userToFollow.followers?.find(
+          (user) => user._id === response?.activeUser?._id
+        );
+        let notification = {
+          receiverId: response?.userToFollow._id,
+          text: ifFollowerAlreadyExists
+            ? "started following you."
+            : "stopped following you.",
+          silent: ifFollowerAlreadyExists ? false : true,
+          read: false,
+          type: "social",
+        };
 
-          CommunicationService.addNotification?.(notification);
+        CommunicationService.addNotification?.(notification);
 
-          socket.current?.emit("sendNotification", {
-            senderId: currentUser?._id,
-            senderName: currentUser?.name,
-            receiverId: response?.userToFollow._id,
-            text: "started following you.",
-            type: "social",
-          });
-        }
-
-        socket.current?.emit("dataUpdate", response?.userToFollow._id);
+        socket.current?.emit("sendNotification", {
+          read: false,
+          senderId: currentUser?._id,
+          senderName: currentUser?.name,
+          receiverId: response?.userToFollow._id,
+          silent: ifFollowerAlreadyExists ? false : true,
+          text: ifFollowerAlreadyExists
+            ? "started following you."
+            : "stopped following you.",
+          type: "social",
+          payload: response?.activeUser,
+        });
 
         const updatedUsers = users.map((user) =>
           user._id === response.userToFollow._id ? response.userToFollow : user
         );
+
         setUsers(updatedUsers);
         setCurrentUser(response.activeUser);
         localStorage.setItem(
@@ -263,6 +254,7 @@ export const UserProvider = ({ children }: React.PropsWithChildren) => {
       <UserContext.Provider
         value={{
           currentUser,
+          onSetCurrentUser: setCurrentUser,
           user,
           users,
           onGetUser: handleGetUser,

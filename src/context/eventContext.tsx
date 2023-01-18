@@ -23,7 +23,7 @@ export const EventProvider = ({ children }: React.PropsWithChildren) => {
   const [events, setEvents] = useState<Event[]>([]);
   const [selectedEvent, setSelectedEvent] = useState<Event | undefined>();
   const { currentUser } = useContext(UserContext);
-  const { socket, onAddNotification, onSendNotification, dataUpdate } =
+  const { onAddNotification, onSendNotification } =
     useContext(CommunicationContext);
 
   const getEvents = async () => {
@@ -35,6 +35,9 @@ export const EventProvider = ({ children }: React.PropsWithChildren) => {
 
   const handleAddEvent = async (event: Event) => {
     const newEvent = await EventService.addEvent(event);
+
+    console.log("followers: (after adding ne event)");
+    console.log(currentUser?.followers);
     if (newEvent) {
       const updateReceivers = currentUser?.followers;
       if (updateReceivers) {
@@ -51,10 +54,10 @@ export const EventProvider = ({ children }: React.PropsWithChildren) => {
             senderId: newEvent.creator?._id,
             senderName: newEvent.creator?.name,
             receiverId: follower._id,
+            silent: false,
             text: "created a new event.",
             type: "event",
           });
-          socket.current?.emit("dataUpdate", follower._id);
         });
       }
 
@@ -77,18 +80,10 @@ export const EventProvider = ({ children }: React.PropsWithChildren) => {
         senderId: currentUser?._id,
         senderName: currentUser?.name,
         receiverId: updatedEvent.creator?._id,
+        silent: false,
         text: "joined your event.",
         type: "event",
       });
-
-      const updateReceivers = currentUser?.followers;
-      // @ts-ignore
-      updateReceivers?.push(updatedEvent.creator);
-      if (updateReceivers) {
-        updateReceivers.forEach((follower) => {
-          socket.current?.emit("dataUpdate", follower._id);
-        });
-      }
 
       setSelectedEvent(updatedEvent);
       const updatedEvents = events.map((event) =>
@@ -106,14 +101,6 @@ export const EventProvider = ({ children }: React.PropsWithChildren) => {
         event._id === updatedEvent._id ? updatedEvent : event
       );
 
-      const updateReceivers = currentUser?.followers;
-      // @ts-ignore
-      updateReceivers?.push(updatedEvent.creator);
-      if (updateReceivers) {
-        updateReceivers.forEach((follower) => {
-          socket.current?.emit("dataUpdate", follower._id);
-        });
-      }
       setEvents(updatedEvents);
     }
   };
@@ -146,19 +133,10 @@ export const EventProvider = ({ children }: React.PropsWithChildren) => {
         senderId: currentUser?._id,
         senderName: currentUser?.name,
         receiverId: updatedEvent.creator?._id,
+        silent: false,
         text: "rated your event.",
         type: "event",
       });
-
-      const updateReceivers = currentUser?.followers;
-      // @ts-ignore
-      updateReceivers?.push(updatedEvent.creator);
-      if (updateReceivers) {
-        updateReceivers.forEach((follower) => {
-          console.log("event updated rating");
-          socket.current?.emit("dataUpdate", follower._id);
-        });
-      }
 
       const updatedEvents = events.map((event) =>
         event._id === updatedEvent._id ? updatedEvent : event
@@ -174,13 +152,6 @@ export const EventProvider = ({ children }: React.PropsWithChildren) => {
       const updatedEvents = events.filter((event) => event._id !== id);
       setEvents(updatedEvents);
       setSelectedEvent(undefined);
-
-      const updateReceivers = currentUser?.followers;
-      if (updateReceivers) {
-        updateReceivers.forEach((follower) => {
-          socket.current?.emit("dataUpdate", follower._id);
-        });
-      }
     }
   };
 
@@ -193,9 +164,7 @@ export const EventProvider = ({ children }: React.PropsWithChildren) => {
     }
   }, [currentUser]);
 
-  useEffect(() => {
-    dataUpdate && getEvents?.();
-  }, [dataUpdate]);
+  // useefect ktory sprawdza zmiane w update, i jak jest typ event to updatuje payload
 
   return (
     <EventContext.Provider

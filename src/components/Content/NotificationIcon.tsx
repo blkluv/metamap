@@ -35,7 +35,9 @@ const NotificationIcon = () => {
         >
           <StyledBadge
             badgeContent={
-              notifications.filter((notification) => !notification.read).length
+              notifications.filter(
+                (notification) => !notification.read && !notification.silent
+              ).length
             }
             overlap="circular"
             sx={{

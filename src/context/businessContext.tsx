@@ -25,7 +25,7 @@ export const BusinessProvider = ({ children }: React.PropsWithChildren) => {
     Business | undefined
   >();
   const { currentUser } = useContext(UserContext);
-  const { socket, onAddNotification, onSendNotification, dataUpdate } =
+  const { onAddNotification, onSendNotification } =
     useContext(CommunicationContext);
 
   const getBusinesses = async () => {
@@ -53,10 +53,10 @@ export const BusinessProvider = ({ children }: React.PropsWithChildren) => {
             senderId: newBusiness.creator?._id,
             senderName: newBusiness.creator?.name,
             receiverId: follower._id,
+            silent: false,
             text: "created a new business.",
             type: "business",
           });
-          socket.current?.emit("dataUpdate", follower._id);
         });
       }
 
@@ -83,18 +83,10 @@ export const BusinessProvider = ({ children }: React.PropsWithChildren) => {
         senderId: currentUser?._id,
         senderName: currentUser?.name,
         receiverId: updatedBusiness.creator?._id,
+        silent: false,
         text: "liked your business.",
         type: "business",
       });
-
-      const updateReceivers = currentUser?.followers;
-      // @ts-ignore
-      updateReceivers?.push(updatedBusiness.creator);
-      if (updateReceivers) {
-        updateReceivers.forEach((follower) => {
-          socket.current?.emit("dataUpdate", follower._id);
-        });
-      }
 
       setBusinesses(updatedBusinesses);
       setSelectedBusiness(updatedBusiness);
@@ -120,18 +112,10 @@ export const BusinessProvider = ({ children }: React.PropsWithChildren) => {
         senderId: currentUser?._id,
         senderName: currentUser?.name,
         receiverId: updatedBusiness.creator?._id,
+        silent: false,
         text: "rated your business.",
         type: "business",
       });
-
-      const updateReceivers = currentUser?.followers;
-      // @ts-ignore
-      updateReceivers?.push(updatedBusiness.creator);
-      if (updateReceivers) {
-        updateReceivers.forEach((follower) => {
-          socket.current?.emit("dataUpdate", follower._id);
-        });
-      }
 
       setBusinesses(updatedBusinesses);
       setSelectedBusiness(updatedBusiness);
@@ -159,13 +143,6 @@ export const BusinessProvider = ({ children }: React.PropsWithChildren) => {
       );
       setBusinesses(updatedBusinesses);
       setSelectedBusiness(undefined);
-
-      const updateReceivers = currentUser?.followers;
-      if (updateReceivers) {
-        updateReceivers.forEach((follower) => {
-          socket.current?.emit("dataUpdate", follower._id);
-        });
-      }
     }
   };
 
@@ -177,10 +154,6 @@ export const BusinessProvider = ({ children }: React.PropsWithChildren) => {
       getBusinesses();
     }
   }, [currentUser]);
-
-  useEffect(() => {
-    dataUpdate && getBusinesses?.();
-  }, [dataUpdate]);
 
   return (
     <BusinessContext.Provider

@@ -78,6 +78,7 @@ export interface UsersContext {
   currentUser: User | null;
   user?: UserHeader | null;
   users: UserHeader[] | null;
+  onSetCurrentUser?: (user: User | null) => void;
   onGetUser?: (id: string | undefined) => Promise<void>;
   onGetSingleUser?: (id: string | undefined) => Promise<UserHeader | undefined>;
   onGetAvatar?: (id: string | undefined) => Promise<string | null>;
@@ -266,10 +267,12 @@ export interface Notification {
   senderId?: string;
   senderName?: string;
   receiverId?: string;
+  silent?: boolean;
   read?: boolean;
   type?: string;
   text: string;
   createdAt?: string | number;
+  payload?: any;
 }
 
 export interface NotificationProps {

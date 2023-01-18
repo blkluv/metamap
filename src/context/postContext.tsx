@@ -24,7 +24,7 @@ export const PostProvider = ({ children }: React.PropsWithChildren) => {
   const [posts, setPosts] = useState<Post[]>([]);
   const [usersPosts, setUsersPosts] = useState<Post[]>([]);
   const { currentUser } = useContext(UserContext);
-  const { socket, onAddNotification, onSendNotification, dataUpdate } =
+  const { onAddNotification, onSendNotification } =
     useContext(CommunicationContext);
 
   const handleGetFollowingPosts = async () => {
@@ -42,6 +42,8 @@ export const PostProvider = ({ children }: React.PropsWithChildren) => {
   };
 
   const handleAddPost = async (post: object) => {
+    console.log(currentUser?.followers);
+
     const newPost = await PostService.addPost(post);
     if (newPost) {
       const creatorFollowers = currentUser?.followers;
@@ -60,11 +62,10 @@ export const PostProvider = ({ children }: React.PropsWithChildren) => {
             senderId: newPost.creator?._id,
             senderName: newPost.creator?.name,
             receiverId: follower._id,
+            silent: false,
             text: "created a new post.",
             type: "social",
           });
-
-          socket.current?.emit("dataUpdate", follower._id);
         });
       }
 
@@ -80,14 +81,6 @@ export const PostProvider = ({ children }: React.PropsWithChildren) => {
 
       const updatedUsersPosts = usersPosts.filter((post) => post._id !== id);
       setUsersPosts(updatedUsersPosts);
-
-      const creatorFollowers = currentUser?.followers;
-
-      if (creatorFollowers) {
-        creatorFollowers.forEach((follower) => {
-          socket.current?.emit("dataUpdate", follower._id);
-        });
-      }
     }
   };
 
@@ -107,11 +100,10 @@ export const PostProvider = ({ children }: React.PropsWithChildren) => {
           senderId: currentUser?._id,
           senderName: currentUser?.name,
           receiverId: updatedPost.creator?._id,
+          silent: false,
           text: "liked your post.",
           type: "social",
         });
-
-        socket.current?.emit("dataUpdate", updatedPost.creator?._id);
       }
 
       const updatedPosts = posts.map((post) =>
@@ -134,10 +126,6 @@ export const PostProvider = ({ children }: React.PropsWithChildren) => {
       handleGetFollowingPosts();
     }
   }, []);
-
-  useEffect(() => {
-    dataUpdate && handleGetFollowingPosts?.();
-  }, [dataUpdate]);
 
   return (
     <PostContext.Provider

@@ -39,13 +39,12 @@ const CommunicationContext = createContext(INITIAL_STATE);
 export const CommunicationProvider = ({
   children,
 }: React.PropsWithChildren) => {
-  const { currentUser, onGetUsers } = useContext(UserContext);
+  const { currentUser, onSetCurrentUser } = useContext(UserContext);
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [arrivalMessage, setArrivalMessage] = useState<ChatMessage | null>(
     null
   );
-  const [dataUpdate, setDataUpdate] = useState<number | null>(null);
   const [arrivalNotification, setArrivalNotification] =
     useState<Notification | null>(null);
   const [onlineUsers, setOnlineUsers] = useState<UserHeader[]>([]);
@@ -63,12 +62,6 @@ export const CommunicationProvider = ({
         createdAt: Date.now(),
       });
     });
-    socket.current?.on("getDataUpdate", (data: number | null) => {
-      setDataUpdate(data);
-    });
-    socket.current?.on("getGlobalDataUpdate", (data: number | null) => {
-      setDataUpdate(data);
-    });
   }, []);
 
   useEffect(() => {
@@ -78,11 +71,15 @@ export const CommunicationProvider = ({
   }, [arrivalMessage, currentConversation, setMessages]);
 
   useEffect(() => {
-    socket.current?.emit("addUser", currentUser?._id);
+    if (currentUser) {
+      socket.current?.emit("addUser", currentUser?._id);
+    } else {
+      socket.current?.emit("deleteUser");
+    }
     socket.current?.on("getUsers", (users: UserHeader[]) => {
       setOnlineUsers(users);
     });
-  }, [currentUser?._id]);
+  }, [currentUser]);
 
   useEffect(() => {
     socket.current?.on("getNotification", (data: Notification) => {
@@ -90,9 +87,11 @@ export const CommunicationProvider = ({
         senderId: data.senderId,
         senderName: data.senderName,
         receiverId: data.receiverId,
+        silent: data.silent,
         read: data.read,
         type: data.type,
         text: data.text,
+        payload: data.payload,
       });
     });
   }, [notifications]);
@@ -209,6 +208,7 @@ export const CommunicationProvider = ({
     senderId,
     senderName,
     receiverId,
+    silent,
     text,
     type,
   }: Notification) => {
@@ -216,19 +216,54 @@ export const CommunicationProvider = ({
       senderId,
       senderName,
       receiverId,
+      silent,
       text,
       type,
     });
   };
 
   useEffect(() => {
-    arrivalNotification &&
+    if (currentUser && arrivalNotification && arrivalNotification?.payload) {
       handleGetNotifications(arrivalNotification.receiverId);
-  }, [arrivalNotification, handleGetNotifications]);
 
-  useEffect(() => {
-    dataUpdate && onGetUsers?.();
-  }, [dataUpdate, onGetUsers]);
+      if (arrivalNotification?.type === "social") {
+        console.log("arrivalNotification");
+        console.log(arrivalNotification);
+
+        console.log("currentUser");
+        console.log(currentUser);
+
+        console.log("currentUser followers");
+        console.log(currentUser.followers);
+
+        const { _id, name } = arrivalNotification.payload;
+
+        let updatedUser;
+
+        if (currentUser.followers?.find((follower) => follower._id === _id)) {
+          updatedUser = {
+            ...currentUser,
+            followers: currentUser.followers?.filter(
+              (follower) => follower._id !== _id
+            ),
+          };
+        } else {
+          updatedUser = {
+            ...currentUser,
+            followers: [...(currentUser.followers || []), { _id, name }],
+          };
+        }
+
+        console.log("updatedUser");
+        console.log(updatedUser);
+
+        onSetCurrentUser?.(updatedUser);
+        localStorage.setItem("currentUser", JSON.stringify(updatedUser));
+      }
+    }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [arrivalNotification, handleGetNotifications]);
 
   return (
     <CommunicationContext.Provider
@@ -237,7 +272,6 @@ export const CommunicationProvider = ({
         messages,
         notifications,
         onlineUsers,
-        dataUpdate,
         setMessages,
         setNotifications,
         setArrivalMessage,

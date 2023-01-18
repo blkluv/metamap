@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { Box, Divider, List, ListItem } from "@mui/material";
 import PostContext from "../../context/postContext";
 import ThemeContext from "../../context/themeContext";
@@ -6,8 +6,13 @@ import Post from "./Post";
 import Share from "./Share";
 
 const Feed = () => {
-  const { posts } = useContext(PostContext);
+  const { posts, onGetFollowingPosts } = useContext(PostContext);
   const { palette } = useContext(ThemeContext);
+
+  useEffect(() => {
+    onGetFollowingPosts?.();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <Box

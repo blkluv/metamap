@@ -9,6 +9,10 @@ const Notifications = () => {
   const { notifications } = useContext(CommunicationContext);
   const { palette } = useContext(ThemeContext);
 
+  const visibleNotifications = notifications.filter(
+    (notification) => !notification.silent
+  );
+
   return (
     <Box
       sx={{
@@ -41,9 +45,9 @@ const Notifications = () => {
         >
           Notifications
         </Typography>
-        {notifications.length > 0 ? (
+        {visibleNotifications.length > 0 ? (
           <List sx={{ overflow: "scroll" }}>
-            {notifications.map((notification: Notification) => (
+            {visibleNotifications.map((notification: Notification) => (
               <NotificationHeader
                 key={notification._id}
                 notification={notification}

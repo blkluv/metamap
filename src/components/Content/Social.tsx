@@ -1,4 +1,4 @@
-import { useContext, useState, useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Box, Divider } from "@mui/material";
 import UserContext from "../../context/userContext";
 import SocialMenu from "../Navigation/SocialMenu";
@@ -12,7 +12,8 @@ const Social = () => {
 
   useEffect(() => {
     onGetUsers?.();
-  }, [onGetUsers]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <Box

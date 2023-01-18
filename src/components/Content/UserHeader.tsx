@@ -103,24 +103,26 @@ const UserHeader = ({ _id, name }: Header) => {
           ) : null}
         </Box>
       </Box>
-      <Box sx={{ display: "flex", alignItems: "center" }}>
-        <Button
-          onClick={debounce(() => onFollowUser?.(_id), 400)}
-          sx={{
-            color: ifFollowing(currentUser, _id)
-              ? palette?.warning
-              : palette?.blue,
-            borderRadius: "15px",
-          }}
-        >
-          {ifFollowing(currentUser, _id) ? (
-            <CloseIcon fontSize="small" sx={{ width: "1.5rem" }} />
-          ) : (
-            <CheckIcon fontSize="small" sx={{ width: "1.5rem" }} />
-          )}
-          {ifFollowing(currentUser, _id) ? "Unfollow" : "Follow"}
-        </Button>
-      </Box>
+      {currentUser?._id !== _id ? (
+        <Box sx={{ display: "flex", alignItems: "center" }}>
+          <Button
+            onClick={debounce(() => onFollowUser?.(_id), 400)}
+            sx={{
+              color: ifFollowing(currentUser, _id)
+                ? palette?.warning
+                : palette?.blue,
+              borderRadius: "15px",
+            }}
+          >
+            {ifFollowing(currentUser, _id) ? (
+              <CloseIcon fontSize="small" sx={{ width: "1.5rem" }} />
+            ) : (
+              <CheckIcon fontSize="small" sx={{ width: "1.5rem" }} />
+            )}
+            {ifFollowing(currentUser, _id) ? "Unfollow" : "Follow"}
+          </Button>
+        </Box>
+      ) : null}
     </ListItem>
   );
 };
