@@ -24,7 +24,7 @@ export const PostProvider = ({ children }: React.PropsWithChildren) => {
   const [posts, setPosts] = useState<Post[]>([]);
   const [usersPosts, setUsersPosts] = useState<Post[]>([]);
   const { currentUser } = useContext(UserContext);
-  const { onAddNotification, onSendNotification } =
+  const { arrivalNotification, onAddNotification, onSendNotification } =
     useContext(CommunicationContext);
 
   const handleGetFollowingPosts = async () => {
@@ -41,41 +41,64 @@ export const PostProvider = ({ children }: React.PropsWithChildren) => {
     }
   };
 
-  const handleAddPost = async (post: object) => {
-    console.log(currentUser?.followers);
-
+  const handleAddPost = async (post: Post) => {
     const newPost = await PostService.addPost(post);
     if (newPost) {
-      const creatorFollowers = currentUser?.followers;
-
-      if (creatorFollowers) {
-        creatorFollowers.forEach((follower) => {
+      const receivers = currentUser?.followers;
+      if (receivers && receivers?.length > 0) {
+        receivers.forEach((follower) => {
           let notification = {
             receiverId: follower._id,
             text: "created a new post.",
+            silent: false,
             read: false,
-            type: "social",
+            type: "post",
           };
 
           onAddNotification?.(notification);
           onSendNotification?.({
+            ...notification,
             senderId: newPost.creator?._id,
             senderName: newPost.creator?.name,
-            receiverId: follower._id,
-            silent: false,
-            text: "created a new post.",
-            type: "social",
+            payload: { post: newPost },
           });
         });
       }
 
-      setPosts((post: any) => [newPost, ...post]);
+      setPosts((posts: Post[]) => [newPost, ...posts]);
+      if (usersPosts.length > 0) {
+        const ifCreatorsPosts = usersPosts.find(
+          (post) => post.creator?._id === newPost.creator?._id
+        );
+        ifCreatorsPosts && setUsersPosts([newPost, ...usersPosts]);
+      }
     }
   };
 
   const handleDeletePost = async (id: string | undefined) => {
     const deletedPost = await PostService.deletePost(id);
     if (!deletedPost) {
+      const receivers = currentUser?.followers;
+      if (receivers && receivers?.length > 0) {
+        receivers.forEach((follower) => {
+          let notification = {
+            receiverId: follower._id,
+            text: "deleted a post.",
+            silent: true,
+            read: false,
+            type: "postDeletion",
+          };
+
+          onAddNotification?.(notification);
+          onSendNotification?.({
+            ...notification,
+            senderId: currentUser?._id,
+            senderName: currentUser?.name,
+            payload: { _id: id },
+          });
+        });
+      }
+
       const updatedPosts = posts.filter((post) => post._id !== id);
       setPosts(updatedPosts);
 
@@ -87,24 +110,25 @@ export const PostProvider = ({ children }: React.PropsWithChildren) => {
   const handleLikePost = async (id: string | undefined) => {
     const updatedPost = await PostService.likePost(id);
     if (updatedPost) {
-      if (updatedPost?.likes?.find((user) => user._id === currentUser?._id)) {
-        let notification = {
-          receiverId: updatedPost.creator?._id,
-          text: "liked your post.",
-          read: false,
-          type: "social",
-        };
+      const ifLike = updatedPost.likes?.find(
+        (user) => user._id === currentUser?._id
+      );
 
-        onAddNotification?.(notification);
-        onSendNotification?.({
-          senderId: currentUser?._id,
-          senderName: currentUser?.name,
-          receiverId: updatedPost.creator?._id,
-          silent: false,
-          text: "liked your post.",
-          type: "social",
-        });
-      }
+      let notification = {
+        receiverId: updatedPost.creator?._id,
+        text: ifLike ? "likes your post." : "doesn't like your post anymore.",
+        silent: ifLike ? false : true,
+        read: false,
+        type: "post",
+      };
+
+      onAddNotification?.(notification);
+      onSendNotification?.({
+        ...notification,
+        senderId: currentUser?._id,
+        senderName: currentUser?.name,
+        payload: { post: updatedPost },
+      });
 
       const updatedPosts = posts.map((post) =>
         post._id === updatedPost._id ? updatedPost : post
@@ -125,7 +149,45 @@ export const PostProvider = ({ children }: React.PropsWithChildren) => {
     if (loggedUser) {
       handleGetFollowingPosts();
     }
-  }, []);
+  }, [currentUser]);
+
+  useEffect(() => {
+    if (arrivalNotification?.type === "post") {
+      const { post: updatedPost } = arrivalNotification.payload;
+
+      const existingPost = posts.find((post) => post._id === updatedPost._id);
+
+      if (!existingPost) {
+        setPosts?.([updatedPost, ...posts]);
+        if (usersPosts.length > 0) {
+          const ifCreatorsPosts = usersPosts.find(
+            (post) => post.creator?._id === updatedPost.creator?._id
+          );
+          ifCreatorsPosts && setUsersPosts([updatedPost, ...usersPosts]);
+        }
+      } else {
+        const updatedPosts = posts.map((post) =>
+          post._id === updatedPost._id ? updatedPost : post
+        );
+        setPosts?.(updatedPosts);
+
+        const updatedUsersPosts = usersPosts.map((post) =>
+          post._id === updatedPost._id ? updatedPost : post
+        );
+        setUsersPosts(updatedUsersPosts);
+      }
+    }
+
+    if (arrivalNotification?.type === "postDeletion") {
+      const { _id } = arrivalNotification.payload;
+
+      const updatedPosts = posts.filter((post) => post._id !== _id);
+      setPosts?.(updatedPosts);
+      const updatedUsersPosts = usersPosts.filter((post) => post._id !== _id);
+      setUsersPosts?.(updatedUsersPosts);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [arrivalNotification]);
 
   return (
     <PostContext.Provider

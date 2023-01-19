@@ -58,7 +58,7 @@ export const EventProvider = ({ children }: React.PropsWithChildren) => {
         });
       }
 
-      setEvents((events) => [newEvent, ...events]);
+      setEvents((events: Event[]) => [newEvent, ...events]);
     }
   };
 
