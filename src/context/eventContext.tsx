@@ -23,7 +23,7 @@ export const EventProvider = ({ children }: React.PropsWithChildren) => {
   const [events, setEvents] = useState<Event[]>([]);
   const [selectedEvent, setSelectedEvent] = useState<Event | undefined>();
   const { currentUser } = useContext(UserContext);
-  const { onAddNotification, onSendNotification } =
+  const { arrivalNotification, onAddNotification, onSendNotification } =
     useContext(CommunicationContext);
 
   const getEvents = async () => {
@@ -36,27 +36,24 @@ export const EventProvider = ({ children }: React.PropsWithChildren) => {
   const handleAddEvent = async (event: Event) => {
     const newEvent = await EventService.addEvent(event);
 
-    console.log("followers: (after adding ne event)");
-    console.log(currentUser?.followers);
     if (newEvent) {
-      const updateReceivers = currentUser?.followers;
-      if (updateReceivers) {
-        updateReceivers.forEach((follower) => {
+      const receivers = currentUser?.followers;
+      if (receivers && receivers?.length > 0) {
+        receivers.forEach((follower) => {
           let notification = {
             receiverId: follower._id,
             text: "created a new event.",
+            silent: false,
             read: false,
             type: "event",
           };
 
           onAddNotification?.(notification);
           onSendNotification?.({
+            ...notification,
             senderId: newEvent.creator?._id,
             senderName: newEvent.creator?.name,
-            receiverId: follower._id,
-            silent: false,
-            text: "created a new event.",
-            type: "event",
+            payload: { event: newEvent },
           });
         });
       }
@@ -71,18 +68,18 @@ export const EventProvider = ({ children }: React.PropsWithChildren) => {
       let notification = {
         receiverId: updatedEvent.creator?._id,
         text: "joined your event.",
+        silent: false,
         read: false,
         type: "event",
       };
 
       onAddNotification?.(notification);
+
       onSendNotification?.({
+        ...notification,
         senderId: currentUser?._id,
         senderName: currentUser?.name,
-        receiverId: updatedEvent.creator?._id,
-        silent: false,
-        text: "joined your event.",
-        type: "event",
+        payload: { event: updatedEvent },
       });
 
       setSelectedEvent(updatedEvent);
@@ -96,6 +93,23 @@ export const EventProvider = ({ children }: React.PropsWithChildren) => {
   const handleLeaveEvent = async (id: string | undefined) => {
     const updatedEvent = await EventService.leaveEvent(id);
     if (updatedEvent) {
+      let notification = {
+        receiverId: updatedEvent.creator?._id,
+        text: "left your event.",
+        silent: true,
+        read: false,
+        type: "event",
+      };
+
+      onAddNotification?.(notification);
+
+      onSendNotification?.({
+        ...notification,
+        senderId: currentUser?._id,
+        senderName: currentUser?.name,
+        payload: { event: updatedEvent },
+      });
+
       setSelectedEvent(updatedEvent);
       const updatedEvents = events.map((event) =>
         event._id === updatedEvent._id ? updatedEvent : event
@@ -124,18 +138,17 @@ export const EventProvider = ({ children }: React.PropsWithChildren) => {
       let notification = {
         receiverId: updatedEvent.creator?._id,
         text: "rated your event.",
+        silent: false,
         read: false,
         type: "event",
       };
 
       onAddNotification?.(notification);
       onSendNotification?.({
+        ...notification,
         senderId: currentUser?._id,
         senderName: currentUser?.name,
-        receiverId: updatedEvent.creator?._id,
-        silent: false,
-        text: "rated your event.",
-        type: "event",
+        payload: { event: updatedEvent },
       });
 
       const updatedEvents = events.map((event) =>
@@ -149,9 +162,30 @@ export const EventProvider = ({ children }: React.PropsWithChildren) => {
   const handleDeleteEvent = async (id: string | undefined) => {
     const deletedEvent = await EventService.deleteEvent(id);
     if (!deletedEvent) {
+      const receivers = currentUser?.followers;
+      if (receivers && receivers?.length > 0) {
+        receivers.forEach((follower) => {
+          let notification = {
+            receiverId: follower._id,
+            text: "deleted an event.",
+            silent: true,
+            read: false,
+            type: "eventDeletion",
+          };
+
+          onAddNotification?.(notification);
+          onSendNotification?.({
+            ...notification,
+            senderId: currentUser?._id,
+            senderName: currentUser?.name,
+            payload: { _id: id },
+          });
+        });
+      }
+
       const updatedEvents = events.filter((event) => event._id !== id);
       setEvents(updatedEvents);
-      setSelectedEvent(undefined);
+      selectedEvent?._id === id && setSelectedEvent(undefined);
     }
   };
 
@@ -164,13 +198,46 @@ export const EventProvider = ({ children }: React.PropsWithChildren) => {
     }
   }, [currentUser]);
 
-  // useefect ktory sprawdza zmiane w update, i jak jest typ event to updatuje payload
+  useEffect(() => {
+    if (arrivalNotification?.type === "event") {
+      const { event: updatedEvent } = arrivalNotification.payload;
+
+      const existingEvent = events.find(
+        (event) => event._id === updatedEvent._id
+      );
+
+      if (!existingEvent) {
+        setEvents?.([updatedEvent, ...events]);
+      } else {
+        const updatedEvents = events.map((event) =>
+          event._id === updatedEvent._id ? updatedEvent : event
+        );
+
+        setEvents?.(updatedEvents);
+      }
+
+      selectedEvent?._id === updatedEvent._id &&
+        setSelectedEvent?.(updatedEvent);
+    }
+
+    if (arrivalNotification?.type === "eventDeletion") {
+      const { _id } = arrivalNotification.payload;
+
+      const updatedEvents = events.filter((event) => event._id !== _id);
+
+      setEvents?.(updatedEvents);
+
+      selectedEvent?._id === _id && setSelectedEvent?.(undefined);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [arrivalNotification]);
 
   return (
     <EventContext.Provider
       value={{
         events,
         selectedEvent,
+        onSetEvents: setEvents,
         onGetEvents: getEvents,
         onJoinEvent: handleJoinEvent,
         onLeaveEvent: handleLeaveEvent,

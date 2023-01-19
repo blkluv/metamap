@@ -211,6 +211,7 @@ export const CommunicationProvider = ({
     silent,
     text,
     type,
+    payload,
   }: Notification) => {
     socket.current?.emit("sendNotification", {
       senderId,
@@ -219,6 +220,7 @@ export const CommunicationProvider = ({
       silent,
       text,
       type,
+      payload,
     });
   };
 
@@ -226,16 +228,8 @@ export const CommunicationProvider = ({
     if (currentUser && arrivalNotification && arrivalNotification?.payload) {
       handleGetNotifications(arrivalNotification.receiverId);
 
+      // user
       if (arrivalNotification?.type === "social") {
-        console.log("arrivalNotification");
-        console.log(arrivalNotification);
-
-        console.log("currentUser");
-        console.log(currentUser);
-
-        console.log("currentUser followers");
-        console.log(currentUser.followers);
-
         const { _id, name } = arrivalNotification.payload;
 
         let updatedUser;
@@ -254,9 +248,6 @@ export const CommunicationProvider = ({
           };
         }
 
-        console.log("updatedUser");
-        console.log(updatedUser);
-
         onSetCurrentUser?.(updatedUser);
         localStorage.setItem("currentUser", JSON.stringify(updatedUser));
       }
@@ -273,6 +264,7 @@ export const CommunicationProvider = ({
         notifications,
         onlineUsers,
         setMessages,
+        arrivalNotification,
         setNotifications,
         setArrivalMessage,
         conversations,

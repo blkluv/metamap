@@ -210,15 +210,9 @@ export const UserProvider = ({ children }: React.PropsWithChildren) => {
         CommunicationService.addNotification?.(notification);
 
         socket.current?.emit("sendNotification", {
-          read: false,
+          ...notification,
           senderId: currentUser?._id,
           senderName: currentUser?.name,
-          receiverId: response?.userToFollow._id,
-          silent: ifFollowerAlreadyExists ? false : true,
-          text: ifFollowerAlreadyExists
-            ? "started following you."
-            : "stopped following you.",
-          type: "social",
           payload: response?.activeUser,
         });
 

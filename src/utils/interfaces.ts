@@ -121,6 +121,7 @@ export interface Event {
 export interface EventsContext {
   events: Event[];
   selectedEvent?: Event;
+  onSetEvents?: (events: Event[]) => void;
   onAddEvent?: (event: Event) => Promise<void>;
   onGetEvents?: () => Promise<void>;
   onJoinEvent?: (id: string | undefined) => Promise<void>;
@@ -290,6 +291,7 @@ export interface CommunicationContext {
   messages: ChatMessage[];
   dataUpdate?: number | null;
   notifications: Notification[];
+  arrivalNotification?: Notification | null;
   onlineUsers?: UserHeader[] | undefined;
   setArrivalMessage?: (message: ChatMessage) => void;
   setMessages?: (messages: ChatMessage[]) => void;
