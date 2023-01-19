@@ -21,7 +21,7 @@ const ChatAccordion = ({ onlineUsers }: OnlineUsersProps) => {
         display: "flex",
         flexDirection: "column",
         maxHeight: "85vh",
-        padding: ".5rem .5rem 0 .5rem",
+        padding: ".5rem",
         overflow: "scroll",
         minWidth: { xs: "100%", md: "400px" },
       }}

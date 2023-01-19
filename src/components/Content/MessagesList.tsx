@@ -1,13 +1,13 @@
 import { useContext, useEffect, useRef } from "react";
 import { Box } from "@mui/material";
-import ChatContext from "../../context/communicationContext";
+import CommunicationContext from "../../context/communicationContext";
 import UserContext from "../../context/userContext";
 import Message from "../Elements/Message";
 import ChatTimeline from "../Elements/ChatTimeline";
 
 const MessagesList = () => {
   const { messages, currentConversation, onGetMessages } =
-    useContext(ChatContext);
+    useContext(CommunicationContext);
   const { currentUser } = useContext(UserContext);
   const scrollRef = useRef<any>();
 
