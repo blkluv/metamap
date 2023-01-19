@@ -25,7 +25,7 @@ export const BusinessProvider = ({ children }: React.PropsWithChildren) => {
     Business | undefined
   >();
   const { currentUser } = useContext(UserContext);
-  const { onAddNotification, onSendNotification } =
+  const { arrivalNotification, onAddNotification, onSendNotification } =
     useContext(CommunicationContext);
 
   const getBusinesses = async () => {
@@ -37,25 +37,25 @@ export const BusinessProvider = ({ children }: React.PropsWithChildren) => {
 
   const handleAddBusiness = async (business: Business) => {
     const newBusiness = await BusinessService.addBusiness(business);
+
     if (newBusiness) {
-      const updateReceivers = currentUser?.followers;
-      if (updateReceivers) {
-        updateReceivers.forEach((follower) => {
+      const receivers = currentUser?.followers;
+      if (receivers && receivers?.length > 0) {
+        receivers.forEach((follower) => {
           let notification = {
             receiverId: follower._id,
             text: "created a new business.",
+            silent: false,
             read: false,
             type: "business",
           };
 
           onAddNotification?.(notification);
           onSendNotification?.({
+            ...notification,
             senderId: newBusiness.creator?._id,
             senderName: newBusiness.creator?.name,
-            receiverId: follower._id,
-            silent: false,
-            text: "created a new business.",
-            type: "business",
+            payload: { business: newBusiness },
           });
         });
       }
@@ -67,26 +67,31 @@ export const BusinessProvider = ({ children }: React.PropsWithChildren) => {
   const handleLikeBusiness = async (id: string | undefined) => {
     const updatedBusiness = await BusinessService.likeBusiness(id);
     if (updatedBusiness) {
-      const updatedBusinesses = businesses.map((business) =>
-        business._id === updatedBusiness._id ? updatedBusiness : business
+      const ifLike = updatedBusiness.likes?.find(
+        (user) => user._id === currentUser?._id
       );
 
       let notification = {
         receiverId: updatedBusiness.creator?._id,
-        text: "liked your business.",
+        text: ifLike
+          ? "likes your business."
+          : "doesn't like your business anymore.",
+        silent: ifLike ? false : true,
         read: false,
         type: "business",
       };
 
       onAddNotification?.(notification);
       onSendNotification?.({
+        ...notification,
         senderId: currentUser?._id,
         senderName: currentUser?.name,
-        receiverId: updatedBusiness.creator?._id,
-        silent: false,
-        text: "liked your business.",
-        type: "business",
+        payload: { business: updatedBusiness },
       });
+
+      const updatedBusinesses = businesses.map((business) =>
+        business._id === updatedBusiness._id ? updatedBusiness : business
+      );
 
       setBusinesses(updatedBusinesses);
       setSelectedBusiness(updatedBusiness);
@@ -96,26 +101,25 @@ export const BusinessProvider = ({ children }: React.PropsWithChildren) => {
   const handleRateBusiness = async (id: string | undefined, rating: number) => {
     const updatedBusiness = await BusinessService.rateBusiness(id, rating);
     if (updatedBusiness) {
-      const updatedBusinesses = businesses.map((business) =>
-        business._id === updatedBusiness._id ? updatedBusiness : business
-      );
-
       let notification = {
         receiverId: updatedBusiness.creator?._id,
         text: "rated your business.",
+        silent: false,
         read: false,
         type: "business",
       };
 
       onAddNotification?.(notification);
       onSendNotification?.({
+        ...notification,
         senderId: currentUser?._id,
         senderName: currentUser?.name,
-        receiverId: updatedBusiness.creator?._id,
-        silent: false,
-        text: "rated your business.",
-        type: "business",
+        payload: { business: updatedBusiness },
       });
+
+      const updatedBusinesses = businesses.map((business) =>
+        business._id === updatedBusiness._id ? updatedBusiness : business
+      );
 
       setBusinesses(updatedBusinesses);
       setSelectedBusiness(updatedBusiness);
@@ -138,11 +142,32 @@ export const BusinessProvider = ({ children }: React.PropsWithChildren) => {
   const handleDeleteBusiness = async (id: string | undefined) => {
     const deletedBusiness = await BusinessService.deleteBusiness(id);
     if (!deletedBusiness) {
+      const receivers = currentUser?.followers;
+      if (receivers && receivers?.length > 0) {
+        receivers.forEach((follower) => {
+          let notification = {
+            receiverId: follower._id,
+            text: "deleted a business.",
+            silent: true,
+            read: false,
+            type: "businessDeletion",
+          };
+
+          onAddNotification?.(notification);
+          onSendNotification?.({
+            ...notification,
+            senderId: currentUser?._id,
+            senderName: currentUser?.name,
+            payload: { _id: id },
+          });
+        });
+      }
+
       const updatedBusinesses = businesses.filter(
         (business) => business._id !== id
       );
       setBusinesses(updatedBusinesses);
-      setSelectedBusiness(undefined);
+      selectedBusiness?._id === id && setSelectedBusiness(undefined);
     }
   };
 
@@ -154,6 +179,41 @@ export const BusinessProvider = ({ children }: React.PropsWithChildren) => {
       getBusinesses();
     }
   }, [currentUser]);
+
+  useEffect(() => {
+    if (arrivalNotification?.type === "business") {
+      const { business: updatedBusiness } = arrivalNotification.payload;
+
+      const existingBusiness = businesses.find(
+        (business) => business._id === updatedBusiness._id
+      );
+
+      if (!existingBusiness) {
+        setBusinesses?.([updatedBusiness, ...businesses]);
+      } else {
+        const updatedBusinesses = businesses.map((business) =>
+          business._id === updatedBusiness._id ? updatedBusiness : business
+        );
+
+        setBusinesses?.(updatedBusinesses);
+      }
+
+      selectedBusiness?._id === updatedBusiness._id &&
+        setSelectedBusiness?.(updatedBusiness);
+    }
+
+    if (arrivalNotification?.type === "businessDeletion") {
+      const { _id } = arrivalNotification.payload;
+
+      const updatedBusinesses = businesses.filter(
+        (business) => business._id !== _id
+      );
+
+      setBusinesses?.(updatedBusinesses);
+      selectedBusiness?._id === _id && setSelectedBusiness?.(undefined);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [arrivalNotification]);
 
   return (
     <BusinessContext.Provider
