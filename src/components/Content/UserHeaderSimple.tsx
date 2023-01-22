@@ -1,15 +1,19 @@
 import { useCallback, useContext, useEffect, useState, memo } from "react";
 import { Avatar, Badge, Box, Typography } from "@mui/material";
+import CircleIcon from "@mui/icons-material/Circle";
 import { styled } from "@mui/system";
 import UserContext from "../../context/userContext";
 import { UserHeaderSimpleProps } from "../../utils/interfaces";
+import ThemeContext from "../../context/themeContext";
 
 const UserHeaderSimple = ({
   user,
   isOnline,
   onClick,
+  unreadCheck,
 }: UserHeaderSimpleProps) => {
   const { onGetAvatar } = useContext(UserContext);
+  const { palette } = useContext(ThemeContext);
   const [avatar, setAvatar] = useState<string | null | undefined>(null);
 
   const StyledBadge = styled(Badge)(() => ({
@@ -41,7 +45,7 @@ const UserHeaderSimple = ({
       onClick={() => onClick(user)}
       sx={{
         display: "flex",
-        margin: ".8rem 0",
+        margin: "1rem 0",
         cursor: "pointer",
         alignItems: "center",
       }}
@@ -52,7 +56,7 @@ const UserHeaderSimple = ({
           alt="User avatar"
           src={String(avatar)}
           sx={{
-            margin: "0 .5rem .2rem 0",
+            marginRight: ".5rem",
             height: "2rem",
             width: "2rem",
             cursor: "pointer",
@@ -65,7 +69,7 @@ const UserHeaderSimple = ({
           anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
           variant="dot"
           sx={{
-            margin: "0 .5rem .2rem 0",
+            marginRight: ".5rem",
             height: "2rem",
             width: "2rem",
             cursor: "pointer",
@@ -82,7 +86,18 @@ const UserHeaderSimple = ({
           />
         </StyledBadge>
       )}
-      <Typography sx={{ fontSize: ".9rem" }}>{user?.name}</Typography>
+      <>
+        <Typography sx={{ fontSize: ".9rem" }}>{user?.name}</Typography>{" "}
+        {unreadCheck ? (
+          <CircleIcon
+            sx={{
+              color: palette?.green,
+              marginLeft: ".5rem",
+              width: ".8rem",
+            }}
+          />
+        ) : null}
+      </>
     </Box>
   );
 };

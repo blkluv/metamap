@@ -6,11 +6,12 @@ import SendIcon from "@mui/icons-material/Send";
 import { useForm } from "react-hook-form";
 import CommunicationContext from "../../context/communicationContext";
 import UserContext from "../../context/userContext";
+import { notify } from "../../utils/notifications";
 
 const ChatMessageForm = () => {
   const { palette } = useContext(ThemeContext);
-  const { currentUser } = useContext(UserContext);
-  const { socket, onAddMessage, currentConversation } =
+  const { currentUser, users } = useContext(UserContext);
+  const { onAddMessage, currentConversation } =
     useContext(CommunicationContext);
 
   const {
@@ -27,21 +28,23 @@ const ChatMessageForm = () => {
     const text = data.message.trim();
 
     if (text) {
-      const message = {
-        sender: currentUser?._id,
-        text,
-        conversationId: currentConversation?._id,
-      };
-
       const receiverId = currentConversation?.members.find(
         (member: string | undefined) => member !== currentUser?._id
       );
-      socket.current?.emit("sendMessage", {
-        senderId: currentUser?._id,
-        receiverId,
-        text,
-      });
-      onAddMessage?.(message);
+      const receiver = users?.find((user) => user._id === receiverId);
+
+      if (receiver) {
+        const message = {
+          conversationId: currentConversation?._id,
+          sender: { _id: currentUser?._id, name: currentUser?.name },
+          receiver: { _id: receiverId, name: receiver?.name },
+          read: false,
+          text,
+        };
+        onAddMessage?.(message);
+      } else {
+        notify("Message receiver doesn't exist.");
+      }
     }
     resetMessage();
   };

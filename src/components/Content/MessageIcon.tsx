@@ -1,16 +1,15 @@
 import { useContext, useEffect } from "react";
 import { Badge } from "@mui/material";
 import { styled } from "@mui/system";
-import NotificationsNoneIcon from "@mui/icons-material/NotificationsNone";
 import CommunicationContext from "../../context/communicationContext";
 import ThemeContext from "../../context/themeContext";
 import UserContext from "../../context/userContext";
+import MailOutlineIcon from "@mui/icons-material/MailOutline";
 import { NavLink } from "react-router-dom";
 
-const NotificationIcon = () => {
+const MessageIcon = () => {
   const { currentUser } = useContext(UserContext);
-  const { notifications, onGetNotifications } =
-    useContext(CommunicationContext);
+  const { userMessages, onGetUserMessages } = useContext(CommunicationContext);
   const { palette } = useContext(ThemeContext);
 
   const StyledBadge = styled(Badge)(() => ({
@@ -23,32 +22,30 @@ const NotificationIcon = () => {
   }));
 
   useEffect(() => {
-    onGetNotifications?.(currentUser?._id);
-  }, [currentUser?._id, onGetNotifications]);
+    onGetUserMessages?.(currentUser?._id);
+  }, [currentUser?._id, onGetUserMessages]);
 
   return (
     <>
       {currentUser ? (
         <NavLink
-          to={`/dashboard`}
+          to={`/dashboard/chat`}
           style={{ textDecoration: "none", color: "inherit" }}
         >
           <StyledBadge
             badgeContent={
-              notifications.filter(
-                (notification) => !notification.read && !notification.silent
-              ).length
+              userMessages.filter((message) => !message.read).length
             }
             overlap="circular"
             sx={{
-              marginRight: { xs: "1rem", md: "2rem" },
+              marginRight: "1rem",
               height: "1.6rem",
               width: "1.6rem",
               cursor: "pointer",
               alignSelf: "center",
             }}
           >
-            <NotificationsNoneIcon sx={{ fontSize: "1.6rem" }} />
+            <MailOutlineIcon sx={{ fontSize: "1.6rem" }} />
           </StyledBadge>
         </NavLink>
       ) : null}
@@ -56,4 +53,4 @@ const NotificationIcon = () => {
   );
 };
 
-export default NotificationIcon;
+export default MessageIcon;

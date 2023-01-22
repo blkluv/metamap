@@ -10,14 +10,15 @@ import MessagesList from "../Content/MessagesList";
 const Chat = () => {
   const { palette } = useContext(ThemeContext);
   const { onGetUsers } = useContext(UserContext);
-  const { onlineUsers, onSetCurrentConversation } =
+  const { onlineUsers, userMessages, onSetCurrentConversation } =
     useContext(CommunicationContext);
 
   useEffect(() => {
     onGetUsers?.();
 
     return () => onSetCurrentConversation?.(null);
-  }, [onGetUsers, onSetCurrentConversation]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <Box
@@ -49,7 +50,7 @@ const Chat = () => {
         <MessagesList />
         <ChatMessageForm />
       </Box>
-      <ChatAccordion onlineUsers={onlineUsers} />
+      <ChatAccordion onlineUsers={onlineUsers} userMessages={userMessages} />
     </Box>
   );
 };

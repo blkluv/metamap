@@ -19,6 +19,19 @@ class CommunicationService {
     }
   }
 
+  async getUserMessages(id: string | undefined) {
+    try {
+      const response = await this.http.get<any>(`/messages/user/${id}`);
+      return response.data;
+    } catch (error: unknown) {
+      if (error instanceof AxiosError) {
+        notify(error.response?.data.message);
+      } else if (typeof error === "string") {
+        notify(error);
+      }
+    }
+  }
+
   async getConversations(id: string | undefined) {
     try {
       const response = await this.http.get<any>(`/conversations/${id}`);
@@ -66,6 +79,19 @@ class CommunicationService {
   async addMessage(message: object) {
     try {
       const response = await this.http.post<any>("/message/", message);
+      return response.data;
+    } catch (error: unknown) {
+      if (error instanceof AxiosError) {
+        notify(error.response?.data.message);
+      } else if (typeof error === "string") {
+        notify(error);
+      }
+    }
+  }
+
+  async readMessage(id: string | undefined) {
+    try {
+      const response = await this.http.patch<any>(`/message/read/${id}`);
       return response.data;
     } catch (error: unknown) {
       if (error instanceof AxiosError) {

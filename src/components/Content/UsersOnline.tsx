@@ -4,9 +4,9 @@ import UserContext from "../../context/userContext";
 import CommunicationContext from "../../context/communicationContext";
 import UserHeaderSimple from "./UserHeaderSimple";
 import SearchField from "../Elements/SearchField";
-import { OnlineUsersProps, UserHeader } from "../../utils/interfaces";
+import { ChatProps, UserHeader } from "../../utils/interfaces";
 
-const UsersOnline = ({ onlineUsers }: OnlineUsersProps) => {
+const UsersOnline = ({ onlineUsers }: ChatProps) => {
   const { currentUser } = useContext(UserContext);
   const { onGetMembersConversation } = useContext(CommunicationContext);
   const [online, setOnline] = useState<(string | null | undefined)[]>([]);

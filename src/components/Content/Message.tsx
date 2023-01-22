@@ -1,11 +1,22 @@
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
+import CommunicationContext from "../../context/communicationContext";
 import ThemeContext from "../../context/themeContext";
+import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 import { Avatar, Box, Typography } from "@mui/material";
 import { ChatMessageProps } from "../../utils/interfaces";
 import moment from "moment";
 
-const Message = ({ message, own }: ChatMessageProps) => {
+const Message = ({
+  message: { _id, read, text, createdAt },
+  own,
+}: ChatMessageProps) => {
+  const { onReadMessage } = useContext(CommunicationContext);
   const { palette } = useContext(ThemeContext);
+
+  useEffect(() => {
+    !own && !read && onReadMessage?.(_id);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <Box
@@ -36,20 +47,27 @@ const Message = ({ message, own }: ChatMessageProps) => {
               width: "fit-content",
             }}
           >
-            {message.text}
+            {text}
           </Typography>
           <Typography
             sx={{
               display: "flex",
-              margin: ".3rem",
+              margin: "0 .3rem .3rem .3rem",
               justifyContent: `${own ? "flex-end" : "flex-start"}`,
+              alignItems: "center",
+              height: "1.5rem",
             }}
             component="span"
             variant="body2"
             color="grey"
             fontSize={".7rem"}
           >
-            {moment(message.createdAt).fromNow()}
+            {moment(createdAt).fromNow()}
+            {own && read && (
+              <CheckCircleOutlineIcon
+                sx={{ marginLeft: ".5rem", width: ".7rem" }}
+              />
+            )}
           </Typography>
         </Box>
       </Box>

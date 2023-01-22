@@ -20,6 +20,7 @@ import UserContext from "./userContext";
 
 const INITIAL_STATE: Communication = {
   messages: [],
+  userMessages: [],
   conversations: [],
   notifications: [],
   currentConversation: null,
@@ -41,6 +42,7 @@ export const CommunicationProvider = ({
 }: React.PropsWithChildren) => {
   const { currentUser, onSetCurrentUser } = useContext(UserContext);
   const [messages, setMessages] = useState<ChatMessage[]>([]);
+  const [userMessages, setUserMessages] = useState<ChatMessage[]>([]);
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [arrivalMessage, setArrivalMessage] = useState<ChatMessage | null>(
     null
@@ -55,23 +57,35 @@ export const CommunicationProvider = ({
 
   useEffect(() => {
     socket.current = io("localhost:5500");
-    socket.current?.on("getMessage", (data: ChatMessage) => {
-      setArrivalMessage({
-        sender: data.senderId,
-        text: data.text,
-        createdAt: Date.now(),
-      });
-    });
+    socket.current?.on(
+      "getMessage",
+      ({ _id, sender, text, read, conversationId }: ChatMessage) => {
+        setArrivalMessage({
+          _id,
+          sender,
+          text,
+          read,
+          conversationId,
+          createdAt: Date.now(),
+        });
+      }
+    );
   }, []);
 
   useEffect(() => {
     arrivalMessage &&
-      currentConversation?.members.includes(arrivalMessage.sender) &&
+      currentConversation?.members.includes(arrivalMessage.sender?._id) &&
       setMessages((prev: ChatMessage[]) => [...prev, arrivalMessage]);
-  }, [arrivalMessage, currentConversation, setMessages]);
+
+    arrivalMessage &&
+      arrivalMessage.conversationId !== currentConversation?._id &&
+      setUserMessages((prev: ChatMessage[]) => [...prev, arrivalMessage]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [arrivalMessage]);
 
   useEffect(() => {
     if (currentUser) {
+      handleGetUserMessages(currentUser?._id);
       socket.current?.emit("addUser", currentUser?._id);
     } else {
       socket.current?.emit("deleteUser");
@@ -79,21 +93,35 @@ export const CommunicationProvider = ({
     socket.current?.on("getUsers", (users: UserHeader[]) => {
       setOnlineUsers(users);
     });
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentUser]);
 
   useEffect(() => {
-    socket.current?.on("getNotification", (data: Notification) => {
-      setArrivalNotification({
-        senderId: data.senderId,
-        senderName: data.senderName,
-        receiverId: data.receiverId,
-        silent: data.silent,
-        read: data.read,
-        type: data.type,
-        text: data.text,
-        payload: data.payload,
-      });
-    });
+    socket.current?.on(
+      "getNotification",
+      ({
+        senderId,
+        senderName,
+        receiverId,
+        silent,
+        read,
+        type,
+        text,
+        payload,
+      }: Notification) => {
+        setArrivalNotification({
+          senderId,
+          senderName,
+          receiverId,
+          silent,
+          read,
+          type,
+          text,
+          payload,
+        });
+      }
+    );
   }, [notifications]);
 
   const memoizedHandleGetMessages = useMemo(
@@ -110,10 +138,55 @@ export const CommunicationProvider = ({
     memoizedHandleGetMessages,
   ]);
 
+  const memoizedHandleGetUserMessages = useMemo(
+    () => async (id: string | undefined) => {
+      const response = await CommunicationService.getUserMessages(id);
+      if (response) {
+        setUserMessages(response);
+      }
+    },
+    []
+  );
+
+  const handleGetUserMessages = useCallback(memoizedHandleGetUserMessages, [
+    memoizedHandleGetUserMessages,
+  ]);
+
   const handleAddMessage = async (message: ChatMessage) => {
     const response = await CommunicationService.addMessage(message);
     if (response) {
-      setMessages([...messages, response]);
+      const receiverId = currentConversation?.members.find(
+        (member: string | undefined) => member !== currentUser?._id
+      );
+      socket.current?.emit("sendMessage", { ...response, receiverId });
+      setMessages((prev: ChatMessage[]) => [...prev, response]);
+    }
+  };
+
+  const handleReadMessage = async (id: string | undefined) => {
+    const updatedMessage = await CommunicationService.readMessage(id);
+    if (updatedMessage) {
+      let notification = {
+        receiverId: updatedMessage.sender?._id,
+        text: "read your message.",
+        silent: true,
+        read: true,
+        type: "message",
+      };
+
+      handleAddNotification?.(notification);
+      handleSendNotification?.({
+        ...notification,
+        senderId: updatedMessage.sender?._id,
+        senderName: updatedMessage.sender?.name,
+        payload: { message: updatedMessage },
+      });
+
+      const mapMessage = (message: ChatMessage) =>
+        message._id === updatedMessage._id ? updatedMessage : message;
+
+      setMessages((messages) => messages.map(mapMessage));
+      setUserMessages((userMessages) => userMessages.map(mapMessage));
     }
   };
 
@@ -251,16 +324,28 @@ export const CommunicationProvider = ({
         onSetCurrentUser?.(updatedUser);
         localStorage.setItem("currentUser", JSON.stringify(updatedUser));
       }
+
+      // message
+      if (arrivalNotification?.type === "message") {
+        const { message: updatedMessage } = arrivalNotification.payload;
+
+        const mapMessage = (message: ChatMessage) =>
+          message._id === updatedMessage._id ? updatedMessage : message;
+
+        setMessages((messages) => messages.map(mapMessage));
+      }
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [arrivalNotification, handleGetNotifications]);
+  }, [arrivalNotification]);
 
   return (
     <CommunicationContext.Provider
       value={{
         socket,
         messages,
+        userMessages,
+        onReadMessage: handleReadMessage,
         notifications,
         onlineUsers,
         setMessages,
@@ -270,6 +355,7 @@ export const CommunicationProvider = ({
         conversations,
         currentConversation,
         onGetMessages: handleGetMessages,
+        onGetUserMessages: handleGetUserMessages,
         onGetConversations: handleGetConversations,
         onGetMembersConversation: handleGetMembersConversation,
         onAddNotification: handleAddNotification,

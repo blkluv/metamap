@@ -44,6 +44,7 @@ export interface UserHeaderSimpleProps {
   user: UserHeader;
   isOnline: boolean;
   onClick: (user: UserHeader) => void;
+  unreadCheck?: boolean;
 }
 
 export interface UserUpdateReq {
@@ -257,10 +258,16 @@ export interface ThemesContext {
 // communication
 export interface ChatMessage {
   _id?: string;
-  sender?: string;
-  senderId?: string;
+  sender?: { _id: string | undefined; name: string | undefined };
+  receiver?: { _id: string | undefined; name: string | undefined };
+  conversationId?: string;
   text: string;
+  read: boolean;
   createdAt?: string | number;
+}
+
+export interface MessageProps {
+  message: ChatMessage;
 }
 
 export interface Notification {
@@ -289,17 +296,21 @@ export interface ChatConversation {
 export interface CommunicationContext {
   socket?: any;
   messages: ChatMessage[];
+  userMessages: ChatMessage[];
+  onGetMessages?: (id: string | undefined) => Promise<void>;
+  onGetUserMessages?: (id: string | undefined) => Promise<void>;
+  setMessages?: (messages: ChatMessage[]) => void;
+  setUserMessages?: (messages: ChatMessage[]) => void;
+  onReadMessage?: (id: string | undefined) => Promise<void>;
   dataUpdate?: number | null;
   notifications: Notification[];
   arrivalNotification?: Notification | null;
   onlineUsers?: UserHeader[] | undefined;
   setArrivalMessage?: (message: ChatMessage) => void;
-  setMessages?: (messages: ChatMessage[]) => void;
   setNotifications?: (notifications: Notification[]) => void;
   conversations: ChatConversation[];
   currentConversation?: ChatConversation | null;
   onSetCurrentConversation?: (conversation: ChatConversation | null) => void;
-  onGetMessages?: (id: string | undefined) => Promise<void>;
   onGetConversations?: (id: string | undefined) => Promise<void>;
   onGetNotifications?: (id: string | undefined) => Promise<void>;
   onSendNotification?: (notification: Notification) => void;
@@ -323,8 +334,9 @@ export interface ChatConversationProps {
   conversation: ChatConversation;
 }
 
-export interface OnlineUsersProps {
+export interface ChatProps {
   onlineUsers: UserHeader[] | undefined;
+  userMessages?: ChatMessage[];
 }
 
 // other

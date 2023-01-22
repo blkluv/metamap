@@ -6,7 +6,8 @@ import UserHeaderSimple from "./UserHeaderSimple";
 
 const Conversation = ({ conversation }: ChatConversationProps) => {
   const { users, currentUser } = useContext(UserContext);
-  const { onSetCurrentConversation } = useContext(CommunicationContext);
+  const { userMessages, onSetCurrentConversation } =
+    useContext(CommunicationContext);
   const [user, setUser] = useState<UserHeader | undefined>(undefined);
 
   useEffect(() => {
@@ -16,6 +17,13 @@ const Conversation = ({ conversation }: ChatConversationProps) => {
     setUser(users?.find((user) => user._id === secondUserId));
   }, [conversation.members, currentUser?._id, users]);
 
+  const ifUnread = () => {
+    const message = userMessages.find(
+      (message) => !message.read && message.conversationId === conversation._id
+    );
+    return message ? true : false;
+  };
+
   return (
     <>
       {user ? (
@@ -23,6 +31,7 @@ const Conversation = ({ conversation }: ChatConversationProps) => {
           key={conversation._id}
           user={user}
           isOnline={false}
+          unreadCheck={ifUnread()}
           onClick={() => onSetCurrentConversation?.(conversation)}
         />
       ) : null}

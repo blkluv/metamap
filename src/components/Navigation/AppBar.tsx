@@ -13,18 +13,31 @@ import Button from "@mui/material/Button";
 import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
 import { Link as RouterLink } from "react-router-dom";
-import { Link } from "@mui/material";
+import { Badge, Link } from "@mui/material";
 import UserContext from "../../context/userContext";
 import ThemeContext from "../../context/themeContext";
+import CommunicationContext from "../../context/communicationContext";
 import Toggler from "../Elements/Switch";
 import { EventMenuItems } from "../../constants/menuItems";
 import NotificationIcon from "../Content/NotificationIcon";
+import MessageIcon from "../Content/MessageIcon";
+import styled from "@emotion/styled";
 
 const ResponsiveAppBar = () => {
   const { currentUser, onLogout } = useContext(UserContext);
   const { palette } = useContext(ThemeContext);
+  const { userMessages, notifications } = useContext(CommunicationContext);
   const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
+
+  const StyledBadge = styled(Badge)(() => ({
+    "& .MuiBadge-badge": {
+      backgroundColor: palette?.warning,
+      color: "white",
+      WebkitBoxShadow: "0px 0px 16px -8px rgba(0, 0, 0, 0.68)",
+      boxShadow: "0px 0px 16px -8px rgba(0, 0, 0, 0.68)",
+    },
+  }));
 
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElNav(event.currentTarget);
@@ -140,15 +153,63 @@ const ResponsiveAppBar = () => {
             GeoEvents
           </Link>
           <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}></Box>
-          <NotificationIcon />
+          <Box sx={{ display: { xs: "none", md: "flex" } }}>
+            <MessageIcon />
+            <NotificationIcon />
+          </Box>
           {currentUser ? (
             <Box sx={{ flexGrow: 0 }}>
               <Tooltip title="Settings">
                 <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                  {[...userMessages, ...notifications].length > 0 ? (
+                    <StyledBadge
+                      badgeContent={
+                        [...userMessages, ...notifications].filter(
+                          (item) => !item.read
+                        ).length
+                      }
+                      overlap="circular"
+                      sx={{
+                        display: { xs: "flex", md: "none" },
+                        marginRight: "1rem",
+                        height: "1.6rem",
+                        width: "1.6rem",
+                        cursor: "pointer",
+                        alignSelf: "center",
+                      }}
+                    >
+                      <Avatar
+                        alt="User avatar"
+                        src={currentUser?.avatar}
+                        sx={{
+                          display: { xs: "flex", md: "none" },
+                          height: { xs: "1.8rem", md: "2rem" },
+                          width: { xs: "1.8rem", md: "2rem" },
+                          WebkitBoxShadow:
+                            "0px 0px 16px -8px rgba(0, 0, 0, 0.68)",
+                          boxShadow: "0px 0px 16px -8px rgba(0, 0, 0, 0.68)",
+                        }}
+                      />
+                    </StyledBadge>
+                  ) : (
+                    <Avatar
+                      alt="User avatar"
+                      src={currentUser?.avatar}
+                      sx={{
+                        display: { xs: "flex", md: "none" },
+                        height: { xs: "1.8rem", md: "2rem" },
+                        width: { xs: "1.8rem", md: "2rem" },
+                        WebkitBoxShadow:
+                          "0px 0px 16px -8px rgba(0, 0, 0, 0.68)",
+                        boxShadow: "0px 0px 16px -8px rgba(0, 0, 0, 0.68)",
+                      }}
+                    />
+                  )}
                   <Avatar
                     alt="User avatar"
                     src={currentUser?.avatar}
                     sx={{
+                      display: { xs: "none", md: "flex" },
                       height: { xs: "1.8rem", md: "2rem" },
                       width: { xs: "1.8rem", md: "2rem" },
                       WebkitBoxShadow: "0px 0px 16px -8px rgba(0, 0, 0, 0.68)",
@@ -179,6 +240,15 @@ const ResponsiveAppBar = () => {
                 open={Boolean(anchorElUser)}
                 onClose={handleCloseUserMenu}
               >
+                <MenuItem
+                  sx={{
+                    display: { xs: "flex", md: "none" },
+                    justifyContent: "space-between",
+                  }}
+                >
+                  <MessageIcon />
+                  <NotificationIcon />
+                </MenuItem>
                 <MenuItem onClick={handleCloseUserMenu}>
                   <Link
                     component={RouterLink}
