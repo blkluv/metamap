@@ -61,7 +61,7 @@ const ChatTimeline = () => {
         </TimelineSeparator>
         <TimelineContent sx={{ py: "12px", px: 2 }}>
           <Typography variant="h6" component="span" fontSize={"1.1rem"}>
-            Exchange messages
+            Chat
           </Typography>
           <Typography fontSize={".9rem"}>in real time</Typography>
         </TimelineContent>
@@ -80,9 +80,9 @@ const ChatTimeline = () => {
         </TimelineSeparator>
         <TimelineContent sx={{ py: "12px", px: 2 }}>
           <Typography variant="h6" component="span" fontSize={"1.1rem"}>
-            Discuss the events
+            Discuss what
           </Typography>
-          <Typography fontSize={".9rem"}>that interest you</Typography>
+          <Typography fontSize={".9rem"}>interests you</Typography>
         </TimelineContent>
       </TimelineItem>
       <TimelineItem>
@@ -101,7 +101,7 @@ const ChatTimeline = () => {
           <Typography variant="h6" component="span" fontSize={"1.1rem"}>
             Chat history
           </Typography>
-          <Typography fontSize={".9rem"}>is automatically saved</Typography>
+          <Typography fontSize={".9rem"}>will be saved</Typography>
         </TimelineContent>
       </TimelineItem>
       <TimelineItem>

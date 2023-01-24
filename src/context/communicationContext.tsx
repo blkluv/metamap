@@ -79,7 +79,7 @@ export const CommunicationProvider = ({
 
     arrivalMessage &&
       arrivalMessage.conversationId !== currentConversation?._id &&
-      setUserMessages((prev: ChatMessage[]) => [...prev, arrivalMessage]);
+      setUserMessages((prev: ChatMessage[]) => [arrivalMessage, ...prev]);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [arrivalMessage]);
 
