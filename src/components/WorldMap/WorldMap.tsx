@@ -28,6 +28,7 @@ const WorldMap = () => {
   const { palette } = useContext(ThemeContext);
   const [newMarker, setNewMarker] = useState<PinCardProps | null>(null);
   const [key, setKey] = useState<number>(Math.random());
+  const geoMap = useRef<any>();
 
   const [viewState, setViewState] = useState({
     longitude: 24,
@@ -35,7 +36,18 @@ const WorldMap = () => {
     zoom: 4,
   });
 
-  const geoMap = useRef<any>();
+  useEffect(() => {
+    document.addEventListener("webkitfullscreenchange", () =>
+      setTimeout(() => geoMap.current.resize(), 0)
+    );
+
+    return () => {
+      document.removeEventListener("webkitfullscreenchange", () =>
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+        setTimeout(() => geoMap.current.resize(), 0)
+      );
+    };
+  }, []);
 
   const flyToLocation = (
     ref: any,

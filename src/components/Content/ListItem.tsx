@@ -15,7 +15,7 @@ const MenuItem = ({ label, icon, color, link }: MenuItemProps) => {
       sx={{
         paddingLeft: "0",
         paddingRight: "0",
-        "&:first-child": {
+        "&:first-of-type": {
           paddingTop: "0",
         },
       }}
