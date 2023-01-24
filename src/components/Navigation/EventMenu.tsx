@@ -6,11 +6,9 @@ import ThemeContext from "../../context/themeContext";
 import UserContext from "../../context/userContext";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
-import TravelExploreIcon from "@mui/icons-material/TravelExplore";
-import CheckIcon from "@mui/icons-material/Check";
-import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import SearchField from "../Elements/SearchField";
 import { Event, ItemMenuProps } from "../../utils/interfaces";
+import { TravelExplore, Check, AccessTime } from "@mui/icons-material";
 
 export const EventMenu = ({ items, handleFilter }: ItemMenuProps) => {
   const { currentUser } = useContext(UserContext);
@@ -42,6 +40,7 @@ export const EventMenu = ({ items, handleFilter }: ItemMenuProps) => {
         width: "100%",
         background: palette?.background.primary,
         color: palette?.text.tertiary,
+        marginBottom: "1rem",
       }}
     >
       <CardContent
@@ -56,16 +55,6 @@ export const EventMenu = ({ items, handleFilter }: ItemMenuProps) => {
         >
           Events
         </Typography>
-        <Typography
-          variant="body2"
-          sx={{
-            paddingTop: "0.5rem",
-            marginBottom: "-0.5rem",
-            fontWeight: "bold",
-          }}
-        >
-          Filters
-        </Typography>
       </CardContent>
       <CardActions
         sx={{
@@ -76,7 +65,7 @@ export const EventMenu = ({ items, handleFilter }: ItemMenuProps) => {
         <SearchField data={items} filter={handleFilter} />
         <Button
           variant="contained"
-          startIcon={<TravelExploreIcon />}
+          startIcon={<TravelExplore />}
           disableElevation
           sx={{
             color: palette?.text.primary,
@@ -91,7 +80,7 @@ export const EventMenu = ({ items, handleFilter }: ItemMenuProps) => {
         </Button>
         <Button
           variant="outlined"
-          startIcon={<CheckIcon />}
+          startIcon={<Check />}
           sx={{
             border: `1px solid ${palette?.background.tertiary}`,
             marginLeft: "0 !important",
@@ -105,7 +94,7 @@ export const EventMenu = ({ items, handleFilter }: ItemMenuProps) => {
         </Button>
         <Button
           variant="outlined"
-          startIcon={<AccessTimeIcon />}
+          startIcon={<AccessTime />}
           sx={{
             border: `1px solid ${palette?.background.tertiary}`,
             marginLeft: "0 !important",

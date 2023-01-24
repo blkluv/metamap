@@ -74,7 +74,6 @@ export const EventProvider = ({ children }: React.PropsWithChildren) => {
       };
 
       onAddNotification?.(notification);
-
       onSendNotification?.({
         ...notification,
         senderId: currentUser?._id,
@@ -102,7 +101,6 @@ export const EventProvider = ({ children }: React.PropsWithChildren) => {
       };
 
       onAddNotification?.(notification);
-
       onSendNotification?.({
         ...notification,
         senderId: currentUser?._id,

@@ -4,7 +4,11 @@ import PostContext from "../../context/postContext";
 import UserContext from "../../context/userContext";
 import convertImage from "../../utils/imageConverter";
 import { Post } from "../../utils/interfaces";
-import { Cancel, EmojiEmotions, PermMedia, Room } from "@mui/icons-material";
+import { Cancel, Image } from "@mui/icons-material";
+import { NavLink } from "react-router-dom";
+import { notify } from "../../utils/notifications";
+import debounce from "../../utils/debounce";
+import ThemeContext from "../../context/themeContext";
 import {
   Avatar,
   Box,
@@ -15,10 +19,6 @@ import {
   Input,
   TextField,
 } from "@mui/material";
-import { NavLink } from "react-router-dom";
-import { notify } from "../../utils/notifications";
-import debounce from "../../utils/debounce";
-import ThemeContext from "../../context/themeContext";
 
 const Share = () => {
   const { onAddPost } = useContext(PostContext);
@@ -71,6 +71,7 @@ const Share = () => {
         onSubmit={handleRegisterPost(debounce(handleAddPost, 400))}
         sx={{
           padding: "1rem 1.5rem",
+          margin: "0 .5rem",
           borderRadius: "25px",
           background: palette?.background.tertiary,
           WebkitBoxShadow: "0px 0px 16px -8px rgba(0, 0, 0, 0.68)",
@@ -86,8 +87,8 @@ const Share = () => {
               alt="User avatar"
               src={currentUser?.avatar}
               sx={{
-                height: { xs: "2rem", md: "2.5rem" },
-                width: { xs: "2rem", md: "2.5rem" },
+                height: { xs: "2rem", md: "2.2rem" },
+                width: { xs: "2rem", md: "2.2rem" },
                 marginRight: "10px",
               }}
             />
@@ -166,21 +167,32 @@ const Share = () => {
                 display: "flex",
                 alignItems: "center",
                 marginRight: "0.5rem",
-                marginBottom: "0.5rem",
                 cursor: "pointer",
                 color: "inherit",
               }}
             >
-              <PermMedia
-                htmlColor="tomato"
-                sx={{ fontSize: "1.2rem", marginRight: "0.5rem" }}
+              <Image
+                sx={{
+                  fontSize: "1.2rem",
+                  color: palette?.warning,
+                  marginRight: "-.2rem",
+                }}
               />
-              <Box
+              <Button
                 component="span"
-                sx={{ fontSize: "0.9rem", fontWeight: "500" }}
+                sx={{
+                  fontSize: "0.8rem",
+                  border: "none",
+                  padding: "0.2rem",
+                  borderRadius: "5px",
+                  fontWeight: "500",
+                  marginRight: "0.5rem",
+                  cursor: "pointer",
+                  color: palette?.text.tertiary,
+                }}
               >
                 Photo
-              </Box>
+              </Button>
               <Input
                 type="file"
                 inputProps={{ accept: ".png,.jpeg,.jpg,.webp" }}
@@ -189,62 +201,23 @@ const Share = () => {
                 onChange={(e: any) => setFile(e.target.files[0])}
               />
             </FormLabel>
-            <Box
-              sx={{
-                display: "flex",
-                alignItems: "center",
-                marginRight: "15px",
-                cursor: "pointer",
-                marginBottom: "0.5rem",
-              }}
-            >
-              <Room
-                htmlColor="green"
-                sx={{ fontSize: "1.2rem", marginRight: "0.3rem" }}
-              />
-              <Box
-                component="span"
-                sx={{ fontSize: "14px", fontWeight: "500" }}
-              >
-                Location
-              </Box>
-            </Box>
-            <Box
-              sx={{
-                display: "flex",
-                alignItems: "center",
-                marginRight: "15px",
-                cursor: "pointer",
-                marginBottom: "0.5rem",
-              }}
-            >
-              <EmojiEmotions
-                htmlColor="goldenrod"
-                sx={{ fontSize: "1.2rem", marginRight: "0.3rem" }}
-              />
-              <Box
-                component="span"
-                sx={{ fontSize: "14px", fontWeight: "500" }}
-              >
-                Feelings
-              </Box>
-            </Box>
           </Box>
-          <Button
-            type="submit"
-            sx={{
-              fontSize: "0.8rem",
-              border: "none",
-              padding: "0.2rem",
-              borderRadius: "5px",
-              fontWeight: "500",
-              marginRight: "0.5rem",
-              cursor: "pointer",
-              color: palette?.text.tertiary,
-            }}
-          >
-            Share
-          </Button>
+          <Box sx={{ display: "flex", alignItems: "center" }}>
+            <Button
+              type="submit"
+              sx={{
+                fontSize: "0.8rem",
+                border: "none",
+                padding: "0.2rem",
+                borderRadius: "5px",
+                fontWeight: "500",
+                cursor: "pointer",
+                color: palette?.text.tertiary,
+              }}
+            >
+              Share
+            </Button>
+          </Box>
         </Box>
       </Box>
     </Box>

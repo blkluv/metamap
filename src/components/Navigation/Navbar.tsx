@@ -19,7 +19,8 @@ const TopNavbar = () => {
       <Box
         sx={{
           display: { xs: "none", md: "flex" },
-          width: "250px",
+          minWidth: "220px",
+          maxWidth: "220px",
           justifyContent: "center",
           alignItems: "center",
         }}

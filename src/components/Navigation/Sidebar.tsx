@@ -9,7 +9,8 @@ const Sidebar = () => {
       sx={{
         display: { xs: "none", md: "flex" },
         flexDirection: "column",
-        width: "243px",
+        minWidth: "220px",
+        maxWidth: "220px",
         height: "auto",
         justifyContent: "space-between",
         padding: "1.5rem",

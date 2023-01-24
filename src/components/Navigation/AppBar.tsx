@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext, useState, useMemo } from "react";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
@@ -12,11 +12,13 @@ import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
+import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import { Link as RouterLink } from "react-router-dom";
 import { Badge, Link } from "@mui/material";
 import UserContext from "../../context/userContext";
 import ThemeContext from "../../context/themeContext";
 import CommunicationContext from "../../context/communicationContext";
+import { ChatMessage, Notification } from "../../utils/interfaces";
 import Toggler from "../Elements/Switch";
 import { EventMenuItems } from "../../constants/menuItems";
 import NotificationIcon from "../Content/NotificationIcon";
@@ -54,6 +56,24 @@ const ResponsiveAppBar = () => {
     setAnchorElUser(null);
   };
 
+  const filterNotifications = (
+    notifications: Notification[],
+    messages: ChatMessage[]
+  ) => {
+    const visibleNotifications = notifications.filter(
+      (notification: Notification) => !notification.silent && !notification.read
+    );
+    const unreadMessages = messages.filter(
+      (message: ChatMessage) => !message.read
+    );
+    return [...visibleNotifications, ...unreadMessages].length;
+  };
+
+  const memoizedFilterNotifications = useMemo(
+    () => filterNotifications(notifications, userMessages),
+    [notifications, userMessages]
+  );
+
   return (
     <AppBar
       elevation={0}
@@ -67,9 +87,26 @@ const ResponsiveAppBar = () => {
       <Container maxWidth={false} sx={{ padding: { md: "0.5rem 2.5rem" } }}>
         <Toolbar disableGutters>
           <Typography
-            sx={{ fontSize: 14, display: { xs: "none", md: "flex" } }}
-            color={palette?.text.primary}
+            sx={{
+              fontSize: 14,
+              padding: ".5rem 1.5rem",
+              borderRadius: "15px",
+              display: { xs: "none", md: "flex" },
+              color: palette?.text.tertiary,
+              alignItems: "center",
+              border: `1px solid ${palette?.background.tertiary}`,
+              WebkitBoxShadow: "0px 0px 16px -8px rgba(0, 0, 0, 0.68)",
+              boxShadow: "0px 0px 16px -8px rgba(0, 0, 0, 0.68)",
+            }}
           >
+            <AccessTimeIcon
+              sx={{
+                marginLeft: "-.5rem",
+                marginRight: ".5rem",
+                width: "1.2rem",
+                color: palette?.green,
+              }}
+            />
             {new Date().toLocaleString("en-GB", {
               dateStyle: "short",
               timeStyle: "short",
@@ -161,37 +198,18 @@ const ResponsiveAppBar = () => {
             <Box sx={{ flexGrow: 0 }}>
               <Tooltip title="Settings">
                 <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                  {[...userMessages, ...notifications].length > 0 ? (
-                    <StyledBadge
-                      badgeContent={
-                        [...userMessages, ...notifications].filter(
-                          (item) => !item.read
-                        ).length
-                      }
-                      overlap="circular"
-                      sx={{
-                        display: { xs: "flex", md: "none" },
-                        marginRight: "1rem",
-                        height: "1.6rem",
-                        width: "1.6rem",
-                        cursor: "pointer",
-                        alignSelf: "center",
-                      }}
-                    >
-                      <Avatar
-                        alt="User avatar"
-                        src={currentUser?.avatar}
-                        sx={{
-                          display: { xs: "flex", md: "none" },
-                          height: { xs: "1.8rem", md: "2rem" },
-                          width: { xs: "1.8rem", md: "2rem" },
-                          WebkitBoxShadow:
-                            "0px 0px 16px -8px rgba(0, 0, 0, 0.68)",
-                          boxShadow: "0px 0px 16px -8px rgba(0, 0, 0, 0.68)",
-                        }}
-                      />
-                    </StyledBadge>
-                  ) : (
+                  <StyledBadge
+                    badgeContent={memoizedFilterNotifications}
+                    overlap="circular"
+                    sx={{
+                      display: { xs: "flex", md: "none" },
+                      marginRight: "1rem",
+                      height: "1.6rem",
+                      width: "1.6rem",
+                      cursor: "pointer",
+                      alignSelf: "center",
+                    }}
+                  >
                     <Avatar
                       alt="User avatar"
                       src={currentUser?.avatar}
@@ -204,7 +222,7 @@ const ResponsiveAppBar = () => {
                         boxShadow: "0px 0px 16px -8px rgba(0, 0, 0, 0.68)",
                       }}
                     />
-                  )}
+                  </StyledBadge>
                   <Avatar
                     alt="User avatar"
                     src={currentUser?.avatar}

@@ -5,13 +5,15 @@ import UserContext from "../../context/userContext";
 import PostContext from "../../context/postContext";
 import ThemeContext from "../../context/themeContext";
 import { Avatar, Box, CardMedia, ListItem, Typography } from "@mui/material";
-import FavoriteIcon from "@mui/icons-material/Favorite";
-import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
-import RemoveCircleOutlineIcon from "@mui/icons-material/RemoveCircleOutline";
 import { Post as PostProps } from "../../utils/interfaces";
 import { notify } from "../../utils/notifications";
 import moment from "moment";
 import debounce from "../../utils/debounce";
+import {
+  Favorite,
+  FavoriteBorder,
+  RemoveCircleOutline,
+} from "@mui/icons-material";
 
 const Post = ({
   _id,
@@ -68,6 +70,9 @@ const Post = ({
         alignItems: "flex-start",
         WebkitBoxShadow: "0px 0px 16px -8px rgba(0, 0, 0, 0.68)",
         boxShadow: "0px 0px 16px -8px rgba(0, 0, 0, 0.68)",
+        "&:last-child": {
+          marginBottom: "2.5rem",
+        },
       }}
     >
       <Box
@@ -89,8 +94,8 @@ const Post = ({
               src={avatar}
               sx={{
                 margin: ".2rem .5rem .2rem 0",
-                height: "2.5rem",
-                width: "2.5rem",
+                height: "2.2rem",
+                width: "2.2rem",
                 cursor: "pointer",
               }}
             />
@@ -131,7 +136,7 @@ const Post = ({
           </Box>
         </Box>
         {currentUser?._id === creator?._id ? (
-          <RemoveCircleOutlineIcon
+          <RemoveCircleOutline
             sx={{
               cursor: "pointer",
               color: palette?.text.primary,
@@ -177,7 +182,7 @@ const Post = ({
         }}
       >
         {likes?.find((user) => user._id === currentUser?._id) ? (
-          <FavoriteIcon
+          <Favorite
             sx={{
               fontSize: "1.5rem",
               cursor: "pointer",
@@ -186,7 +191,7 @@ const Post = ({
             onClick={debounce(() => handleLikePost(), 400)}
           />
         ) : (
-          <FavoriteBorderIcon
+          <FavoriteBorder
             sx={{ fontSize: "1.5rem", cursor: "pointer" }}
             onClick={debounce(() => handleLikePost(), 400)}
           />

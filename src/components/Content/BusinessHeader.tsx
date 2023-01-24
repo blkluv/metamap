@@ -8,19 +8,21 @@ import UserContext from "../../context/userContext";
 import ThemeContext from "../../context/themeContext";
 import { BusinessHeader as Header } from "../../utils/interfaces";
 import { Box, CardMedia } from "@mui/material";
-import FavoriteIcon from "@mui/icons-material/Favorite";
-import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
-import PhoneAndroidIcon from "@mui/icons-material/PhoneAndroid";
-import AlternateEmailIcon from "@mui/icons-material/AlternateEmail";
-import RemoveCircleOutlineIcon from "@mui/icons-material/RemoveCircleOutline";
-import HomeIcon from "@mui/icons-material/Home";
-import LanguageIcon from "@mui/icons-material/Language";
 import debounce from "../../utils/debounce";
 import preview from "../../images/preview.png";
 import { notify } from "../../utils/notifications";
 import EventContext from "../../context/eventContext";
 import Rating from "../Elements/Rating";
 import ConfirmationDialog from "../Elements/ConfirmationDialog";
+import {
+  FavoriteBorder,
+  PhoneAndroid,
+  AlternateEmail,
+  RemoveCircleOutline,
+  Favorite,
+  Home,
+  Language,
+} from "@mui/icons-material";
 
 const BusinessHeader = ({
   business: {
@@ -103,6 +105,9 @@ const BusinessHeader = ({
         alignItems: "flex-start",
         WebkitBoxShadow: "0px 0px 16px -8px rgba(0, 0, 0, 0.68)",
         boxShadow: "0px 0px 16px -8px rgba(0, 0, 0, 0.68)",
+        "&:last-child": {
+          marginBottom: variant === "list" ? "2.5rem" : "0",
+        },
       }}
       selected={_id === selectedBusiness?._id}
       onClick={() => (variant === "list" ? handleSelect() : null)}
@@ -124,7 +129,7 @@ const BusinessHeader = ({
             Business
           </Typography>
           {currentUser?._id === creator?._id ? (
-            <RemoveCircleOutlineIcon
+            <RemoveCircleOutline
               sx={{
                 cursor: "pointer",
                 color: palette?.text.primary,
@@ -191,7 +196,7 @@ const BusinessHeader = ({
                   {likes?.length ? likes.length : ""}
                 </Typography>
                 {likes?.find((user) => user._id === currentUser?._id) ? (
-                  <FavoriteIcon
+                  <Favorite
                     sx={{
                       fontSize: "1.2rem",
                       cursor: "pointer",
@@ -200,7 +205,7 @@ const BusinessHeader = ({
                     onClick={debounce(() => handleLikeBusiness(), 400)}
                   />
                 ) : (
-                  <FavoriteBorderIcon
+                  <FavoriteBorder
                     sx={{ fontSize: "1.2rem", cursor: "pointer" }}
                     onClick={debounce(() => handleLikeBusiness(), 400)}
                   />
@@ -220,6 +225,7 @@ const BusinessHeader = ({
                 style={{
                   textDecoration: "none",
                   color: palette?.text.tertiary,
+                  fontWeight: "bold",
                 }}
               >
                 {creator?.name}
@@ -260,7 +266,7 @@ const BusinessHeader = ({
                   margin: ".1rem .7rem .3rem 0",
                 }}
               >
-                <HomeIcon
+                <Home
                   sx={{
                     fontSize: "1.2rem",
                     marginRight: ".2rem",
@@ -276,7 +282,7 @@ const BusinessHeader = ({
                   margin: ".1rem .7rem .3rem 0",
                 }}
               >
-                <PhoneAndroidIcon
+                <PhoneAndroid
                   sx={{
                     fontSize: "1.2rem",
                     marginRight: ".2rem",
@@ -292,7 +298,7 @@ const BusinessHeader = ({
                   margin: ".1rem .7rem .3rem 0",
                 }}
               >
-                <AlternateEmailIcon
+                <AlternateEmail
                   sx={{
                     fontSize: "1.2rem",
                     marginRight: ".2rem",
@@ -308,7 +314,7 @@ const BusinessHeader = ({
                   margin: ".1rem .7rem .3rem 0",
                 }}
               >
-                <LanguageIcon
+                <Language
                   sx={{
                     fontSize: "1.2rem",
                     marginRight: ".2rem",

@@ -3,8 +3,7 @@ import ListItem from "@mui/material/ListItem";
 import { NavLink } from "react-router-dom";
 import { Box, Button, Typography } from "@mui/material";
 import { MessageProps } from "../../utils/interfaces";
-import ChatIcon from "@mui/icons-material/Chat";
-import SendIcon from "@mui/icons-material/Send";
+import { Chat, Send } from "@mui/icons-material";
 import ThemeContext from "../../context/themeContext";
 import CommunicationContext from "../../context/communicationContext";
 import moment from "moment";
@@ -36,7 +35,7 @@ const MessageHeader = ({
           color: palette?.text.tertiary,
         }}
       >
-        <ChatIcon sx={{ marginRight: ".5rem", width: "1rem" }} />
+        <Chat sx={{ marginRight: ".5rem", width: "1rem" }} />
         <Box sx={{ display: "flex", flexDirection: "column" }}>
           <Typography sx={{ fontSize: ".9rem" }}>
             <NavLink
@@ -80,7 +79,7 @@ const MessageHeader = ({
           }
           sx={{ borderRadius: "15px", paddingRight: 0 }}
         >
-          <SendIcon />
+          <Send />
         </Button>
       </Box>
     </ListItem>

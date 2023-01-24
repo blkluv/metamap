@@ -5,13 +5,15 @@ import TimelineSeparator from "@mui/lab/TimelineSeparator";
 import TimelineConnector from "@mui/lab/TimelineConnector";
 import TimelineContent from "@mui/lab/TimelineContent";
 import TimelineDot from "@mui/lab/TimelineDot";
-import CheckIcon from "@mui/icons-material/Check";
 import Typography from "@mui/material/Typography";
 import ThemeContext from "../../context/themeContext";
-import SwapHorizIcon from "@mui/icons-material/SwapHoriz";
-import StorageIcon from "@mui/icons-material/Storage";
-import ArrowRightIcon from "@mui/icons-material/ArrowRight";
-import ChatIcon from "@mui/icons-material/Chat";
+import {
+  Check,
+  SwapHoriz,
+  Storage,
+  ArrowRight,
+  Chat,
+} from "@mui/icons-material";
 
 const ChatTimeline = () => {
   const { palette } = useContext(ThemeContext);
@@ -32,7 +34,7 @@ const ChatTimeline = () => {
             sx={{ bgcolor: "secondary.main", height: "1.5rem" }}
           />
           <TimelineDot sx={{ background: palette?.text.secondary }}>
-            <CheckIcon sx={{ color: palette?.text.primary }} />
+            <Check sx={{ color: palette?.text.primary }} />
           </TimelineDot>
           <TimelineConnector
             sx={{ bgcolor: "secondary.main", height: "1.5rem" }}
@@ -51,7 +53,7 @@ const ChatTimeline = () => {
             sx={{ bgcolor: "secondary.main", height: "1.5rem" }}
           />
           <TimelineDot sx={{ background: palette?.blue }}>
-            <SwapHorizIcon />
+            <SwapHoriz />
           </TimelineDot>
           <TimelineConnector
             sx={{ bgcolor: "secondary.main", height: "1.5rem" }}
@@ -70,7 +72,7 @@ const ChatTimeline = () => {
             sx={{ bgcolor: "secondary.main", height: "1.5rem" }}
           />
           <TimelineDot sx={{ background: "#44b700" }} variant="filled">
-            <ChatIcon sx={{ padding: ".1rem" }} />
+            <Chat sx={{ padding: ".1rem" }} />
           </TimelineDot>
           <TimelineConnector
             sx={{ bgcolor: "secondary.main", height: "1.5rem" }}
@@ -89,7 +91,7 @@ const ChatTimeline = () => {
             sx={{ bgcolor: "secondary.main", height: "1.5rem" }}
           />
           <TimelineDot color="primary" variant="outlined">
-            <StorageIcon sx={{ padding: ".1rem" }} />
+            <Storage sx={{ padding: ".1rem" }} />
           </TimelineDot>
           <TimelineConnector
             sx={{ bgcolor: "secondary.main", height: "1.5rem" }}
@@ -108,7 +110,7 @@ const ChatTimeline = () => {
             sx={{ bgcolor: "secondary.main", height: "1.5rem" }}
           />
           <TimelineDot color="secondary">
-            <ArrowRightIcon />
+            <ArrowRight />
           </TimelineDot>
           <TimelineConnector
             sx={{ bgcolor: "secondary.main", height: "1.5rem" }}

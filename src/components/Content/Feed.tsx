@@ -47,22 +47,26 @@ const Feed = () => {
           ))}
         </List>
       ) : (
-        <ListItem
-          sx={{
-            borderRadius: "15px",
-            background: palette?.background.tertiary,
-            marginBottom: "1rem",
-            display: "flex",
-            flexDirection: "column",
-            padding: "1rem 1.5rem",
-            alignItems: "flex-start",
-            WebkitBoxShadow: "0px 0px 16px -8px rgba(0, 0, 0, 0.68)",
-            boxShadow: "0px 0px 16px -8px rgba(0, 0, 0, 0.68)",
-            color: palette?.text.primary,
-          }}
-        >
-          No posts to display
-        </ListItem>
+        <Box sx={{ padding: "0 .5rem" }}>
+          <ListItem
+            sx={{
+              borderRadius: "15px",
+              background: palette?.background.tertiary,
+              marginBottom: "1rem",
+              display: "flex",
+              flexDirection: "column",
+              padding: "1rem 1.5rem",
+              alignItems: "flex-start",
+              border: `1px solid ${palette?.background.tertiary}`,
+              WebkitBoxShadow: "0px 0px 16px -8px rgba(0, 0, 0, 0.68)",
+              boxShadow: "0px 0px 16px -8px rgba(0, 0, 0, 0.68)",
+              color: palette?.text.primary,
+              width: "fit-content",
+            }}
+          >
+            No posts to display
+          </ListItem>
+        </Box>
       )}
     </Box>
   );

@@ -4,13 +4,11 @@ import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
-import TravelExploreIcon from "@mui/icons-material/TravelExplore";
-import CheckIcon from "@mui/icons-material/Check";
-import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import UserContext from "../../context/userContext";
 import ThemeContext from "../../context/themeContext";
 import { Business, ItemMenuProps } from "../../utils/interfaces";
 import SearchField from "../Elements/SearchField";
+import { TravelExplore, Check, FavoriteBorder } from "@mui/icons-material";
 
 export const BusinessMenu = ({ items, handleFilter }: ItemMenuProps) => {
   const { currentUser } = useContext(UserContext);
@@ -36,6 +34,7 @@ export const BusinessMenu = ({ items, handleFilter }: ItemMenuProps) => {
         width: "100%",
         background: palette?.background.primary,
         color: palette?.text.tertiary,
+        marginBottom: "1rem",
       }}
     >
       <CardContent
@@ -50,16 +49,6 @@ export const BusinessMenu = ({ items, handleFilter }: ItemMenuProps) => {
         >
           Business
         </Typography>
-        <Typography
-          variant="body2"
-          sx={{
-            paddingTop: "0.5rem",
-            marginBottom: "-0.5rem",
-            fontWeight: "bold",
-          }}
-        >
-          Filters
-        </Typography>
       </CardContent>
       <CardActions
         sx={{
@@ -70,7 +59,7 @@ export const BusinessMenu = ({ items, handleFilter }: ItemMenuProps) => {
         <SearchField data={items} filter={handleFilter} />
         <Button
           variant="contained"
-          startIcon={<TravelExploreIcon />}
+          startIcon={<TravelExplore />}
           disableElevation
           sx={{
             color: palette?.text.primary,
@@ -85,7 +74,7 @@ export const BusinessMenu = ({ items, handleFilter }: ItemMenuProps) => {
         </Button>
         <Button
           variant="outlined"
-          startIcon={<CheckIcon />}
+          startIcon={<Check />}
           sx={{
             border: `1px solid ${palette?.background.tertiary}`,
             marginLeft: "0 !important",
@@ -99,7 +88,7 @@ export const BusinessMenu = ({ items, handleFilter }: ItemMenuProps) => {
         </Button>
         <Button
           variant="outlined"
-          startIcon={<FavoriteBorderIcon />}
+          startIcon={<FavoriteBorder />}
           sx={{
             border: `1px solid ${palette?.background.tertiary}`,
             marginLeft: "0 !important",

@@ -11,7 +11,7 @@ const Content = () => {
       sx={{
         display: "flex",
         width: { xs: "100%", md: "55%" },
-        minHeight: { xs: "600px", md: "600px" },
+        minHeight: { xs: "max-content" },
         maxHeight: "85vh",
       }}
     >

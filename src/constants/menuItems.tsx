@@ -13,6 +13,7 @@ const StyledBadge = styled(Badge)(() => ({
     width: ".6rem",
     height: ".6rem",
     borderRadius: "50%",
+    border: "1px solid white",
     WebkitBoxShadow: "0px 0px 16px -8px rgba(0, 0, 0, 0.68)",
     boxShadow: "0px 0px 16px -8px rgba(0, 0, 0, 0.68)",
   },
@@ -23,28 +24,28 @@ export const EventMenuItems = [
     id: 1,
     label: "Home",
     icon: <HomeIcon />,
-    color: "rgb(235, 110, 105)",
+    color: "yellowgreen",
     link: "",
   },
   {
     id: 2,
     label: "Events",
     icon: <RoomIcon />,
-    color: "rgb(120,120,126)",
+    color: "white",
     link: "events",
   },
   {
     id: 3,
     label: "Business",
     icon: <StoreIcon />,
-    color: "rgb(120,120,126)",
+    color: "white",
     link: "business",
   },
   {
     id: 4,
     label: "Community",
     icon: <GroupIcon />,
-    color: "rgb(120,120,126)",
+    color: "white",
     link: "social",
   },
   {
@@ -59,7 +60,7 @@ export const EventMenuItems = [
         <ChatIcon sx={{ fontSize: "1.2rem" }} />
       </StyledBadge>
     ),
-    color: "rgb(120,120,126)",
+    color: "white",
     link: "chat",
   },
 ];

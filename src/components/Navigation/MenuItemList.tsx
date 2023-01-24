@@ -12,6 +12,7 @@ const MenuItemList = ({ items }: MenuItemListProps) => {
       sx={{
         width: "100%",
         color: palette?.text.secondary,
+        paddingTop: "0",
       }}
     >
       {items.map((item) => (

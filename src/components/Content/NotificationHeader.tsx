@@ -3,18 +3,20 @@ import ListItem from "@mui/material/ListItem";
 import { NavLink } from "react-router-dom";
 import { NotificationProps } from "../../utils/interfaces";
 import { Box, Button, Typography } from "@mui/material";
-import GroupIcon from "@mui/icons-material/Group";
-import StoreIcon from "@mui/icons-material/Store";
-import RoomIcon from "@mui/icons-material/Room";
-import ChatIcon from "@mui/icons-material/Chat";
-import ReportGmailerrorredIcon from "@mui/icons-material/ReportGmailerrorred";
-import MarkunreadIcon from "@mui/icons-material/Markunread";
-import CloseIcon from "@mui/icons-material/Close";
-import DraftsIcon from "@mui/icons-material/Drafts";
 import ThemeContext from "../../context/themeContext";
 import CommunicationContext from "../../context/communicationContext";
 import debounce from "../../utils/debounce";
 import moment from "moment";
+import {
+  Group,
+  Store,
+  Room,
+  Chat,
+  ReportGmailerrorred,
+  Markunread,
+  Close,
+  Drafts,
+} from "@mui/icons-material";
 
 const NotificationHeader = ({
   notification: { _id, text, read, type, senderName, createdAt },
@@ -24,11 +26,11 @@ const NotificationHeader = ({
     useContext(CommunicationContext);
 
   const renderIcon = (type: string | undefined) => {
-    if (type === "event") return <RoomIcon sx={{ marginRight: ".5rem" }} />;
-    if (type === "business") return <StoreIcon sx={{ marginRight: ".5rem" }} />;
-    if (type === "social") return <GroupIcon sx={{ marginRight: ".5rem" }} />;
-    if (type === "chat") return <ChatIcon sx={{ marginRight: ".5rem" }} />;
-    return <ReportGmailerrorredIcon sx={{ marginRight: ".5rem" }} />;
+    if (type === "event") return <Room sx={{ marginRight: ".5rem" }} />;
+    if (type === "business") return <Store sx={{ marginRight: ".5rem" }} />;
+    if (type === "social") return <Group sx={{ marginRight: ".5rem" }} />;
+    if (type === "chat") return <Chat sx={{ marginRight: ".5rem" }} />;
+    return <ReportGmailerrorred sx={{ marginRight: ".5rem" }} />;
   };
 
   return (
@@ -91,9 +93,9 @@ const NotificationHeader = ({
             borderRadius: "15px",
           }}
         >
-          {read ? <DraftsIcon /> : <MarkunreadIcon />}
+          {read ? <Drafts /> : <Markunread />}
         </Button>
-        <CloseIcon
+        <Close
           onClick={debounce(() => onDeleteNotification?.(_id), 200)}
           sx={{
             color: palette?.warning,

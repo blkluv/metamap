@@ -22,6 +22,7 @@ export const ThemeProvider = ({ children }: React.PropsWithChildren) => {
           // light mode
           primary: "white",
           divider: "rgb(120,120,126)",
+          border: "rgb(252,251,255,.3)",
           warning: "rgb(235, 110, 105)",
           blue: "#2196f3",
           green: "yellowgreen",
@@ -44,6 +45,7 @@ export const ThemeProvider = ({ children }: React.PropsWithChildren) => {
           primary: "rgb(31,30,43)",
           divider: "rgb(120,120,126)",
           warning: "rgb(235, 110, 105)",
+          border: "rgb(53,51,64)",
           blue: "#2196f3",
           green: "yellowgreen",
           background: {

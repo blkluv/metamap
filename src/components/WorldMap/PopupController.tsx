@@ -13,6 +13,7 @@ const PopupController = ({ newMarker, setNewMarker }: any) => {
     <>
       {newMarker ? (
         <Popup
+          closeButton={false}
           style={{ padding: 0, margin: 0 }}
           longitude={newMarker.lng}
           latitude={newMarker.lat}

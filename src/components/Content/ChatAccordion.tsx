@@ -5,15 +5,17 @@ import ConversationList from "./ConversationList";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import Typography from "@mui/material/Typography";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import MarkunreadIcon from "@mui/icons-material/Markunread";
-import CircleIcon from "@mui/icons-material/Circle";
 import ThemeContext from "../../context/themeContext";
 import UsersOnline from "./UsersOnline";
-import ChatIcon from "@mui/icons-material/Chat";
-import GroupIcon from "@mui/icons-material/Group";
 import { ChatProps } from "../../utils/interfaces";
 import Messages from "./Messages";
+import {
+  ExpandMore,
+  Markunread,
+  Circle,
+  Chat,
+  Group,
+} from "@mui/icons-material";
 
 const ChatAccordion = ({ onlineUsers, userMessages }: ChatProps) => {
   const { palette } = useContext(ThemeContext);
@@ -44,14 +46,14 @@ const ChatAccordion = ({ onlineUsers, userMessages }: ChatProps) => {
         }}
       >
         <AccordionSummary
-          expandIcon={<ExpandMoreIcon sx={{ color: palette?.text.tertiary }} />}
+          expandIcon={<ExpandMore sx={{ color: palette?.text.tertiary }} />}
           aria-controls="panel1a-content"
           id="panel1a-header"
         >
-          <MarkunreadIcon sx={{ marginRight: ".5rem", width: "1rem" }} />
+          <Markunread sx={{ marginRight: ".5rem", width: "1rem" }} />
           <Typography sx={{ fontWeight: 500 }}>Unread</Typography>
           {userMessages?.find((message) => !message.read) ? (
-            <CircleIcon
+            <Circle
               sx={{
                 color: palette?.green,
                 marginLeft: ".5rem",
@@ -79,11 +81,11 @@ const ChatAccordion = ({ onlineUsers, userMessages }: ChatProps) => {
         }}
       >
         <AccordionSummary
-          expandIcon={<ExpandMoreIcon sx={{ color: palette?.text.tertiary }} />}
+          expandIcon={<ExpandMore sx={{ color: palette?.text.tertiary }} />}
           aria-controls="panel1a-content"
           id="panel1a-header"
         >
-          <ChatIcon sx={{ marginRight: ".5rem", width: "1rem" }} />
+          <Chat sx={{ marginRight: ".5rem", width: "1rem" }} />
           <Typography sx={{ fontWeight: 500 }}>Conversations</Typography>
         </AccordionSummary>
         <AccordionDetails>
@@ -105,11 +107,11 @@ const ChatAccordion = ({ onlineUsers, userMessages }: ChatProps) => {
         }}
       >
         <AccordionSummary
-          expandIcon={<ExpandMoreIcon sx={{ color: palette?.text.tertiary }} />}
+          expandIcon={<ExpandMore sx={{ color: palette?.text.tertiary }} />}
           aria-controls="panel2a-content"
           id="panel2a-header"
         >
-          <GroupIcon sx={{ marginRight: ".5rem", width: "1.1rem" }} />
+          <Group sx={{ marginRight: ".5rem", width: "1.1rem" }} />
           <Typography sx={{ fontWeight: 500 }}>Contacts</Typography>
         </AccordionSummary>
         <AccordionDetails>

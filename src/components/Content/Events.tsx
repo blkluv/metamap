@@ -1,6 +1,6 @@
 import { useContext, useEffect, useState } from "react";
 import EventContext from "../../context/eventContext";
-import { Box, Divider } from "@mui/material";
+import { Box } from "@mui/material";
 import EventMenu from "../Navigation/EventMenu";
 import EventsList from "./EventsList";
 import { Event } from "../../utils/interfaces";
@@ -54,10 +54,6 @@ const Events = () => {
       }}
     >
       <EventMenu items={events} handleFilter={handleFilter} />
-      <Divider
-        variant="middle"
-        sx={{ background: "rgb(120,120,126)", margin: "1rem 0 1.5rem 0" }}
-      />
       <EventsList items={filteredItems ? filteredItems : events} />
     </Box>
   );

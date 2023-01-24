@@ -232,6 +232,7 @@ export interface Palette {
   primary: string;
   divider: string;
   warning: string;
+  border: string;
   blue: string;
   green: string;
   background: {

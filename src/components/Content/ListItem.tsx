@@ -1,25 +1,38 @@
+import { useContext } from "react";
 import ListItem from "@mui/material/ListItem";
 import ListItemAvatar from "@mui/material/ListItemAvatar";
 import Avatar from "@mui/material/Avatar";
 import { MenuItemProps } from "../../utils/interfaces";
 import { Link as RouterLink } from "react-router-dom";
 import { Link } from "@mui/material";
+import ThemeContext from "../../context/themeContext";
 
 const MenuItem = ({ label, icon, color, link }: MenuItemProps) => {
+  const { palette } = useContext(ThemeContext);
+
   return (
     <ListItem
       sx={{
         paddingLeft: "0",
+        paddingRight: "0",
+        "&:first-child": {
+          paddingTop: "0",
+        },
       }}
     >
-      <ListItemAvatar>
+      <ListItemAvatar sx={{ minWidth: "45px" }}>
         <Avatar
           sx={{
-            bgcolor: color,
+            color,
+            bgcolor: "transparent",
             borderRadius: "10px",
+            border: `1px solid ${palette?.border}`,
+            WebkitBoxShadow: "0px 0px 16px -8px rgba(0, 0, 0, 0.68)",
+            boxShadow: "0px 0px 16px -8px rgba(0, 0, 0, 0.68)",
             width: 32,
             height: 32,
             margin: "0.5rem 0",
+            padding: "1rem",
           }}
           variant="square"
         >
@@ -31,8 +44,13 @@ const MenuItem = ({ label, icon, color, link }: MenuItemProps) => {
         to={`/dashboard/${link}`}
         color="inherit"
         sx={{
+          transition: "color .1s",
           fontSize: "1rem",
           textDecoration: "none",
+          fontWeight: 500,
+          "&:hover": {
+            color: palette?.text.primary,
+          },
         }}
       >
         {label}

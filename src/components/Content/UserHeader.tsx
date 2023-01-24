@@ -4,9 +4,7 @@ import ListItem from "@mui/material/ListItem";
 import Typography from "@mui/material/Typography";
 import { UserHeader as Header, User } from "../../utils/interfaces";
 import { Avatar, Box, Button } from "@mui/material";
-import CheckIcon from "@mui/icons-material/Check";
-import CloseIcon from "@mui/icons-material/Close";
-import PeopleIcon from "@mui/icons-material/People";
+import { Check, Close, People } from "@mui/icons-material";
 import UserContext from "../../context/userContext";
 import ThemeContext from "../../context/themeContext";
 import debounce from "../../utils/debounce";
@@ -47,6 +45,9 @@ const UserHeader = ({ _id, name }: Header) => {
         justifyContent: "space-between",
         WebkitBoxShadow: "0px 0px 16px -8px rgba(0, 0, 0, 0.68)",
         boxShadow: "0px 0px 16px -8px rgba(0, 0, 0, 0.68)",
+        "&:last-child": {
+          marginBottom: "2.5rem",
+        },
       }}
     >
       <Box
@@ -65,8 +66,8 @@ const UserHeader = ({ _id, name }: Header) => {
             src={avatar}
             sx={{
               margin: "0 .5rem .2rem 0",
-              height: "2.5rem",
-              width: "2.5rem",
+              height: "2.2rem",
+              width: "2.2rem",
               cursor: "pointer",
               alignSelf: "center",
             }}
@@ -93,7 +94,7 @@ const UserHeader = ({ _id, name }: Header) => {
             </Typography>
           </NavLink>
           {ifFollowing(currentUser, _id) ? (
-            <PeopleIcon
+            <People
               sx={{
                 width: "1.5rem",
                 fontSize: "1rem",
@@ -115,9 +116,9 @@ const UserHeader = ({ _id, name }: Header) => {
             }}
           >
             {ifFollowing(currentUser, _id) ? (
-              <CloseIcon fontSize="small" sx={{ width: "1.5rem" }} />
+              <Close fontSize="small" sx={{ width: "1.5rem" }} />
             ) : (
-              <CheckIcon fontSize="small" sx={{ width: "1.5rem" }} />
+              <Check fontSize="small" sx={{ width: "1.5rem" }} />
             )}
             {ifFollowing(currentUser, _id) ? "Unfollow" : "Follow"}
           </Button>

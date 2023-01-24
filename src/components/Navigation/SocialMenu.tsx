@@ -6,11 +6,9 @@ import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
-import CheckIcon from "@mui/icons-material/Check";
-import CloseIcon from "@mui/icons-material/Close";
-import VisibilityIcon from "@mui/icons-material/Visibility";
 import SearchField from "../Elements/SearchField";
 import { UserHeader } from "../../utils/interfaces";
+import { Check, Close, Visibility } from "@mui/icons-material";
 
 export const SocialMenu = ({ handleFilter, users }: any) => {
   const { currentUser } = useContext(UserContext);
@@ -36,6 +34,7 @@ export const SocialMenu = ({ handleFilter, users }: any) => {
         width: "100%",
         background: palette?.background.primary,
         color: palette?.text.tertiary,
+        marginBottom: "1rem",
       }}
     >
       <CardContent
@@ -50,16 +49,6 @@ export const SocialMenu = ({ handleFilter, users }: any) => {
         >
           Community
         </Typography>
-        <Typography
-          variant="body2"
-          sx={{
-            paddingTop: "0.5rem",
-            marginBottom: "-0.5rem",
-            fontWeight: "bold",
-          }}
-        >
-          Filters
-        </Typography>
       </CardContent>
       <CardActions
         sx={{
@@ -70,7 +59,7 @@ export const SocialMenu = ({ handleFilter, users }: any) => {
         <SearchField data={users} filter={handleFilter} />
         <Button
           variant="contained"
-          startIcon={<CloseIcon />}
+          startIcon={<Close />}
           disableElevation
           sx={{
             color: palette?.text.primary,
@@ -86,7 +75,7 @@ export const SocialMenu = ({ handleFilter, users }: any) => {
         <Button
           onClick={() => handleFollowing(users)}
           variant="outlined"
-          startIcon={<CheckIcon />}
+          startIcon={<Check />}
           sx={{
             border: `1px solid ${palette?.background.tertiary}`,
             marginLeft: "0 !important",
@@ -100,7 +89,7 @@ export const SocialMenu = ({ handleFilter, users }: any) => {
         <Button
           onClick={() => handleFollowers(users)}
           variant="outlined"
-          startIcon={<VisibilityIcon />}
+          startIcon={<Visibility />}
           sx={{
             border: `1px solid ${palette?.background.tertiary}`,
             marginLeft: "0 !important",

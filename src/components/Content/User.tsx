@@ -27,11 +27,9 @@ import {
   Business,
 } from "../../utils/interfaces";
 import convertImage from "../../utils/imageConverter";
-import CheckIcon from "@mui/icons-material/Check";
-import CloseIcon from "@mui/icons-material/Close";
-import EditIcon from "@mui/icons-material/Edit";
 import debounce from "../../utils/debounce";
 import BusinessHeader from "./BusinessHeader";
+import { Check, Close, Edit } from "@mui/icons-material";
 
 const User = () => {
   const { events } = useContext(EventContext);
@@ -178,7 +176,7 @@ const User = () => {
                 )}
               </FormLabel>
               {file ? (
-                <CheckIcon
+                <Check
                   sx={{
                     position: "absolute",
                     bottom: "10px",
@@ -225,9 +223,9 @@ const User = () => {
                     }}
                   >
                     {ifFollowing(currentUser, user?._id) ? (
-                      <CloseIcon fontSize="small" sx={{ width: "1.5rem" }} />
+                      <Close fontSize="small" sx={{ width: "1.5rem" }} />
                     ) : (
-                      <CheckIcon fontSize="small" sx={{ width: "1.5rem" }} />
+                      <Check fontSize="small" sx={{ width: "1.5rem" }} />
                     )}
                     {ifFollowing(currentUser, user?._id)
                       ? "Unfollow"
@@ -236,7 +234,7 @@ const User = () => {
                 ) : (
                   <>
                     {editDescription ? (
-                      <CheckIcon
+                      <Check
                         sx={{
                           cursor: "pointer",
                           opacity: "0.8",
@@ -251,7 +249,7 @@ const User = () => {
                         )}
                       />
                     ) : (
-                      <EditIcon
+                      <Edit
                         sx={{
                           padding: "0 .1rem",
                           marginTop: ".5rem",
@@ -368,16 +366,16 @@ const User = () => {
               }}
             >
               {ifFollowing(currentUser, user?._id) ? (
-                <CloseIcon fontSize="small" sx={{ width: "1.5rem" }} />
+                <Close fontSize="small" sx={{ width: "1.5rem" }} />
               ) : (
-                <CheckIcon fontSize="small" sx={{ width: "1.5rem" }} />
+                <Check fontSize="small" sx={{ width: "1.5rem" }} />
               )}
               {ifFollowing(currentUser, user?._id) ? "Unfollow" : "Follow"}
             </Button>
           ) : (
             <>
               {editDescription ? (
-                <CheckIcon
+                <Check
                   sx={{
                     cursor: "pointer",
                     opacity: "0.8",
@@ -392,7 +390,7 @@ const User = () => {
                   )}
                 />
               ) : (
-                <EditIcon
+                <Edit
                   sx={{
                     padding: "0 .1rem",
                     marginTop: ".5rem",

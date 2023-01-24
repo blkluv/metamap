@@ -1,6 +1,6 @@
 import { useContext, useEffect, useState } from "react";
 import BusinessContext from "../../context/businessContext";
-import { Box, Divider } from "@mui/material";
+import { Box } from "@mui/material";
 import BusinessMenu from "../Navigation/BusinessMenu";
 import BusinessesList from "./BusinessesList";
 import { Business } from "../../utils/interfaces";
@@ -53,10 +53,6 @@ const Businesses = () => {
       }}
     >
       <BusinessMenu items={businesses} handleFilter={handleFilter} />
-      <Divider
-        variant="middle"
-        sx={{ background: "rgb(120,120,126)", margin: "1rem 0 1.5rem 0" }}
-      />
       <BusinessesList items={filteredItems ? filteredItems : businesses} />
     </Box>
   );

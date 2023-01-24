@@ -28,6 +28,8 @@ const Notifications = () => {
         border: `1px solid ${palette?.background.tertiary}`,
         WebkitBoxShadow: "0px 0px 16px -8px rgba(0, 0, 0, 0.68)",
         boxShadow: "0px 0px 16px -8px rgba(0, 0, 0, 0.68)",
+        maxHeight: "85vh",
+        overflow: "scroll",
       }}
     >
       <Box sx={{ width: "100%" }}>

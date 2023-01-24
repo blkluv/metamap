@@ -78,7 +78,12 @@ const Rating = ({
         onChangeActive={(event, newHover) => {
           setHover(newHover);
         }}
-        emptyIcon={<StarIcon style={{ opacity: 0.55 }} fontSize="inherit" />}
+        emptyIcon={
+          <StarIcon
+            style={{ opacity: 0.4, color: palette?.text.primary }}
+            fontSize="inherit"
+          />
+        }
       />
       {!checkIfReadOnly() ? (
         <Box sx={{ ml: 1, fontSize: ".8rem" }}>

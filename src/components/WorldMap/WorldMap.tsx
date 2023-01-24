@@ -80,7 +80,7 @@ const WorldMap = () => {
     <Box
       sx={{
         width: { xs: "100%", md: "45%" },
-        minHeight: { xs: "90vh", md: "600px" },
+        minHeight: { xs: "90vh", md: "100%" },
         maxHeight: "fit-content",
         background: palette?.background.primary,
         WebkitBoxShadow: "0px 0px 16px -8px rgba(0, 0, 0, 0.68)",
@@ -117,6 +117,7 @@ const WorldMap = () => {
         ) : null}
         {selectedEvent || selectedBusiness ? (
           <Popup
+            closeButton={false}
             key={key + 1}
             style={{ background: "transparent" }}
             //@ts-ignore
