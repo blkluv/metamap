@@ -227,6 +227,7 @@ export const EventProvider = ({ children }: React.PropsWithChildren) => {
 
       selectedEvent?._id === _id && setSelectedEvent?.(undefined);
     }
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [arrivalNotification]);
 

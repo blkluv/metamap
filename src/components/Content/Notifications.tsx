@@ -23,7 +23,7 @@ const Notifications = () => {
         flexDirection: "column",
         padding: "1rem 1.5rem",
         alignItems: "flex-start",
-        width: { xs: "100%", md: "40%" },
+        width: { xs: "100%", md: "45%" },
         height: "fit-content",
         border: `1px solid ${palette?.background.tertiary}`,
         WebkitBoxShadow: "0px 0px 16px -8px rgba(0, 0, 0, 0.68)",

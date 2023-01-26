@@ -113,7 +113,7 @@ export const UserProvider = ({ children }: React.PropsWithChildren) => {
   const handleGetUsers = useCallback(async () => {
     const updatedUsers = await UserService.getUsers();
     if (updatedUsers) {
-      localStorage.setItem("users", JSON.stringify(users));
+      localStorage.setItem("users", JSON.stringify(updatedUsers));
       setUsers(updatedUsers);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -208,19 +208,24 @@ export const UserProvider = ({ children }: React.PropsWithChildren) => {
         };
 
         CommunicationService.addNotification?.(notification);
+        setTimeout(() => {
+          socket.current?.emit("sendNotification", {
+            ...notification,
+            senderId: currentUser?._id,
+            senderName: currentUser?.name,
+            payload: response?.activeUser,
+          });
+        }, 1000);
 
-        socket.current?.emit("sendNotification", {
-          ...notification,
-          senderId: currentUser?._id,
-          senderName: currentUser?.name,
-          payload: response?.activeUser,
-        });
+        if (users) {
+          const updatedUsers = users.map((user) =>
+            user._id === response.userToFollow._id
+              ? response.userToFollow
+              : user
+          );
+          setUsers(updatedUsers);
+        }
 
-        const updatedUsers = users.map((user) =>
-          user._id === response.userToFollow._id ? response.userToFollow : user
-        );
-
-        setUsers(updatedUsers);
         setCurrentUser(response.activeUser);
         localStorage.setItem(
           "currentUser",
@@ -238,6 +243,11 @@ export const UserProvider = ({ children }: React.PropsWithChildren) => {
       localStorage.setItem("currentUser", JSON.stringify(response));
     }
   };
+
+  useEffect(() => {
+    !users && currentUser && handleGetUsers();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentUser]);
 
   return (
     <GoogleOAuthProvider

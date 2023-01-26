@@ -44,7 +44,9 @@ const User = () => {
 
   useEffect(() => {
     onGetUser?.(id);
-    onGetUsersPosts?.(id);
+    if (user) {
+      onGetUsersPosts?.(id);
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentUser]);
 
@@ -130,6 +132,7 @@ const User = () => {
           width: { xs: "100%", md: "50%" },
           overflow: "scroll",
           marginBottom: { xs: "2rem", md: "-2rem", lg: "-2.5rem" },
+          minHeight: "15rem",
           color: palette?.text.tertiary,
         }}
       >
@@ -137,6 +140,7 @@ const User = () => {
           sx={{
             display: "flex",
             flexDirection: { xs: "column", sm: "row", md: "column", lg: "row" },
+            alignItems: { xs: "center", sm: "left" },
           }}
         >
           <Box
@@ -152,9 +156,9 @@ const User = () => {
                   alt={"User avatar"}
                   src={renderAvatar(user, currentUser, file)}
                   sx={{
-                    margin: "0 2rem 1rem 0",
-                    height: { xs: "8rem", md: "7rem" },
-                    width: { xs: "8rem", md: "7rem" },
+                    margin: { xs: "0 1rem 1rem 0", sm: "0 1.5rem 1rem 0" },
+                    height: { xs: "4rem", sm: "4rem", md: "4rem", lg: "6rem" },
+                    width: { xs: "4rem", sm: "4rem", md: "4rem", lg: "6rem" },
                     WebkitBoxShadow: "0px 0px 16px -8px rgba(0, 0, 0, 0.68)",
                     boxShadow: "0px 0px 16px -8px rgba(0, 0, 0, 0.68)",
                     cursor:
@@ -472,7 +476,7 @@ const User = () => {
       </Box>
       <Box
         sx={{
-          width: { xs: "100%", md: "50%" },
+          width: { xs: "100%", md: "60%" },
           padding: 1,
           marginBottom: { xs: "0", md: "-2rem", lg: "-2.5rem" },
           overflow: "scroll",

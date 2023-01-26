@@ -118,6 +118,19 @@ class CommunicationService {
     }
   }
 
+  async deleteConversation(id: string | undefined) {
+    try {
+      const response = await this.http.delete(`/conversation/${id}`);
+      return response.data;
+    } catch (error: unknown) {
+      if (error instanceof AxiosError) {
+        notify(error.response?.data.message);
+      } else if (typeof error === "string") {
+        notify(error);
+      }
+    }
+  }
+
   async addNotification(notification: object) {
     try {
       const response = await this.http.post<any>(

@@ -291,6 +291,7 @@ export interface NotificationProps {
 export interface ChatConversation {
   _id: string;
   members: (string | undefined)[];
+  readOnly: boolean;
   createdAt?: string | number;
 }
 
@@ -311,6 +312,7 @@ export interface CommunicationContext {
   setNotifications?: (notifications: Notification[]) => void;
   conversations: ChatConversation[];
   currentConversation?: ChatConversation | null;
+  onDeleteConversation?: (id: string | undefined) => Promise<void>;
   onSetCurrentConversation?: (conversation: ChatConversation | null) => void;
   onGetConversations?: (id: string | undefined) => Promise<void>;
   onGetNotifications?: (id: string | undefined) => Promise<void>;

@@ -122,7 +122,7 @@ export const CommunicationProvider = ({
         });
       }
     );
-  }, [notifications]);
+  }, []);
 
   const memoizedHandleGetMessages = useMemo(
     () => async (id: string | undefined) => {
@@ -216,6 +216,19 @@ export const CommunicationProvider = ({
     await CommunicationService.addNotification(notification);
   };
 
+  const handleDeleteConversation = async (id: string | undefined) => {
+    const deletedConversation = await CommunicationService.deleteConversation(
+      id
+    );
+    if (!deletedConversation) {
+      const updatedConversations = conversations.filter(
+        (conversation) => conversation._id !== id
+      );
+      setConversations(updatedConversations);
+      setCurrentConversation(null);
+    }
+  };
+
   const handleGetMembersConversation = async (
     firstUserId: string | undefined,
     secondUserId: string | undefined
@@ -242,6 +255,7 @@ export const CommunicationProvider = ({
   const memoizedGetNotifications = useMemo(
     () => async (id: string | undefined) => {
       const response = await CommunicationService.getNotifications(id);
+
       if (response) {
         setNotifications(response);
       }
@@ -286,15 +300,17 @@ export const CommunicationProvider = ({
     type,
     payload,
   }: Notification) => {
-    socket.current?.emit("sendNotification", {
-      senderId,
-      senderName,
-      receiverId,
-      silent,
-      text,
-      type,
-      payload,
-    });
+    setTimeout(() => {
+      socket.current?.emit("sendNotification", {
+        senderId,
+        senderName,
+        receiverId,
+        silent,
+        text,
+        type,
+        payload,
+      });
+    }, 1000);
   };
 
   useEffect(() => {
@@ -357,6 +373,7 @@ export const CommunicationProvider = ({
         onGetMessages: handleGetMessages,
         onGetUserMessages: handleGetUserMessages,
         onGetConversations: handleGetConversations,
+        onDeleteConversation: handleDeleteConversation,
         onGetMembersConversation: handleGetMembersConversation,
         onAddNotification: handleAddNotification,
         onSendNotification: handleSendNotification,
