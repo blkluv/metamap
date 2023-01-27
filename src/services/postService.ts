@@ -26,7 +26,7 @@ class PostService {
       return response.data;
     } catch (error: unknown) {
       if (error instanceof AxiosError) {
-        notify(error.response?.data.message);
+        notify("User not found");
       } else if (typeof error === "string") {
         notify(error);
       }

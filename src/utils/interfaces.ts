@@ -79,6 +79,7 @@ export interface UsersContext {
   currentUser: User | null;
   user?: UserHeader | null;
   users: UserHeader[] | null;
+  onSetUser?: (user: User | null) => void;
   onSetCurrentUser?: (user: User | null) => void;
   onGetUser?: (id: string | undefined) => Promise<void>;
   onGetSingleUser?: (id: string | undefined) => Promise<UserHeader | undefined>;

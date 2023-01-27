@@ -36,19 +36,24 @@ const User = () => {
   const { businesses } = useContext(BusinessContext);
   const { palette } = useContext(ThemeContext);
   const { usersPosts, onGetUsersPosts } = useContext(PostContext);
-  const { user, currentUser, onGetUser, onUpdateUser, onFollowUser } =
-    useContext(UserContext);
+  const {
+    user,
+    onSetUser,
+    currentUser,
+    onGetUser,
+    onUpdateUser,
+    onFollowUser,
+  } = useContext(UserContext);
   const { id } = useParams();
   const [file, setFile] = useState<File | null>(null);
   const [editDescription, setEditDescription] = useState<boolean>(false);
 
   useEffect(() => {
     onGetUser?.(id);
-    if (user) {
-      onGetUsersPosts?.(id);
-    }
+    onGetUsersPosts?.(id);
+    return () => onSetUser?.(null);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentUser]);
+  }, [id]);
 
   const {
     register: registerDescription,

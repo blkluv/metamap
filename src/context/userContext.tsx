@@ -88,7 +88,7 @@ export const UserProvider = ({ children }: React.PropsWithChildren) => {
     if (user) {
       setUser(user);
     } else {
-      navigate("/");
+      navigate("/dashboard");
     }
   };
 
