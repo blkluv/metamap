@@ -59,6 +59,73 @@ class PostService {
     }
   }
 
+  async addComment(postId: string | undefined, comment: object) {
+    try {
+      const response = await this.http.patch<Post>(
+        `/comment/${postId}`,
+        comment
+      );
+      return response.data;
+    } catch (error: unknown) {
+      if (error instanceof AxiosError) {
+        notify(error.response?.data.message);
+      } else if (typeof error === "string") {
+        notify(error);
+      }
+    }
+  }
+
+  async likeComment(postId: string | undefined, commentId: string | undefined) {
+    try {
+      const response = await this.http.patch<Post>(
+        `/comment/like/${postId}/${commentId}`
+      );
+      return response.data;
+    } catch (error: unknown) {
+      if (error instanceof AxiosError) {
+        notify(error.response?.data.message);
+      } else if (typeof error === "string") {
+        notify(error);
+      }
+    }
+  }
+
+  async dislikeComment(
+    postId: string | undefined,
+    commentId: string | undefined
+  ) {
+    try {
+      const response = await this.http.patch<Post>(
+        `/comment/dislike/${postId}/${commentId}`
+      );
+      return response.data;
+    } catch (error: unknown) {
+      if (error instanceof AxiosError) {
+        notify(error.response?.data.message);
+      } else if (typeof error === "string") {
+        notify(error);
+      }
+    }
+  }
+
+  async deleteComment(
+    postId: string | undefined,
+    commentId: string | undefined
+  ) {
+    try {
+      const response = await this.http.patch<Post>(
+        `/comment/${postId}/${commentId}`
+      );
+      return response.data;
+    } catch (error: unknown) {
+      if (error instanceof AxiosError) {
+        notify(error.response?.data.message);
+      } else if (typeof error === "string") {
+        notify(error);
+      }
+    }
+  }
+
   async deletePost(id: string | undefined) {
     try {
       const response = await this.http.delete(`/${id}`);

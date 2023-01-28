@@ -142,6 +142,178 @@ export const PostProvider = ({ children }: React.PropsWithChildren) => {
     }
   };
 
+  const handleAddComment = async (
+    postId: string | undefined,
+    comment: object
+  ) => {
+    const updatedPost = await PostService.addComment(postId, comment);
+    if (updatedPost) {
+      if (currentUser?._id !== updatedPost.creator?._id) {
+        const ifComment = updatedPost.comments?.find(
+          (comment) => comment.creator?._id === currentUser?._id
+        );
+
+        let notification = {
+          receiverId: updatedPost.creator?._id,
+          text: ifComment
+            ? "commented your post."
+            : "deleted a comment in your post.",
+          silent: ifComment ? false : true,
+          read: false,
+          type: "post",
+        };
+        onAddNotification?.(notification);
+        setTimeout(() => {
+          onSendNotification?.({
+            ...notification,
+            senderId: currentUser?._id,
+            senderName: currentUser?.name,
+            payload: { post: updatedPost },
+          });
+        }, 1000);
+      }
+
+      const updatedPosts = posts.map((post) =>
+        post._id === updatedPost._id ? updatedPost : post
+      );
+      setPosts(updatedPosts);
+
+      const updatedUsersPosts = usersPosts.map((post) =>
+        post._id === updatedPost._id ? updatedPost : post
+      );
+      setUsersPosts(updatedUsersPosts);
+    }
+  };
+
+  const handleLikeComment = async (
+    postId: string | undefined,
+    commentId: string | undefined
+  ) => {
+    const updatedPost = await PostService.likeComment(postId, commentId);
+
+    if (updatedPost) {
+      const targetComment = updatedPost.comments?.find(
+        (comment) => comment._id === commentId
+      );
+
+      const ifLike = targetComment?.likes?.find(
+        (user) => user._id === currentUser?._id
+      );
+
+      let notification = {
+        receiverId: targetComment?.creator?._id,
+        text: ifLike
+          ? "likes your comment."
+          : "doesn't like your comment anymore.",
+        silent: ifLike ? false : true,
+        read: false,
+        type: "post",
+      };
+
+      onAddNotification?.(notification);
+      setTimeout(() => {
+        onSendNotification?.({
+          ...notification,
+          senderId: currentUser?._id,
+          senderName: currentUser?.name,
+          payload: { post: updatedPost },
+        });
+      }, 1000);
+
+      const updatedPosts = posts.map((post) =>
+        post._id === updatedPost._id ? updatedPost : post
+      );
+      setPosts(updatedPosts);
+
+      const updatedUsersPosts = usersPosts.map((post) =>
+        post._id === updatedPost._id ? updatedPost : post
+      );
+      setUsersPosts(updatedUsersPosts);
+    }
+  };
+
+  const handleDislikeComment = async (
+    postId: string | undefined,
+    commentId: string | undefined
+  ) => {
+    const updatedPost = await PostService.dislikeComment(postId, commentId);
+    if (updatedPost) {
+      const targetComment = updatedPost.comments?.find(
+        (comment) => comment._id === commentId
+      );
+
+      const ifDislike = targetComment?.dislikes?.find(
+        (user) => user._id === currentUser?._id
+      );
+
+      let notification = {
+        receiverId: targetComment?.creator?._id,
+        text: ifDislike
+          ? "dislikes your comment."
+          : "doesn't dislike your comment anymore.",
+        silent: true,
+        read: false,
+        type: "post",
+      };
+
+      onAddNotification?.(notification);
+      setTimeout(() => {
+        onSendNotification?.({
+          ...notification,
+          senderId: currentUser?._id,
+          senderName: currentUser?.name,
+          payload: { post: updatedPost },
+        });
+      }, 1000);
+
+      const updatedPosts = posts.map((post) =>
+        post._id === updatedPost._id ? updatedPost : post
+      );
+      setPosts(updatedPosts);
+
+      const updatedUsersPosts = usersPosts.map((post) =>
+        post._id === updatedPost._id ? updatedPost : post
+      );
+      setUsersPosts(updatedUsersPosts);
+    }
+  };
+
+  const handleDeleteComment = async (
+    postId: string | undefined,
+    commentId: string | undefined
+  ) => {
+    const updatedPost = await PostService.deleteComment(postId, commentId);
+    if (updatedPost) {
+      let notification = {
+        receiverId: updatedPost.creator?._id,
+        text: "deleted a comment.",
+        silent: true,
+        read: false,
+        type: "post",
+      };
+
+      onAddNotification?.(notification);
+      setTimeout(() => {
+        onSendNotification?.({
+          ...notification,
+          senderId: currentUser?._id,
+          senderName: currentUser?.name,
+          payload: { post: updatedPost },
+        });
+      }, 1000);
+
+      const updatedPosts = posts.map((post) =>
+        post._id === updatedPost._id ? updatedPost : post
+      );
+      setPosts(updatedPosts);
+
+      const updatedUsersPosts = usersPosts.map((post) =>
+        post._id === updatedPost._id ? updatedPost : post
+      );
+      setUsersPosts(updatedUsersPosts);
+    }
+  };
+
   useEffect(() => {
     const loggedUser = localStorage.getItem("auth")
       ? JSON.parse(localStorage.getItem("auth") as string)
@@ -198,6 +370,10 @@ export const PostProvider = ({ children }: React.PropsWithChildren) => {
         onGetUsersPosts: handleGetUsersPosts,
         onAddPost: handleAddPost,
         onLikePost: handleLikePost,
+        onAddComment: handleAddComment,
+        onLikeComment: handleLikeComment,
+        onDislikeComment: handleDislikeComment,
+        onDeleteComment: handleDeleteComment,
         onDeletePost: handleDeletePost,
       }}
     >

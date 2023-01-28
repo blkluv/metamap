@@ -1,3 +1,13 @@
+// Comment
+export interface Comment {
+  _id?: string;
+  creator?: UserHeader;
+  likes?: UserHeader[];
+  dislikes?: UserHeader[];
+  text: string;
+  createdAt?: string;
+}
+
 // rating
 export interface Rate {
   _id: string;
@@ -110,6 +120,7 @@ export interface Event {
   location: string | null;
   coordinates?: { lng: number; lat: number };
   description: string | null;
+  comments?: Comment[];
   logo?: any;
   creator?: UserHeader;
   participants?: UserHeader[];
@@ -176,7 +187,7 @@ export interface Business {
   };
   creator?: UserHeader;
   owners?: UserHeader[];
-  comments?: [];
+  comments?: Comment[];
 }
 
 export interface BusinessHeader {
@@ -206,6 +217,7 @@ export interface Post {
   _id?: string;
   creator?: UserHeader;
   description: string;
+  comments?: Comment[];
   file?: any;
   createdAt?: string;
   likes?: UserHeader[];
@@ -226,6 +238,71 @@ export interface PostsContext {
   onAddPost?: (post: Post) => Promise<void>;
   onLikePost?: (id: string | undefined) => Promise<void>;
   onDeletePost?: (id: string | undefined) => Promise<void>;
+  onAddComment?: (
+    postId: string | undefined,
+    comment: Comment
+  ) => Promise<void>;
+  onLikeComment?: (
+    postId: string | undefined,
+    commentId: string | undefined
+  ) => Promise<void>;
+  onDislikeComment?: (
+    postId: string | undefined,
+    commentId: string | undefined
+  ) => Promise<void>;
+  onDeleteComment?: (
+    postId: string | undefined,
+    commentId: string | undefined
+  ) => Promise<void>;
+}
+
+// Comment props
+export interface CommentProps {
+  itemId: string | undefined;
+  comment: Comment;
+  onLike?:
+    | ((
+        itemId: string | undefined,
+        commentId: string | undefined
+      ) => Promise<void>)
+    | undefined;
+  onDislike?:
+    | ((
+        itemId: string | undefined,
+        commentId: string | undefined
+      ) => Promise<void>)
+    | undefined;
+  onDelete?:
+    | ((
+        itemId: string | undefined,
+        commentId: string | undefined
+      ) => Promise<void>)
+    | undefined;
+}
+
+export interface CommentFormProps {
+  item: Post | Event | Business;
+  onAdd:
+    | ((itemId: string | undefined, comment: Comment) => Promise<void>)
+    | undefined;
+  onLike?:
+    | ((
+        itemId: string | undefined,
+        commentId: string | undefined
+      ) => Promise<void>)
+    | undefined;
+  onDislike?:
+    | ((
+        itemId: string | undefined,
+        commentId: string | undefined
+      ) => Promise<void>)
+    | undefined;
+  onDelete?:
+    | ((
+        itemId: string | undefined,
+        commentId: string | undefined
+      ) => Promise<void>)
+    | undefined;
 }
 
 // theme
@@ -373,7 +450,7 @@ export interface ConfirmationDialogProps {
   title: string;
   confirmLabel: string;
   isOpen: boolean;
-  onConfirm: () => void;
+  onConfirm: any;
   onClose: () => void;
 }
 

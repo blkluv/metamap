@@ -91,6 +91,7 @@ const NotificationHeader = ({
           sx={{
             color: !read ? palette?.warning : palette?.green,
             borderRadius: "15px",
+            minWidth: "0",
           }}
         >
           {read ? <Drafts /> : <Markunread />}

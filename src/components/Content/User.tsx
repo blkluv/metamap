@@ -146,6 +146,7 @@ const User = () => {
             display: "flex",
             flexDirection: { xs: "column", sm: "row", md: "column", lg: "row" },
             alignItems: { xs: "center", sm: "left" },
+            padding: "0 .5rem",
           }}
         >
           <Box
@@ -348,7 +349,7 @@ const User = () => {
             display: { xs: "none", sm: "flex", md: "none", lg: "flex" },
             alignItems: "center",
             justifyContent: "space-between",
-            marginTop: ".5rem",
+            padding: ".5rem .5rem 0 .5rem",
           }}
         >
           <Typography
@@ -413,7 +414,7 @@ const User = () => {
         </Box>
         <Box
           sx={{
-            margin: ".5rem 0 1rem 0",
+            margin: ".5rem",
             fontSize: "1rem",
             display: { xs: "none", sm: "block", md: "none", lg: "block" },
           }}
@@ -460,7 +461,10 @@ const User = () => {
         </Box>
         <Divider
           variant="middle"
-          sx={{ background: "rgb(120,120,126)", margin: ".5rem 0 1.5rem 0" }}
+          sx={{
+            background: "rgb(120,120,126)",
+            margin: "1rem .5rem 1.5rem .5rem",
+          }}
         />
         <Box
           sx={{

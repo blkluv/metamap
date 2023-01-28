@@ -18,7 +18,6 @@ const Notifications = () => {
       sx={{
         borderRadius: "25px",
         background: palette?.background.primary,
-        marginBottom: "1rem",
         display: "flex",
         flexDirection: "column",
         padding: "1rem 1.5rem",

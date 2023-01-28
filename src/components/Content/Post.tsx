@@ -1,10 +1,18 @@
 import { useContext, useState, useEffect } from "react";
 import { NavLink } from "react-router-dom";
+import Comments from "./Comments";
 import ConfirmationDialog from "../Elements/ConfirmationDialog";
 import UserContext from "../../context/userContext";
 import PostContext from "../../context/postContext";
 import ThemeContext from "../../context/themeContext";
-import { Avatar, Box, CardMedia, ListItem, Typography } from "@mui/material";
+import {
+  Avatar,
+  Box,
+  CardMedia,
+  Divider,
+  ListItem,
+  Typography,
+} from "@mui/material";
 import { Post as PostProps } from "../../utils/interfaces";
 import { notify } from "../../utils/notifications";
 import moment from "moment";
@@ -15,30 +23,30 @@ import {
   RemoveCircleOutline,
 } from "@mui/icons-material";
 
-const Post = ({
-  _id,
-  creator,
-  description,
-  file,
-  createdAt,
-  likes,
-}: PostProps) => {
+const Post = (post: PostProps) => {
   const { currentUser, onGetAvatar } = useContext(UserContext);
-  const { onLikePost, onDeletePost } = useContext(PostContext);
+  const {
+    onLikePost,
+    onDeletePost,
+    onAddComment,
+    onDeleteComment,
+    onLikeComment,
+    onDislikeComment,
+  } = useContext(PostContext);
   const { palette } = useContext(ThemeContext);
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [avatar, setAvatar] = useState<any>(null);
 
   useEffect(() => {
-    getAvatar(creator?.name);
+    getAvatar(post.creator?.name);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentUser]);
 
   const handleLikePost = () => {
-    if (creator?._id === currentUser?._id) {
+    if (post.creator?._id === currentUser?._id) {
       notify("You can't like your own post.");
     } else {
-      onLikePost?.(_id);
+      onLikePost?.(post._id);
     }
   };
 
@@ -49,7 +57,7 @@ const Post = ({
     setIsOpen(false);
   };
   const handleConfirmDialog = async () => {
-    await onDeletePost?.(_id);
+    await onDeletePost?.(post._id);
     setIsOpen(false);
   };
 
@@ -86,11 +94,11 @@ const Post = ({
       >
         <Box sx={{ display: "flex", alignItems: "center" }}>
           <NavLink
-            to={`/dashboard/profile/${creator?.name}`}
+            to={`/dashboard/profile/${post.creator?.name}`}
             style={{ textDecoration: "none" }}
           >
             <Avatar
-              alt={creator?.name}
+              alt={post.creator?.name}
               src={avatar}
               sx={{
                 margin: ".2rem .5rem .2rem 0",
@@ -107,7 +115,7 @@ const Post = ({
             }}
           >
             <NavLink
-              to={`/dashboard/profile/${creator?.name}`}
+              to={`/dashboard/profile/${post.creator?.name}`}
               style={{ textDecoration: "none" }}
             >
               <Typography
@@ -121,7 +129,7 @@ const Post = ({
                 fontSize={".9rem"}
                 fontWeight={500}
               >
-                {creator?.name}
+                {post.creator?.name}
               </Typography>
             </NavLink>
             <Typography
@@ -131,20 +139,56 @@ const Post = ({
               color="grey"
               fontSize={".8rem"}
             >
-              {moment(createdAt).fromNow()}
+              {moment(post.createdAt).fromNow()}
             </Typography>
           </Box>
         </Box>
-        {currentUser?._id === creator?._id ? (
-          <RemoveCircleOutline
-            sx={{
-              cursor: "pointer",
-              color: palette?.text.primary,
-              fontSize: "1.2rem",
-            }}
-            onClick={() => handleOpenDialog()}
-          />
-        ) : null}
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            margin: "0",
+            flexWrap: "wrap",
+            color: palette?.text.primary,
+          }}
+        >
+          {post.likes?.find((user) => user._id === currentUser?._id) ? (
+            <Favorite
+              sx={{
+                fontSize: "1.4rem",
+                cursor: "pointer",
+                color: palette?.warning,
+              }}
+              onClick={debounce(() => handleLikePost(), 300)}
+            />
+          ) : (
+            <FavoriteBorder
+              sx={{
+                fontSize: "1.4rem",
+                cursor: "pointer",
+              }}
+              onClick={debounce(() => handleLikePost(), 300)}
+            />
+          )}
+          <Typography
+            sx={{ display: "block", marginLeft: ".3rem", marginRight: ".5rem" }}
+            component="span"
+            variant="body2"
+            fontSize={".9rem"}
+          >
+            {post.likes?.length ? post.likes.length : ""}
+          </Typography>
+          {currentUser?._id === post.creator?._id ? (
+            <RemoveCircleOutline
+              sx={{
+                cursor: "pointer",
+                color: palette?.text.primary,
+                fontSize: "1.2rem",
+              }}
+              onClick={() => handleOpenDialog()}
+            />
+          ) : null}
+        </Box>
       </Box>
       <Box sx={{ width: "100%" }}>
         <Typography
@@ -154,9 +198,9 @@ const Post = ({
           color={palette?.text.tertiary}
           fontSize={"1rem"}
         >
-          {description}
+          {post.description}
         </Typography>
-        {file ? (
+        {post.file ? (
           <CardMedia
             component="img"
             sx={{
@@ -164,47 +208,30 @@ const Post = ({
               height: "250px",
               borderRadius: "10px",
               marginTop: "1rem",
+              marginBottom: ".5rem",
             }}
-            image={file}
+            image={post.file}
             alt={"Post photo"}
           />
         ) : (
           <></>
         )}
       </Box>
-      <Box
+      <Divider
+        variant="middle"
         sx={{
-          display: "flex",
-          alignItems: "center",
-          margin: "1rem 0 0 0",
-          flexWrap: "wrap",
-          color: palette?.text.primary,
+          background: "rgb(120,120,126)",
+          margin: ".8rem 0 0 0",
+          width: "100%",
         }}
-      >
-        {likes?.find((user) => user._id === currentUser?._id) ? (
-          <Favorite
-            sx={{
-              fontSize: "1.5rem",
-              cursor: "pointer",
-              color: palette?.warning,
-            }}
-            onClick={debounce(() => handleLikePost(), 400)}
-          />
-        ) : (
-          <FavoriteBorder
-            sx={{ fontSize: "1.5rem", cursor: "pointer" }}
-            onClick={debounce(() => handleLikePost(), 400)}
-          />
-        )}
-        <Typography
-          sx={{ display: "block", marginLeft: ".5rem" }}
-          component="span"
-          variant="body2"
-          fontSize={".9rem"}
-        >
-          {likes?.length ? likes.length : ""}
-        </Typography>
-      </Box>
+      />
+      <Comments
+        item={post}
+        onAdd={onAddComment}
+        onDelete={onDeleteComment}
+        onLike={onLikeComment}
+        onDislike={onDislikeComment}
+      />
       <ConfirmationDialog
         title={"Delete this post?"}
         confirmLabel={"delete"}
