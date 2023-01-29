@@ -23,9 +23,7 @@ const INITIAL_STATE: UsersContext = {
   currentUser: localStorage.getItem("currentUser")
     ? JSON.parse(localStorage.getItem("currentUser") as string)
     : null,
-  users: localStorage.getItem("users")
-    ? JSON.parse(localStorage.getItem("users") as string)
-    : null,
+  users: null,
 };
 
 UserService.http.interceptors.request.use((req: any) => {
@@ -49,11 +47,7 @@ export const UserProvider = ({ children }: React.PropsWithChildren) => {
       : null
   );
   const [user, setUser] = useState<UserHeader | null>();
-  const [users, setUsers] = useState<UserHeader[]>(
-    localStorage.getItem("users")
-      ? JSON.parse(localStorage.getItem("users") as string)
-      : null
-  );
+  const [users, setUsers] = useState<UserHeader[] | null>(null);
 
   const decodeJWT = (token: string): any => {
     try {
@@ -113,10 +107,8 @@ export const UserProvider = ({ children }: React.PropsWithChildren) => {
   const handleGetUsers = useCallback(async () => {
     const updatedUsers = await UserService.getUsers();
     if (updatedUsers) {
-      localStorage.setItem("users", JSON.stringify(updatedUsers));
       setUsers(updatedUsers);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleSignUp = async (user: User) => {
@@ -159,7 +151,6 @@ export const UserProvider = ({ children }: React.PropsWithChildren) => {
     googleLogout();
     localStorage.removeItem("auth");
     localStorage.removeItem("currentUser");
-    localStorage.removeItem("users");
     setCurrentUser(null);
   };
 
@@ -245,9 +236,8 @@ export const UserProvider = ({ children }: React.PropsWithChildren) => {
   };
 
   useEffect(() => {
-    !users && currentUser && handleGetUsers();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentUser]);
+    currentUser && handleGetUsers();
+  }, [currentUser, handleGetUsers]);
 
   return (
     <GoogleOAuthProvider

@@ -79,9 +79,10 @@ const Comment = ({
         <Box
           sx={{
             display: "flex",
+            flexDirection: { xs: "column", sm: "row" },
             flexwrap: "wrap",
             margin: ".4rem 0 0 0",
-            alignItems: "center",
+            alignItems: { xs: "flex-start", sm: "center" },
           }}
         >
           <Typography
@@ -93,95 +94,105 @@ const Comment = ({
           >
             {moment(comment.createdAt).fromNow()}
           </Typography>
-          {currentUser?._id === comment.creator?._id ? (
+          <Box
+            sx={{
+              display: "flex",
+              flexWrap: "wrap",
+              marginTop: { xs: ".2rem", sm: "0" },
+            }}
+          >
+            {currentUser?._id === comment.creator?._id ? (
+              <Box
+                sx={{
+                  margin: 0,
+                  color: palette?.warning,
+                  marginRight: ".5rem",
+                  fontWeight: 500,
+                  fontSize: ".8rem",
+                  cursor: "pointer",
+                  display: "flex",
+                }}
+                onClick={() => itemId && onDelete?.(itemId, comment)}
+              >
+                Delete
+              </Box>
+            ) : null}
             <Box
               sx={{
-                margin: 0,
-                color: palette?.warning,
-                marginRight: ".5rem",
-                fontWeight: 500,
-                fontSize: ".8rem",
-                cursor: "pointer",
                 display: "flex",
+                marginRight: ".5rem",
+                alignItems: "center",
               }}
-              onClick={() => itemId && onDelete?.(itemId, comment)}
             >
-              Delete
+              {comment.likes?.find((user) => user._id === currentUser?._id) ? (
+                <ThumbUp
+                  sx={{
+                    fontSize: ".9rem",
+                    cursor: "pointer",
+                    color: palette?.text.primary,
+                  }}
+                  onClick={debounce(
+                    () => itemId && onLike?.(itemId, comment),
+                    300
+                  )}
+                />
+              ) : (
+                <ThumbUpOffAlt
+                  sx={{ fontSize: "1rem", cursor: "pointer" }}
+                  onClick={debounce(
+                    () => itemId && onLike?.(itemId, comment),
+                    300
+                  )}
+                />
+              )}
+              <Typography
+                sx={{ display: "block", marginLeft: ".3rem" }}
+                component="span"
+                variant="body2"
+                fontSize={".8rem"}
+              >
+                {comment.likes?.length ? comment.likes.length : ""}
+              </Typography>
             </Box>
-          ) : null}
-          <Box
-            sx={{
-              display: "flex",
-              marginRight: ".5rem",
-              alignItems: "center",
-            }}
-          >
-            {comment.likes?.find((user) => user._id === currentUser?._id) ? (
-              <ThumbUp
-                sx={{
-                  fontSize: ".9rem",
-                  cursor: "pointer",
-                  color: palette?.text.primary,
-                }}
-                onClick={debounce(
-                  () => itemId && onLike?.(itemId, comment),
-                  300
-                )}
-              />
-            ) : (
-              <ThumbUpOffAlt
-                sx={{ fontSize: "1rem", cursor: "pointer" }}
-                onClick={debounce(
-                  () => itemId && onLike?.(itemId, comment),
-                  300
-                )}
-              />
-            )}
-            <Typography
-              sx={{ display: "block", marginLeft: ".3rem" }}
-              component="span"
-              variant="body2"
-              fontSize={".8rem"}
+            <Box
+              sx={{
+                display: "flex",
+                marginRight: ".5rem",
+                alignItems: "center",
+              }}
             >
-              {comment.likes?.length ? comment.likes.length : ""}
-            </Typography>
-          </Box>
-          <Box
-            sx={{
-              display: "flex",
-              marginRight: ".5rem",
-              alignItems: "center",
-            }}
-          >
-            {comment.dislikes?.find((user) => user._id === currentUser?._id) ? (
-              <ThumbDown
-                sx={{
-                  fontSize: ".9rem",
-                  cursor: "pointer",
-                  color: palette?.text.primary,
-                }}
-                onClick={debounce(
-                  () => itemId && onDislike?.(itemId, comment),
-                  300
-                )}
-              />
-            ) : (
-              <ThumbDownOffAlt
-                sx={{ fontSize: "1rem", cursor: "pointer" }}
-                onClick={debounce(
-                  () => itemId && onDislike?.(itemId, comment),
-                  300
-                )}
-              />
-            )}
-            <Typography
-              sx={{ display: "block", marginLeft: ".3rem" }}
-              component="span"
-              variant="body2"
-              fontSize={".8rem"}
-            >
-              {comment.dislikes?.length ? comment.dislikes.length : ""}
-            </Typography>
+              {comment.dislikes?.find(
+                (user) => user._id === currentUser?._id
+              ) ? (
+                <ThumbDown
+                  sx={{
+                    fontSize: ".9rem",
+                    cursor: "pointer",
+                    color: palette?.text.primary,
+                  }}
+                  onClick={debounce(
+                    () => itemId && onDislike?.(itemId, comment),
+                    300
+                  )}
+                />
+              ) : (
+                <ThumbDownOffAlt
+                  sx={{ fontSize: "1rem", cursor: "pointer" }}
+                  onClick={debounce(
+                    () => itemId && onDislike?.(itemId, comment),
+                    300
+                  )}
+                />
+              )}
+              <Typography
+                sx={{ display: "block", marginLeft: ".3rem" }}
+                component="span"
+                variant="body2"
+                fontSize={".8rem"}
+              >
+                {comment.dislikes?.length ? comment.dislikes.length : ""}
+              </Typography>
+            </Box>
           </Box>
         </Box>
       </Box>
