@@ -27,7 +27,6 @@ const Comments = ({
       sx={{
         display: "flex",
         width: "100%",
-        paddingTop: ".5rem",
       }}
     >
       <Accordion

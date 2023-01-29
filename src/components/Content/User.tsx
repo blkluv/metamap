@@ -7,6 +7,7 @@ import {
   FormLabel,
   Input,
   List,
+  ListItem,
   TextField,
   Typography,
 } from "@mui/material";
@@ -145,7 +146,7 @@ const User = () => {
           sx={{
             display: "flex",
             flexDirection: { xs: "column", sm: "row", md: "column", lg: "row" },
-            alignItems: { xs: "center", sm: "left" },
+            alignItems: { xs: "flex-start", sm: "center" },
             padding: "0 .5rem",
           }}
         >
@@ -276,7 +277,7 @@ const User = () => {
           <Box
             sx={{ display: "flex", m: 1, gridGap: "1rem", flexWrap: "wrap" }}
           >
-            <Box sx={{ m: 2 }}>
+            <Box sx={{ margin: { xs: "16px 16px 10px 0", md: 2 } }}>
               <Typography sx={{ fontWeight: 500, fontSize: "1.2rem" }}>
                 {getUsersItems([...events, ...businesses]).length}
               </Typography>
@@ -479,7 +480,25 @@ const User = () => {
               ))}
             </List>
           ) : (
-            <p>No posts to display.</p>
+            <Box sx={{ padding: "0 .5rem" }}>
+              <ListItem
+                sx={{
+                  borderRadius: "15px",
+                  marginBottom: "1rem",
+                  display: "flex",
+                  flexDirection: "column",
+                  padding: "1rem 1.5rem",
+                  alignItems: "flex-start",
+                  border: `1px solid ${palette?.background.tertiary}`,
+                  WebkitBoxShadow: "0px 0px 16px -8px rgba(0, 0, 0, 0.68)",
+                  boxShadow: "0px 0px 16px -8px rgba(0, 0, 0, 0.68)",
+                  color: palette?.text.primary,
+                  width: "fit-content",
+                }}
+              >
+                No posts to display
+              </ListItem>
+            </Box>
           )}
         </Box>
       </Box>

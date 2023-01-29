@@ -13,7 +13,7 @@ import UpdatePassword from "../Auth/UpdatePassword";
 
 const MenuAccordion = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
-  const { onDeleteUser } = useContext(UserContext);
+  const { currentUser, onDeleteUser } = useContext(UserContext);
   const { palette } = useContext(ThemeContext);
 
   const handleOpenDialog = () => {
@@ -29,31 +29,35 @@ const MenuAccordion = () => {
 
   return (
     <Box>
-      <Accordion
-        sx={{
-          color: palette?.text.tertiary,
-          borderRadius: "25px !important",
-          background: palette?.background.primary,
-          border: `1px solid ${palette?.background.tertiary}`,
-          WebkitBoxShadow: "0px 0px 16px -8px rgba(0, 0, 0, 0.68)",
-          boxShadow: "0px 0px 16px -8px rgba(0, 0, 0, 0.68)",
-          marginBottom: "0.5rem",
-          "&:before": {
-            display: "none",
-          },
-        }}
-      >
-        <AccordionSummary
-          expandIcon={<ExpandMoreIcon sx={{ color: palette?.text.tertiary }} />}
-          aria-controls="panel1a-content"
-          id="panel1a-header"
+      {!currentUser?.name.startsWith("guest") && !currentUser?.external ? (
+        <Accordion
+          sx={{
+            color: palette?.text.tertiary,
+            borderRadius: "25px !important",
+            background: palette?.background.primary,
+            border: `1px solid ${palette?.background.tertiary}`,
+            WebkitBoxShadow: "0px 0px 16px -8px rgba(0, 0, 0, 0.68)",
+            boxShadow: "0px 0px 16px -8px rgba(0, 0, 0, 0.68)",
+            marginBottom: "0.5rem",
+            "&:before": {
+              display: "none",
+            },
+          }}
         >
-          <Typography sx={{ fontWeight: 500 }}>Change Password</Typography>
-        </AccordionSummary>
-        <AccordionDetails>
-          <UpdatePassword transparent />
-        </AccordionDetails>
-      </Accordion>
+          <AccordionSummary
+            expandIcon={
+              <ExpandMoreIcon sx={{ color: palette?.text.tertiary }} />
+            }
+            aria-controls="panel1a-content"
+            id="panel1a-header"
+          >
+            <Typography sx={{ fontWeight: 500 }}>Change Password</Typography>
+          </AccordionSummary>
+          <AccordionDetails>
+            <UpdatePassword transparent />
+          </AccordionDetails>
+        </Accordion>
+      ) : null}
       <Accordion
         sx={{
           color: palette?.text.tertiary,

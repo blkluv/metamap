@@ -32,6 +32,7 @@ export interface UserHeader {
   description?: string;
   following?: UserHeader[];
   followers?: UserHeader[];
+  external?: boolean;
   avatar?: any;
   userId?: string;
   type?: string;
@@ -46,6 +47,7 @@ export interface User {
   following?: UserHeader[];
   followers?: UserHeader[];
   newsletter?: boolean;
+  external?: boolean;
   description?: string;
   avatar?: any;
 }
