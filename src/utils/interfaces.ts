@@ -240,71 +240,32 @@ export interface PostsContext {
   onAddPost?: (post: Post) => Promise<void>;
   onLikePost?: (id: string | undefined) => Promise<void>;
   onDeletePost?: (id: string | undefined) => Promise<void>;
-  onAddComment?: (
-    postId: string | undefined,
-    comment: Comment
-  ) => Promise<void>;
-  onLikeComment?: (
-    postId: string | undefined,
-    commentId: string | undefined
-  ) => Promise<void>;
-  onDislikeComment?: (
-    postId: string | undefined,
-    commentId: string | undefined
-  ) => Promise<void>;
-  onDeleteComment?: (
-    postId: string | undefined,
-    commentId: string | undefined
-  ) => Promise<void>;
+  onAddComment?: (postId: string, comment: Comment) => Promise<void>;
+  onLikeComment?: (postId: string, commentId: string) => Promise<void>;
+  onDislikeComment?: (postId: string, commentId: string) => Promise<void>;
+  onDeleteComment?: (postId: string, comment: Comment) => Promise<void>;
 }
 
 // Comment props
 export interface CommentProps {
   itemId: string | undefined;
   comment: Comment;
-  onLike?:
-    | ((
-        itemId: string | undefined,
-        commentId: string | undefined
-      ) => Promise<void>)
-    | undefined;
-  onDislike?:
-    | ((
-        itemId: string | undefined,
-        commentId: string | undefined
-      ) => Promise<void>)
-    | undefined;
-  onDelete?:
-    | ((
-        itemId: string | undefined,
-        commentId: string | undefined
-      ) => Promise<void>)
-    | undefined;
+  onLike?: (itemId: string, comment: Comment) => void;
+  onDislike?: (itemId: string, comment: Comment) => void;
+  onDelete?: (itemId: string, comment: Comment) => void;
+}
+
+export interface CommentsProps {
+  item: Post | Event | Business;
+  onAdd?: (itemId: string, comment: Comment) => Promise<void>;
+  onLike?: (itemId: string, commentId: string) => Promise<void>;
+  onDislike?: (itemId: string, commentId: string) => Promise<void>;
+  onDelete?: (itemId: string, comment: Comment) => Promise<void>;
 }
 
 export interface CommentFormProps {
   item: Post | Event | Business;
-  onAdd:
-    | ((itemId: string | undefined, comment: Comment) => Promise<void>)
-    | undefined;
-  onLike?:
-    | ((
-        itemId: string | undefined,
-        commentId: string | undefined
-      ) => Promise<void>)
-    | undefined;
-  onDislike?:
-    | ((
-        itemId: string | undefined,
-        commentId: string | undefined
-      ) => Promise<void>)
-    | undefined;
-  onDelete?:
-    | ((
-        itemId: string | undefined,
-        commentId: string | undefined
-      ) => Promise<void>)
-    | undefined;
+  onAdd: (itemId: string, comment: Comment) => void;
 }
 
 // theme

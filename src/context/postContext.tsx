@@ -1,6 +1,6 @@
 import { useState, useEffect, createContext, useContext } from "react";
 import PostService from "../services/postService";
-import { Post, PostsContext } from "../utils/interfaces";
+import { Comment, Post, PostsContext } from "../utils/interfaces";
 import CommunicationContext from "./communicationContext";
 import UserContext from "./userContext";
 
@@ -187,7 +187,7 @@ export const PostProvider = ({ children }: React.PropsWithChildren) => {
 
   const handleLikeComment = async (
     postId: string | undefined,
-    commentId: string | undefined
+    commentId: string
   ) => {
     const updatedPost = await PostService.likeComment(postId, commentId);
 
@@ -234,7 +234,7 @@ export const PostProvider = ({ children }: React.PropsWithChildren) => {
 
   const handleDislikeComment = async (
     postId: string | undefined,
-    commentId: string | undefined
+    commentId: string
   ) => {
     const updatedPost = await PostService.dislikeComment(postId, commentId);
     if (updatedPost) {
@@ -280,9 +280,9 @@ export const PostProvider = ({ children }: React.PropsWithChildren) => {
 
   const handleDeleteComment = async (
     postId: string | undefined,
-    commentId: string | undefined
+    { _id }: Comment
   ) => {
-    const updatedPost = await PostService.deleteComment(postId, commentId);
+    const updatedPost = await PostService.deleteComment(postId, _id);
     if (updatedPost) {
       let notification = {
         receiverId: updatedPost.creator?._id,

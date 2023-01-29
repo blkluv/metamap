@@ -21,7 +21,7 @@ const CommentForm = ({ item, onAdd }: CommentFormProps) => {
 
   const handleSubmitComment = (data: { comment: string }) => {
     const text = data.comment.trim();
-    text && onAdd?.(item._id, { text });
+    text && item._id && onAdd?.(item._id, { text });
     resetComment();
   };
 
