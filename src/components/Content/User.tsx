@@ -54,7 +54,7 @@ const User = () => {
     onGetUsersPosts?.(id);
     return () => onSetUser?.(null);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [id]);
+  }, [id, currentUser]);
 
   const {
     register: registerDescription,
