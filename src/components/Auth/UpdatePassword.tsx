@@ -105,7 +105,7 @@ const UpdatePassword = ({ transparent }: { transparent?: boolean }) => {
             required
             fullWidth
             label="Old Password"
-            type="oldpassword"
+            type="password"
             id="oldpassword"
             autoComplete="old-password"
             placeholder="8 - 25 characters"
@@ -120,7 +120,7 @@ const UpdatePassword = ({ transparent }: { transparent?: boolean }) => {
             required
             fullWidth
             label="New Password"
-            type="newpassword"
+            type="password"
             id="newpassword"
             autoComplete="new-password"
             placeholder="8 - 25 characters"
@@ -135,7 +135,7 @@ const UpdatePassword = ({ transparent }: { transparent?: boolean }) => {
             required
             fullWidth
             label="Confirm New Password"
-            type="confirmPassword"
+            type="password"
             id="confirmPassword"
             autoComplete="confirm-password"
             placeholder="8 - 25 characters"
