@@ -1,7 +1,8 @@
 import axios, { AxiosError } from "axios";
 import { notify } from "../utils/notifications";
 
-const BASE_URL = "http://geoevents-api-production.up.railway.app/communication";
+const BASE_URL =
+  "https://geoevents-api-production.up.railway.app/communication";
 
 class CommunicationService {
   http = axios.create({ baseURL: BASE_URL });
