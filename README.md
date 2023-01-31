@@ -1,12 +1,8 @@
 # GEOEVENTS
 
-```
 [LIVE SITE - FRONTEND](https://geoevents.pages.dev)
-```
 
-```
 [API](https://geoevents-api-production.up.railway.app)
-```
 
 ## Table of contents
 
