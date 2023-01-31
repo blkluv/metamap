@@ -2,7 +2,7 @@ import axios, { AxiosError } from "axios";
 import { Event } from "../utils/interfaces";
 import { notify } from "../utils/notifications";
 
-const BASE_URL = "http://localhost:5000/events";
+const BASE_URL = "http://geoevents-api-production.up.railway.app/events";
 
 class EventService {
   http = axios.create({ baseURL: BASE_URL });

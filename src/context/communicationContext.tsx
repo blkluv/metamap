@@ -55,11 +55,10 @@ export const CommunicationProvider = ({
   const [currentConversation, setCurrentConversation] =
     useState<ChatConversation | null>(null);
   const socket = useRef<any>();
-  // const targetRef = useRef<any>(null);
   const [targetElement, setTargetElement] = useState<any>(null);
 
   useEffect(() => {
-    socket.current = io("localhost:5500");
+    socket.current = io("geoevents-api-production.up.railway.app");
     socket.current?.on(
       "getMessage",
       ({ _id, sender, text, read, conversationId }: ChatMessage) => {

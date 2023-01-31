@@ -7,7 +7,7 @@ import {
 } from "../utils/interfaces";
 import { notify } from "../utils/notifications";
 
-const BASE_URL = "http://localhost:5000/users";
+const BASE_URL = "http://geoevents-api-production.up.railway.app/users";
 
 class UserService {
   http = axios.create({ baseURL: BASE_URL });

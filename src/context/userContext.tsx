@@ -59,7 +59,7 @@ export const UserProvider = ({ children }: React.PropsWithChildren) => {
 
   const socket = useRef<any>();
   useEffect(() => {
-    socket.current = io("localhost:5500");
+    socket.current = io("geoevents-api-production.up.railway.app");
   }, []);
 
   useEffect(() => {

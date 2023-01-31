@@ -24,27 +24,27 @@ const ChangePassword = () => {
   } = useForm({
     defaultValues: {
       password: null,
-      passwordRepeat: null,
+      confirmpassword: null,
     },
   });
 
   const handleChangePassword = (data: {
     password: string | null;
-    passwordRepeat: string | null;
+    confirmpassword: string | null;
   }) => {
     const password = data.password?.trim();
-    const passwordRepeat = data.passwordRepeat?.trim();
+    const confirmpassword = data.confirmpassword?.trim();
 
-    if (!password || !passwordRepeat) {
+    if (!password || !confirmpassword) {
       return notify("Please complete all fields.");
     }
 
-    if (password !== passwordRepeat) return notify("Passwords don't match.");
+    if (password !== confirmpassword) return notify("Passwords don't match.");
 
     const url = window.location;
     const token = url.hash.split("#access_token=")[1];
 
-    onChangePassword?.(token, { password, passwordRepeat });
+    onChangePassword?.(token, { password, confirmpassword });
     resetSignUp();
   };
 
@@ -102,7 +102,7 @@ const ChangePassword = () => {
         <Box
           component="form"
           onSubmit={handleRegisterChangePassword(
-            debounce(handleChangePassword, 400)
+            debounce(handleChangePassword, 300)
           )}
           sx={{ mt: 1 }}
         >
@@ -126,10 +126,10 @@ const ChangePassword = () => {
             required
             fullWidth
             label="Confirm Password"
-            type="passwordRepeat"
-            id="passwordRepeat"
-            autoComplete="current-passwordRepeat"
-            {...registerChangePassword("passwordRepeat", {
+            type="password"
+            id="confirmpassword"
+            autoComplete="current-confirmpassword"
+            {...registerChangePassword("confirmpassword", {
               required: true,
               minLength: 8,
               maxLength: 25,
