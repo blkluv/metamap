@@ -11,7 +11,9 @@ import EventContext from "../../context/eventContext";
 import BusinessContext from "../../context/businessContext";
 import UserContext from "../../context/userContext";
 import ThemeContext from "../../context/themeContext";
-import maplibregl from "maplibre-gl";
+// @ts-ignore
+// eslint-disable-next-line import/no-webpack-loader-syntax
+import maplibregl from "!maplibre-gl";
 import "maplibre-gl/dist/maplibre-gl.css";
 import { Box } from "@mui/material";
 import { PinCardProps } from "../../utils/interfaces";
