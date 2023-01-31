@@ -151,6 +151,7 @@ export interface EventHeader {
   event: Event;
   variant: string;
   popup?: boolean;
+  innerRef?: any;
 }
 
 export interface EventsListProps {
@@ -196,6 +197,7 @@ export interface BusinessHeader {
   business: Business;
   variant: string;
   popup?: boolean;
+  innerRef?: any;
 }
 
 export interface BusinessesListProps {
@@ -223,6 +225,17 @@ export interface Post {
   file?: any;
   createdAt?: string;
   likes?: UserHeader[];
+}
+
+export interface PostHeader {
+  post: Post;
+  innerRef?: any;
+}
+
+export interface PostsListProps {
+  items: Post[];
+  targetElement: any;
+  targetRef: any;
 }
 
 export interface PinCardProps {
@@ -338,6 +351,7 @@ export interface ChatConversation {
 
 export interface CommunicationContext {
   socket?: any;
+  targetElement?: any;
   messages: ChatMessage[];
   userMessages: ChatMessage[];
   onGetMessages?: (id: string | undefined) => Promise<void>;
@@ -346,6 +360,7 @@ export interface CommunicationContext {
   setUserMessages?: (messages: ChatMessage[]) => void;
   onReadMessage?: (id: string | undefined) => Promise<void>;
   dataUpdate?: number | null;
+  onSetTargetElement?: (target: any) => void;
   notifications: Notification[];
   arrivalNotification?: Notification | null;
   onlineUsers?: UserHeader[] | undefined;

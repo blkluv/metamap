@@ -46,6 +46,7 @@ export const EventProvider = ({ children }: React.PropsWithChildren) => {
             silent: false,
             read: false,
             type: "event",
+            payload: { event: newEvent },
           };
 
           onAddNotification?.(notification);
@@ -53,7 +54,6 @@ export const EventProvider = ({ children }: React.PropsWithChildren) => {
             ...notification,
             senderId: newEvent.creator?._id,
             senderName: newEvent.creator?.name,
-            payload: { event: newEvent },
           });
         });
       }
@@ -71,6 +71,7 @@ export const EventProvider = ({ children }: React.PropsWithChildren) => {
         silent: false,
         read: false,
         type: "event",
+        payload: { event: updatedEvent },
       };
 
       onAddNotification?.(notification);
@@ -78,7 +79,6 @@ export const EventProvider = ({ children }: React.PropsWithChildren) => {
         ...notification,
         senderId: currentUser?._id,
         senderName: currentUser?.name,
-        payload: { event: updatedEvent },
       });
 
       setSelectedEvent(updatedEvent);
@@ -98,6 +98,7 @@ export const EventProvider = ({ children }: React.PropsWithChildren) => {
         silent: true,
         read: false,
         type: "event",
+        payload: { event: updatedEvent },
       };
 
       onAddNotification?.(notification);
@@ -105,7 +106,6 @@ export const EventProvider = ({ children }: React.PropsWithChildren) => {
         ...notification,
         senderId: currentUser?._id,
         senderName: currentUser?.name,
-        payload: { event: updatedEvent },
       });
 
       setSelectedEvent(updatedEvent);
@@ -139,6 +139,7 @@ export const EventProvider = ({ children }: React.PropsWithChildren) => {
         silent: false,
         read: false,
         type: "event",
+        payload: { event: updatedEvent },
       };
 
       onAddNotification?.(notification);
@@ -146,7 +147,6 @@ export const EventProvider = ({ children }: React.PropsWithChildren) => {
         ...notification,
         senderId: currentUser?._id,
         senderName: currentUser?.name,
-        payload: { event: updatedEvent },
       });
 
       const updatedEvents = events.map((event) =>
@@ -220,11 +220,8 @@ export const EventProvider = ({ children }: React.PropsWithChildren) => {
 
     if (arrivalNotification?.type === "eventDeletion") {
       const { _id } = arrivalNotification.payload;
-
       const updatedEvents = events.filter((event) => event._id !== _id);
-
       setEvents?.(updatedEvents);
-
       selectedEvent?._id === _id && setSelectedEvent?.(undefined);
     }
 

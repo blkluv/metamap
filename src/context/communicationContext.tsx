@@ -24,6 +24,7 @@ const INITIAL_STATE: Communication = {
   conversations: [],
   notifications: [],
   currentConversation: null,
+  targetElement: null,
 };
 
 CommunicationService.http.interceptors.request.use((req: any) => {
@@ -54,6 +55,8 @@ export const CommunicationProvider = ({
   const [currentConversation, setCurrentConversation] =
     useState<ChatConversation | null>(null);
   const socket = useRef<any>();
+  // const targetRef = useRef<any>(null);
+  const [targetElement, setTargetElement] = useState<any>(null);
 
   useEffect(() => {
     socket.current = io("localhost:5500");
@@ -313,6 +316,8 @@ export const CommunicationProvider = ({
     }, 1000);
   };
 
+  const handleSetTargetElement = (target: any) => setTargetElement(target);
+
   useEffect(() => {
     if (currentUser && arrivalNotification && arrivalNotification?.payload) {
       handleGetNotifications(arrivalNotification.receiverId);
@@ -370,6 +375,8 @@ export const CommunicationProvider = ({
         setArrivalMessage,
         conversations,
         currentConversation,
+        targetElement,
+        onSetTargetElement: handleSetTargetElement,
         onGetMessages: handleGetMessages,
         onGetUserMessages: handleGetUserMessages,
         onGetConversations: handleGetConversations,

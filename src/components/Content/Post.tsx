@@ -13,7 +13,7 @@ import {
   ListItem,
   Typography,
 } from "@mui/material";
-import { Post as PostProps } from "../../utils/interfaces";
+import { PostHeader } from "../../utils/interfaces";
 import { notify } from "../../utils/notifications";
 import moment from "moment";
 import debounce from "../../utils/debounce";
@@ -23,7 +23,7 @@ import {
   RemoveCircleOutline,
 } from "@mui/icons-material";
 
-const Post = (post: PostProps) => {
+const Post = ({ post, innerRef }: PostHeader) => {
   const { currentUser, onGetAvatar } = useContext(UserContext);
   const {
     onLikePost,
@@ -68,6 +68,7 @@ const Post = (post: PostProps) => {
 
   return (
     <ListItem
+      // ref={innerRef}
       sx={{
         borderRadius: "25px",
         background: palette?.background.tertiary,
@@ -218,6 +219,7 @@ const Post = (post: PostProps) => {
         )}
       </Box>
       <Divider
+        ref={innerRef}
         variant="middle"
         sx={{
           background: "rgb(120,120,126)",

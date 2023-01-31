@@ -1,30 +1,27 @@
 import { useContext, useEffect, useRef } from "react";
 import List from "@mui/material/List";
-import EventHeader from "./EventHeader";
-import { Event, EventsListProps } from "../../utils/interfaces";
-import CommunicationContext from "../../context/communicationContext";
-import EventContext from "../../context/eventContext";
 import ThemeContext from "../../context/themeContext";
 import { Box, ListItem } from "@mui/material";
+import CommunicationContext from "../../context/communicationContext";
+import { PostsListProps } from "../../utils/interfaces";
+import Post from "./Post";
 
-const EventsList = ({ items }: EventsListProps) => {
+const PostList = ({ items }: PostsListProps) => {
   const { palette } = useContext(ThemeContext);
   const { targetElement, onSetTargetElement } =
     useContext(CommunicationContext);
-  const { onSetSelectedEvent } = useContext(EventContext);
   const targetRef = useRef<any>(null);
 
   useEffect(() => {
     if (targetElement) {
-      onSetSelectedEvent?.(targetElement);
       targetRef?.current?.scrollIntoView({
         behavior: "smooth",
-        block: "nearest",
-        inline: "start",
+        block: "start",
+        inline: "nearest",
       });
     }
     return () => onSetTargetElement?.(null);
-  }, [onSetSelectedEvent, onSetTargetElement, targetElement]);
+  }, [onSetTargetElement, targetElement]);
 
   return (
     <>
@@ -32,19 +29,18 @@ const EventsList = ({ items }: EventsListProps) => {
         <List
           sx={{
             width: "100%",
+            borderRadius: "25px",
             background: palette?.background.primary,
-            color: "white",
             padding: 1,
-            marginBottom: { xs: "0", md: "-5rem", lg: "-3rem" },
+            marginBottom: ".5rem",
             overflow: "scroll",
           }}
         >
-          {items.map((event: Event) => (
-            <EventHeader
-              innerRef={event._id === targetElement ? targetRef : null}
-              key={event._id}
-              variant={"list"}
-              event={event}
+          {items.map((element: any) => (
+            <Post
+              innerRef={element._id === targetElement ? targetRef : null}
+              key={element._id}
+              post={element}
             />
           ))}
         </List>
@@ -53,6 +49,7 @@ const EventsList = ({ items }: EventsListProps) => {
           <ListItem
             sx={{
               borderRadius: "15px",
+              background: palette?.background.tertiary,
               marginBottom: "1rem",
               display: "flex",
               flexDirection: "column",
@@ -65,7 +62,7 @@ const EventsList = ({ items }: EventsListProps) => {
               width: "fit-content",
             }}
           >
-            No events to display
+            No posts to display
           </ListItem>
         </Box>
       )}
@@ -73,4 +70,4 @@ const EventsList = ({ items }: EventsListProps) => {
   );
 };
 
-export default EventsList;
+export default PostList;

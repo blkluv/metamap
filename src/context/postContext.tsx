@@ -53,6 +53,7 @@ export const PostProvider = ({ children }: React.PropsWithChildren) => {
             silent: false,
             read: false,
             type: "post",
+            payload: { post: newPost },
           };
 
           onAddNotification?.(notification);
@@ -60,7 +61,6 @@ export const PostProvider = ({ children }: React.PropsWithChildren) => {
             ...notification,
             senderId: newPost.creator?._id,
             senderName: newPost.creator?.name,
-            payload: { post: newPost },
           });
         });
       }
@@ -87,6 +87,7 @@ export const PostProvider = ({ children }: React.PropsWithChildren) => {
             silent: true,
             read: false,
             type: "postDeletion",
+            payload: { _id: id },
           };
 
           onAddNotification?.(notification);
@@ -94,7 +95,6 @@ export const PostProvider = ({ children }: React.PropsWithChildren) => {
             ...notification,
             senderId: currentUser?._id,
             senderName: currentUser?.name,
-            payload: { _id: id },
           });
         });
       }
@@ -120,6 +120,7 @@ export const PostProvider = ({ children }: React.PropsWithChildren) => {
         silent: ifLike ? false : true,
         read: false,
         type: "post",
+        payload: { post: updatedPost },
       };
 
       onAddNotification?.(notification);
@@ -127,7 +128,6 @@ export const PostProvider = ({ children }: React.PropsWithChildren) => {
         ...notification,
         senderId: currentUser?._id,
         senderName: currentUser?.name,
-        payload: { post: updatedPost },
       });
 
       const updatedPosts = posts.map((post) =>
@@ -161,6 +161,7 @@ export const PostProvider = ({ children }: React.PropsWithChildren) => {
           silent: ifComment ? false : true,
           read: false,
           type: "post",
+          payload: { post: updatedPost },
         };
         onAddNotification?.(notification);
         setTimeout(() => {
@@ -168,7 +169,6 @@ export const PostProvider = ({ children }: React.PropsWithChildren) => {
             ...notification,
             senderId: currentUser?._id,
             senderName: currentUser?.name,
-            payload: { post: updatedPost },
           });
         }, 1000);
       }
@@ -208,6 +208,7 @@ export const PostProvider = ({ children }: React.PropsWithChildren) => {
         silent: ifLike ? false : true,
         read: false,
         type: "post",
+        payload: { post: updatedPost },
       };
 
       onAddNotification?.(notification);
@@ -216,7 +217,6 @@ export const PostProvider = ({ children }: React.PropsWithChildren) => {
           ...notification,
           senderId: currentUser?._id,
           senderName: currentUser?.name,
-          payload: { post: updatedPost },
         });
       }, 1000);
 
@@ -254,6 +254,7 @@ export const PostProvider = ({ children }: React.PropsWithChildren) => {
         silent: true,
         read: false,
         type: "post",
+        payload: { post: updatedPost },
       };
 
       onAddNotification?.(notification);
@@ -262,7 +263,6 @@ export const PostProvider = ({ children }: React.PropsWithChildren) => {
           ...notification,
           senderId: currentUser?._id,
           senderName: currentUser?.name,
-          payload: { post: updatedPost },
         });
       }, 1000);
 
@@ -290,6 +290,7 @@ export const PostProvider = ({ children }: React.PropsWithChildren) => {
         silent: true,
         read: false,
         type: "post",
+        payload: { post: updatedPost },
       };
 
       onAddNotification?.(notification);
@@ -298,7 +299,6 @@ export const PostProvider = ({ children }: React.PropsWithChildren) => {
           ...notification,
           senderId: currentUser?._id,
           senderName: currentUser?.name,
-          payload: { post: updatedPost },
         });
       }, 1000);
 

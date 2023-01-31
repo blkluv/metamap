@@ -38,6 +38,7 @@ const EventHeader = ({
   },
   variant,
   popup,
+  innerRef,
 }: Header) => {
   const {
     selectedEvent,
@@ -117,6 +118,7 @@ const EventHeader = ({
 
   return (
     <ListItem
+      ref={innerRef}
       alignItems="flex-start"
       sx={{
         cursor: "pointer",

@@ -1,18 +1,31 @@
-import { useContext, useEffect } from "react";
-import { Box, Divider, List, ListItem } from "@mui/material";
+import { useContext, useEffect, useRef } from "react";
+import { Box, Divider } from "@mui/material";
 import PostContext from "../../context/postContext";
-import ThemeContext from "../../context/themeContext";
-import Post from "./Post";
 import Share from "./Share";
+import PostList from "./PostsList";
+import CommunicationContext from "../../context/communicationContext";
 
 const Feed = () => {
   const { posts, onGetFollowingPosts } = useContext(PostContext);
-  const { palette } = useContext(ThemeContext);
+  const { targetElement, onSetTargetElement } =
+    useContext(CommunicationContext);
+  const targetRef = useRef<any>(null);
 
   useEffect(() => {
     onGetFollowingPosts?.();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  useEffect(() => {
+    if (targetElement) {
+      targetRef?.current?.scrollIntoView({
+        behavior: "smooth",
+        block: "end",
+        inline: "start",
+      });
+    }
+    return () => onSetTargetElement?.(null);
+  }, [onSetTargetElement, targetElement]);
 
   return (
     <Box
@@ -31,43 +44,11 @@ const Feed = () => {
           margin: "1rem 3rem 1rem 3rem",
         }}
       />
-      {posts.length > 0 ? (
-        <List
-          sx={{
-            width: "100%",
-            borderRadius: "25px",
-            background: palette?.background.primary,
-            padding: 1,
-            marginBottom: { xs: "0", md: "-5rem", lg: "-3rem" },
-            overflow: "scroll",
-          }}
-        >
-          {posts.map((element: any) => (
-            <Post key={element._id} {...element} />
-          ))}
-        </List>
-      ) : (
-        <Box sx={{ padding: "0 .5rem" }}>
-          <ListItem
-            sx={{
-              borderRadius: "15px",
-              background: palette?.background.tertiary,
-              marginBottom: "1rem",
-              display: "flex",
-              flexDirection: "column",
-              padding: "1rem 1.5rem",
-              alignItems: "flex-start",
-              border: `1px solid ${palette?.background.tertiary}`,
-              WebkitBoxShadow: "0px 0px 16px -8px rgba(0, 0, 0, 0.68)",
-              boxShadow: "0px 0px 16px -8px rgba(0, 0, 0, 0.68)",
-              color: palette?.text.primary,
-              width: "fit-content",
-            }}
-          >
-            No posts to display
-          </ListItem>
-        </Box>
-      )}
+      <PostList
+        items={posts}
+        targetElement={targetElement}
+        targetRef={targetRef}
+      />
     </Box>
   );
 };

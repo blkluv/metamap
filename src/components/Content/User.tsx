@@ -476,7 +476,7 @@ const User = () => {
           {usersPosts.length > 0 ? (
             <List sx={{ padding: 1 }}>
               {usersPosts.map((element: any) => (
-                <Post key={element._id} {...element} />
+                <Post key={element._id} post={element} />
               ))}
             </List>
           ) : (

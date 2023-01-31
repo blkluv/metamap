@@ -39,6 +39,7 @@ const BusinessHeader = ({
   },
   variant,
   popup,
+  innerRef,
 }: Header) => {
   const {
     selectedBusiness,
@@ -90,6 +91,7 @@ const BusinessHeader = ({
 
   return (
     <ListItem
+      ref={innerRef}
       alignItems="flex-start"
       sx={{
         cursor: "pointer",

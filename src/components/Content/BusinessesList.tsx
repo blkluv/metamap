@@ -1,12 +1,30 @@
-import { useContext } from "react";
+import { useContext, useEffect, useRef } from "react";
 import List from "@mui/material/List";
 import BusinessHeader from "./BusinessHeader";
 import { Business, BusinessesListProps } from "../../utils/interfaces";
 import ThemeContext from "../../context/themeContext";
 import { Box, ListItem } from "@mui/material";
+import CommunicationContext from "../../context/communicationContext";
+import BusinessContext from "../../context/businessContext";
 
 const BusinessesList = ({ items }: BusinessesListProps) => {
   const { palette } = useContext(ThemeContext);
+  const { targetElement, onSetTargetElement } =
+    useContext(CommunicationContext);
+  const { onSetSelectedBusiness } = useContext(BusinessContext);
+  const targetRef = useRef<any>(null);
+
+  useEffect(() => {
+    if (targetElement) {
+      onSetSelectedBusiness?.(targetElement);
+      targetRef?.current?.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+        inline: "nearest",
+      });
+    }
+    return () => onSetTargetElement?.(null);
+  }, [onSetSelectedBusiness, onSetTargetElement, targetElement]);
 
   return (
     <>
@@ -23,6 +41,7 @@ const BusinessesList = ({ items }: BusinessesListProps) => {
         >
           {items.map((business: Business) => (
             <BusinessHeader
+              innerRef={business._id === targetElement ? targetRef : null}
               key={business._id}
               variant={"list"}
               business={business}

@@ -36,7 +36,7 @@ const Notifications = () => {
           sx={{
             fontWeight: 700,
             textTransform: "uppercase",
-            marginBottom: ".5rem",
+            marginBottom: "0",
             display: "flex",
             justifyItems: "center",
             alignItems: "center",

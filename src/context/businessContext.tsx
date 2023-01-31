@@ -48,6 +48,7 @@ export const BusinessProvider = ({ children }: React.PropsWithChildren) => {
             silent: false,
             read: false,
             type: "business",
+            payload: { business: newBusiness },
           };
 
           onAddNotification?.(notification);
@@ -55,7 +56,6 @@ export const BusinessProvider = ({ children }: React.PropsWithChildren) => {
             ...notification,
             senderId: newBusiness.creator?._id,
             senderName: newBusiness.creator?.name,
-            payload: { business: newBusiness },
           });
         });
       }
@@ -79,6 +79,7 @@ export const BusinessProvider = ({ children }: React.PropsWithChildren) => {
         silent: ifLike ? false : true,
         read: false,
         type: "business",
+        payload: { business: updatedBusiness },
       };
 
       onAddNotification?.(notification);
@@ -86,7 +87,6 @@ export const BusinessProvider = ({ children }: React.PropsWithChildren) => {
         ...notification,
         senderId: currentUser?._id,
         senderName: currentUser?.name,
-        payload: { business: updatedBusiness },
       });
 
       const updatedBusinesses = businesses.map((business) =>
@@ -107,6 +107,7 @@ export const BusinessProvider = ({ children }: React.PropsWithChildren) => {
         silent: false,
         read: false,
         type: "business",
+        payload: { business: updatedBusiness },
       };
 
       onAddNotification?.(notification);
@@ -114,7 +115,6 @@ export const BusinessProvider = ({ children }: React.PropsWithChildren) => {
         ...notification,
         senderId: currentUser?._id,
         senderName: currentUser?.name,
-        payload: { business: updatedBusiness },
       });
 
       const updatedBusinesses = businesses.map((business) =>
@@ -151,6 +151,7 @@ export const BusinessProvider = ({ children }: React.PropsWithChildren) => {
             silent: true,
             read: false,
             type: "businessDeletion",
+            payload: { _id: id },
           };
 
           onAddNotification?.(notification);
@@ -158,7 +159,6 @@ export const BusinessProvider = ({ children }: React.PropsWithChildren) => {
             ...notification,
             senderId: currentUser?._id,
             senderName: currentUser?.name,
-            payload: { _id: id },
           });
         });
       }
