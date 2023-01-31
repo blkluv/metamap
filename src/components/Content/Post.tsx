@@ -68,7 +68,7 @@ const Post = ({ post, innerRef }: PostHeader) => {
 
   return (
     <ListItem
-      // ref={innerRef}
+      ref={innerRef}
       sx={{
         borderRadius: "25px",
         background: palette?.background.tertiary,
@@ -219,7 +219,6 @@ const Post = ({ post, innerRef }: PostHeader) => {
         )}
       </Box>
       <Divider
-        ref={innerRef}
         variant="middle"
         sx={{
           background: "rgb(120,120,126)",
