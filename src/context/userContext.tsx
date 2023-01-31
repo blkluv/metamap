@@ -160,7 +160,6 @@ export const UserProvider = ({ children }: React.PropsWithChildren) => {
 
   const handleChangePassword = async (token: string, data: object) => {
     const response = await UserService.changePassword(token, data);
-    console.log(response);
     if (response.state === "success") {
       navigate("/account/signin");
     }

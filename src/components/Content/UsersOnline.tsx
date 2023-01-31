@@ -67,7 +67,7 @@ const UsersOnline = ({ onlineUsers }: ChatProps) => {
             fontSize: "1rem",
             textDecoration: "none",
             fontWeight: 500,
-            color: palette?.text.secondary,
+            color: palette?.text.tertiary,
             "&:hover": {
               color: palette?.text.primary,
             },
