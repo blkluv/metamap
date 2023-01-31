@@ -7,7 +7,7 @@ const convertImage = async (file: File, width: number, height: number) => {
       width,
       height,
       "JPG",
-      90,
+      80,
       0,
       (result) => {
         resolve(result);

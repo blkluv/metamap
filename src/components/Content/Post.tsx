@@ -22,6 +22,8 @@ import {
   FavoriteBorder,
   RemoveCircleOutline,
 } from "@mui/icons-material";
+// @ts-ignore
+import ReactEmoji from "react-emoji";
 
 const Post = ({ post, innerRef }: PostHeader) => {
   const { currentUser, onGetAvatar } = useContext(UserContext);
@@ -171,20 +173,27 @@ const Post = ({ post, innerRef }: PostHeader) => {
               onClick={debounce(() => handleLikePost(), 300)}
             />
           )}
-          <Typography
-            sx={{ display: "block", marginLeft: ".3rem", marginRight: ".5rem" }}
-            component="span"
-            variant="body2"
-            fontSize={".9rem"}
-          >
-            {post.likes?.length ? post.likes.length : ""}
-          </Typography>
+          {post.likes?.length ? (
+            <Typography
+              sx={{
+                display: "block",
+                marginLeft: ".3rem",
+                marginRight: ".5rem",
+              }}
+              component="span"
+              variant="body2"
+              fontSize={".9rem"}
+            >
+              {post.likes.length}
+            </Typography>
+          ) : null}
           {currentUser?._id === post.creator?._id ? (
             <RemoveCircleOutline
               sx={{
                 cursor: "pointer",
                 color: palette?.text.primary,
                 fontSize: "1.2rem",
+                marginLeft: ".3rem",
               }}
               onClick={() => handleOpenDialog()}
             />
@@ -193,13 +202,18 @@ const Post = ({ post, innerRef }: PostHeader) => {
       </Box>
       <Box sx={{ width: "100%" }}>
         <Typography
-          sx={{ display: "block", margin: "0 0 .5rem 0" }}
+          sx={{
+            margin: "0 0 .5rem 0",
+            "& img": {
+              margin: "0 .2rem",
+            },
+          }}
           component="p"
           variant="body2"
           color={palette?.text.tertiary}
           fontSize={"1rem"}
         >
-          {post.description}
+          {ReactEmoji.emojify(post.description)}
         </Typography>
         {post.file ? (
           <CardMedia

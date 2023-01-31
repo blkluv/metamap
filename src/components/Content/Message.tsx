@@ -4,6 +4,8 @@ import ThemeContext from "../../context/themeContext";
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 import { Avatar, Box, Typography } from "@mui/material";
 import { ChatMessageProps } from "../../utils/interfaces";
+// @ts-ignore
+import ReactEmoji from "react-emoji";
 import moment from "moment";
 
 const Message = ({
@@ -45,9 +47,12 @@ const Message = ({
               padding: "10px 16px",
               fontSize: ".9rem",
               width: "fit-content",
+              "& img": {
+                margin: "0 .2rem",
+              },
             }}
           >
-            {text}
+            {ReactEmoji.emojify(text)}
           </Typography>
           <Typography
             sx={{

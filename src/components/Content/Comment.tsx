@@ -12,6 +12,8 @@ import {
   ThumbDownOffAlt,
 } from "@mui/icons-material";
 import debounce from "../../utils/debounce";
+// @ts-ignore
+import ReactEmoji from "react-emoji";
 
 const Comment = ({
   itemId,
@@ -62,7 +64,15 @@ const Comment = ({
           }}
         />
       </NavLink>
-      <Box sx={{ display: "flex", flexDirection: "column" }}>
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          "& img": {
+            margin: "0 .2rem",
+          },
+        }}
+      >
         <Typography sx={{ fontSize: ".9rem" }}>
           <NavLink
             to={`/dashboard/profile/${comment.creator?.name}`}
@@ -70,11 +80,12 @@ const Comment = ({
               textDecoration: "none",
               color: palette?.text.tertiary,
               fontWeight: 700,
+              marginRight: ".3rem",
             }}
           >
             {comment.creator?.name}
           </NavLink>
-          {` ${comment.text}`}
+          {ReactEmoji.emojify(comment.text)}
         </Typography>
         <Box
           sx={{

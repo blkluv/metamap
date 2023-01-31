@@ -48,7 +48,7 @@ const Share = () => {
     };
 
     if (file) {
-      const convertedFile = await convertImage(file, 800, 600);
+      const convertedFile = await convertImage(file, 480, 320);
       postData.file = convertedFile;
     }
 
