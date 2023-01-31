@@ -162,7 +162,13 @@ const BusinessHeader = ({
         disableTypography
         primary={
           <>
-            <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "space-between",
+                flexWrap: "wrap",
+              }}
+            >
               <Box
                 sx={{
                   display: "flex",
@@ -185,7 +191,6 @@ const BusinessHeader = ({
               <Box
                 sx={{
                   display: "flex",
-                  marginLeft: "1.5rem",
                   color: palette?.text.tertiary,
                 }}
               >
