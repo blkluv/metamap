@@ -281,7 +281,7 @@ const BusinessPin = ({ lng, lat, onClose }: PinCardProps) => {
           {...registerBusiness("email", {
             required: true,
             minLength: 3,
-            maxLength: 25,
+            maxLength: 40,
           })}
         />
         <CssTextField
