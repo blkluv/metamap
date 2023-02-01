@@ -4,8 +4,9 @@ import UserHeader from "./UserHeader";
 import ThemeContext from "../../context/themeContext";
 import { UserHeader as Header, SocialListProps } from "../../utils/interfaces";
 import { Box, ListItem } from "@mui/material";
+import ScrollToTheTop from "../Elements/ScrollToTheTop";
 
-const SocialList = ({ data }: SocialListProps) => {
+const SocialList = ({ data, scrollRef }: SocialListProps) => {
   const { palette } = useContext(ThemeContext);
 
   return (
@@ -17,12 +18,12 @@ const SocialList = ({ data }: SocialListProps) => {
             background: palette?.background.primary,
             padding: ".5rem",
             marginBottom: { xs: "0", md: "-2rem", lg: "-3rem" },
-            overflow: "scroll",
           }}
         >
           {data.map((user: Header) => (
             <UserHeader key={user._id} {...user} />
           ))}
+          <ScrollToTheTop minLength={5} data={data} scrollRef={scrollRef} />
         </List>
       ) : (
         <Box sx={{ padding: "0 .5rem" }}>

@@ -10,7 +10,7 @@ import SearchField from "../Elements/SearchField";
 import { UserHeader } from "../../utils/interfaces";
 import { Check, Close, Visibility } from "@mui/icons-material";
 
-export const SocialMenu = ({ handleFilter, users }: any) => {
+export const SocialMenu = ({ handleFilter, users, scrollRef }: any) => {
   const { currentUser } = useContext(UserContext);
   const { palette } = useContext(ThemeContext);
 
@@ -30,6 +30,7 @@ export const SocialMenu = ({ handleFilter, users }: any) => {
 
   return (
     <Box
+      ref={scrollRef}
       sx={{
         width: "100%",
         background: palette?.background.primary,

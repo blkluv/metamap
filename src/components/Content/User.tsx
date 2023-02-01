@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import {
   Avatar,
   Box,
@@ -31,6 +31,7 @@ import convertImage from "../../utils/imageConverter";
 import debounce from "../../utils/debounce";
 import BusinessHeader from "./BusinessHeader";
 import { Check, Close, Edit } from "@mui/icons-material";
+import ScrollToTheTop from "../Elements/ScrollToTheTop";
 
 const User = () => {
   const { events } = useContext(EventContext);
@@ -48,6 +49,8 @@ const User = () => {
   const { id } = useParams();
   const [file, setFile] = useState<File | null>(null);
   const [editDescription, setEditDescription] = useState<boolean>(false);
+  const userMenuRef = useRef();
+  const userItemsRef = useRef();
 
   useEffect(() => {
     onGetUser?.(id);
@@ -143,6 +146,7 @@ const User = () => {
         }}
       >
         <Box
+          ref={userMenuRef}
           sx={{
             display: "flex",
             flexDirection: { xs: "column", sm: "row", md: "column", lg: "row" },
@@ -478,6 +482,11 @@ const User = () => {
               {usersPosts.map((element: any) => (
                 <Post key={element._id} post={element} />
               ))}
+              <ScrollToTheTop
+                minLength={5}
+                data={usersPosts}
+                scrollRef={userMenuRef}
+              />
             </List>
           ) : (
             <Box sx={{ padding: "0 .5rem" }}>
@@ -510,6 +519,7 @@ const User = () => {
           overflow: "scroll",
         }}
       >
+        <Box ref={userItemsRef}></Box>
         <Masonry columns={{ md: 2, sm: 2, sx: 1 }} spacing={2}>
           {getUsersItems([...events, ...businesses]).map((item: any) => {
             return item.type === "event" ? (
@@ -523,6 +533,11 @@ const User = () => {
             );
           })}
         </Masonry>
+        <ScrollToTheTop
+          minLength={5}
+          data={getUsersItems([...events, ...businesses])}
+          scrollRef={userItemsRef}
+        />
       </Box>
     </Box>
   );

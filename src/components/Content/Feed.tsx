@@ -11,6 +11,7 @@ const Feed = () => {
   const { targetElement, onSetTargetElement } =
     useContext(CommunicationContext);
   const targetRef = useRef<any>(null);
+  const feedMenuRef = useRef();
 
   useEffect(() => {
     onGetFollowingPosts?.();
@@ -38,7 +39,7 @@ const Feed = () => {
         overflow: "scroll",
       }}
     >
-      <Share />
+      <Share scrollRef={feedMenuRef} />
       <Divider
         variant="middle"
         sx={{
@@ -51,6 +52,7 @@ const Feed = () => {
           items={posts}
           targetElement={targetElement}
           targetRef={targetRef}
+          scrollRef={feedMenuRef}
         />
       ) : (
         <FeedTimeline />

@@ -1,13 +1,15 @@
-import { useContext } from "react";
+import { useContext, useRef } from "react";
 import ThemeContext from "../../context/themeContext";
 import CommunicationContext from "../../context/communicationContext";
 import { Box, List, Typography } from "@mui/material";
 import { Notification } from "../../utils/interfaces";
 import NotificationHeader from "./NotificationHeader";
+import ScrollToTheTop from "../Elements/ScrollToTheTop";
 
 const Notifications = () => {
   const { notifications } = useContext(CommunicationContext);
   const { palette } = useContext(ThemeContext);
+  const headerRef = useRef();
 
   const visibleNotifications = notifications.filter(
     (notification) => !notification.silent
@@ -31,6 +33,7 @@ const Notifications = () => {
         overflow: "scroll",
       }}
     >
+      <Box ref={headerRef} sx={{ marginBottom: ".5rem" }}></Box>
       <Box sx={{ width: "100%" }}>
         <Typography
           sx={{
@@ -54,6 +57,11 @@ const Notifications = () => {
                 notification={notification}
               />
             ))}
+            <ScrollToTheTop
+              minLength={10}
+              data={visibleNotifications}
+              scrollRef={headerRef}
+            />
           </List>
         ) : (
           <Typography

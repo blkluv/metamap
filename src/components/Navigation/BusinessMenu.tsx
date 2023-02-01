@@ -10,7 +10,11 @@ import { Business, ItemMenuProps } from "../../utils/interfaces";
 import SearchField from "../Elements/SearchField";
 import { TravelExplore, Check, FavoriteBorder } from "@mui/icons-material";
 
-export const BusinessMenu = ({ items, handleFilter }: ItemMenuProps) => {
+export const BusinessMenu = ({
+  items,
+  handleFilter,
+  scrollRef,
+}: ItemMenuProps) => {
   const { currentUser } = useContext(UserContext);
   const { palette } = useContext(ThemeContext);
 
@@ -30,6 +34,7 @@ export const BusinessMenu = ({ items, handleFilter }: ItemMenuProps) => {
 
   return (
     <Box
+      ref={scrollRef}
       sx={{
         width: "100%",
         background: palette?.background.primary,

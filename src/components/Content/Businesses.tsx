@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useState, useRef } from "react";
 import BusinessContext from "../../context/businessContext";
 import { Box } from "@mui/material";
 import BusinessMenu from "../Navigation/BusinessMenu";
@@ -11,6 +11,7 @@ const Businesses = () => {
     useContext(BusinessContext);
   const { selectedEvent, onRemoveSelectedEvent } = useContext(EventContext);
   const [filteredItems, setFilteredItems] = useState(null);
+  const businessMenuRef = useRef();
 
   useEffect(() => {
     if (filteredItems) {
@@ -50,10 +51,18 @@ const Businesses = () => {
         flexDirection: "column",
         width: "100%",
         height: "100%",
+        overflow: "scroll",
       }}
     >
-      <BusinessMenu items={businesses} handleFilter={handleFilter} />
-      <BusinessesList items={filteredItems ? filteredItems : businesses} />
+      <BusinessMenu
+        items={businesses}
+        handleFilter={handleFilter}
+        scrollRef={businessMenuRef}
+      />
+      <BusinessesList
+        items={filteredItems ? filteredItems : businesses}
+        scrollRef={businessMenuRef}
+      />
     </Box>
   );
 };

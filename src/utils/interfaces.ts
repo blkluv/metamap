@@ -85,6 +85,7 @@ export interface FollowResponse {
 
 export interface SocialListProps {
   data: UserHeader[];
+  scrollRef: any;
 }
 
 export interface UsersContext {
@@ -156,11 +157,13 @@ export interface EventHeader {
 
 export interface EventsListProps {
   items: Event[];
+  scrollRef?: any;
 }
 
 export interface ItemMenuProps {
   items: any;
   handleFilter: (data: any) => void;
+  scrollRef?: any;
 }
 
 // business
@@ -202,6 +205,7 @@ export interface BusinessHeader {
 
 export interface BusinessesListProps {
   items: Business[];
+  scrollRef?: any;
 }
 
 export interface BusinessesContext {
@@ -236,6 +240,7 @@ export interface PostsListProps {
   items: Post[];
   targetElement: any;
   targetRef: any;
+  scrollRef: any;
 }
 
 export interface PinCardProps {
@@ -436,4 +441,10 @@ export interface SearchFieldProps {
   data: any;
   vertical?: boolean;
   filter: (data: any) => void;
+}
+
+export interface ScrollToTheTopProps {
+  minLength: number;
+  data: any;
+  scrollRef?: any;
 }

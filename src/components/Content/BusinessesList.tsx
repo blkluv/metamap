@@ -6,8 +6,9 @@ import ThemeContext from "../../context/themeContext";
 import { Box, ListItem } from "@mui/material";
 import CommunicationContext from "../../context/communicationContext";
 import BusinessContext from "../../context/businessContext";
+import ScrollToTheTop from "../Elements/ScrollToTheTop";
 
-const BusinessesList = ({ items }: BusinessesListProps) => {
+const BusinessesList = ({ items, scrollRef }: BusinessesListProps) => {
   const { palette } = useContext(ThemeContext);
   const { targetElement, onSetTargetElement } =
     useContext(CommunicationContext);
@@ -36,7 +37,6 @@ const BusinessesList = ({ items }: BusinessesListProps) => {
             color: "white",
             padding: 1,
             marginBottom: { xs: "0", md: "-5rem", lg: "-3rem" },
-            overflow: "scroll",
           }}
         >
           {items.map((business: Business) => (
@@ -47,6 +47,7 @@ const BusinessesList = ({ items }: BusinessesListProps) => {
               business={business}
             />
           ))}
+          <ScrollToTheTop minLength={5} data={items} scrollRef={scrollRef} />
         </List>
       ) : (
         <Box sx={{ padding: "0 .5rem" }}>

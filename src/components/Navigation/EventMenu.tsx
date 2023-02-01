@@ -10,7 +10,11 @@ import SearchField from "../Elements/SearchField";
 import { Event, ItemMenuProps } from "../../utils/interfaces";
 import { TravelExplore, Check, AccessTime } from "@mui/icons-material";
 
-export const EventMenu = ({ items, handleFilter }: ItemMenuProps) => {
+export const EventMenu = ({
+  items,
+  handleFilter,
+  scrollRef,
+}: ItemMenuProps) => {
   const { currentUser } = useContext(UserContext);
   const { palette } = useContext(ThemeContext);
 
@@ -36,6 +40,7 @@ export const EventMenu = ({ items, handleFilter }: ItemMenuProps) => {
 
   return (
     <Box
+      ref={scrollRef}
       sx={{
         width: "100%",
         background: palette?.background.primary,

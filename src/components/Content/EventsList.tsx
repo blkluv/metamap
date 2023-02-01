@@ -6,8 +6,9 @@ import CommunicationContext from "../../context/communicationContext";
 import EventContext from "../../context/eventContext";
 import ThemeContext from "../../context/themeContext";
 import { Box, ListItem } from "@mui/material";
+import ScrollToTheTop from "../Elements/ScrollToTheTop";
 
-const EventsList = ({ items }: EventsListProps) => {
+const EventsList = ({ items, scrollRef }: EventsListProps) => {
   const { palette } = useContext(ThemeContext);
   const { targetElement, onSetTargetElement } =
     useContext(CommunicationContext);
@@ -36,7 +37,6 @@ const EventsList = ({ items }: EventsListProps) => {
             color: "white",
             padding: 1,
             marginBottom: { xs: "0", md: "-5rem", lg: "-3rem" },
-            overflow: "scroll",
           }}
         >
           {items.map((event: Event) => (
@@ -47,6 +47,7 @@ const EventsList = ({ items }: EventsListProps) => {
               event={event}
             />
           ))}
+          <ScrollToTheTop minLength={5} data={items} scrollRef={scrollRef} />
         </List>
       ) : (
         <Box sx={{ padding: "0 .5rem" }}>

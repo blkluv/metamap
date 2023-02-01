@@ -20,7 +20,7 @@ import {
   TextField,
 } from "@mui/material";
 
-const Share = () => {
+const Share = ({ scrollRef }: any) => {
   const { onAddPost } = useContext(PostContext);
   const { currentUser } = useContext(UserContext);
   const { palette } = useContext(ThemeContext);
@@ -61,9 +61,11 @@ const Share = () => {
 
   return (
     <Box
+      ref={scrollRef}
       sx={{
         width: "100%",
         borderRadius: "10px",
+        paddingTop: ".5rem",
       }}
     >
       <Box
