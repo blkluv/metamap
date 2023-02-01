@@ -1,11 +1,11 @@
 import { useContext, useEffect, useRef } from "react";
 import List from "@mui/material/List";
 import ThemeContext from "../../context/themeContext";
-import { Box, Button, ListItem } from "@mui/material";
+import { Box, ListItem } from "@mui/material";
 import CommunicationContext from "../../context/communicationContext";
 import { PostsListProps } from "../../utils/interfaces";
-import KeyboardDoubleArrowUpIcon from "@mui/icons-material/KeyboardDoubleArrowUp";
 import Post from "./Post";
+import ScrollToTheTop from "../Elements/ScrollToTheTop";
 
 const PostList = ({ items, scrollRef }: PostsListProps) => {
   const { palette } = useContext(ThemeContext);
@@ -43,27 +43,7 @@ const PostList = ({ items, scrollRef }: PostsListProps) => {
               post={element}
             />
           ))}
-          {items.length > 5 ? (
-            <ListItem sx={{ display: "flex", justifyContent: "center" }}>
-              <Button
-                variant="contained"
-                startIcon={<KeyboardDoubleArrowUpIcon />}
-                disableElevation
-                sx={{
-                  color: palette?.text.primary,
-                  background: palette?.background.tertiary,
-                  marginLeft: "0 !important",
-                  marginRight: "0.5rem !important",
-                  marginTop: "0.5rem !important",
-                }}
-                onClick={() =>
-                  scrollRef.current.scrollIntoView({ behavior: "smooth" })
-                }
-              >
-                Top
-              </Button>
-            </ListItem>
-          ) : null}
+          <ScrollToTheTop minLength={5} data={items} scrollRef={scrollRef} />
         </List>
       ) : (
         <Box sx={{ padding: "0 .5rem" }}>
