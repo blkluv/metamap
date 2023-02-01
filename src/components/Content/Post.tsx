@@ -206,6 +206,9 @@ const Post = ({ post, innerRef }: PostHeader) => {
             margin: "0 0 .5rem 0",
             "& img": {
               margin: "0 .2rem",
+              width: ".9rem",
+              height: ".9rem",
+              padding: "0",
             },
           }}
           component="p"

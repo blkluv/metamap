@@ -70,6 +70,9 @@ const Comment = ({
           flexDirection: "column",
           "& img": {
             margin: "0 .2rem",
+            width: ".9rem",
+            height: ".9rem",
+            padding: "0",
           },
         }}
       >
