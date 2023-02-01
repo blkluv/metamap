@@ -15,6 +15,7 @@ import {
   RemoveCircleOutline,
   Home,
   Person,
+  DoNotDisturb,
 } from "@mui/icons-material";
 import debounce from "../../utils/debounce";
 import preview from "../../images/preview.png";
@@ -82,27 +83,39 @@ const EventHeader = ({
   };
 
   const handleJoinEvent = () => {
-    if (currentUser?.name.startsWith("guest")) {
-      notify("DEMO users cannot join anything.");
-      return;
+    //@ts-ignore
+    const ended = new Date(end) < new Date();
+    if (!ended) {
+      if (currentUser?.name.startsWith("guest")) {
+        notify("DEMO users cannot join anything.");
+        return;
+      }
+      if (creator?._id === currentUser?._id) {
+        notify("You can't join your own event.");
+        return;
+      }
+      onJoinEvent?.(_id);
+    } else {
+      notify("This event is ended.");
     }
-    if (creator?._id === currentUser?._id) {
-      notify("You can't join your own event.");
-      return;
-    }
-    onJoinEvent?.(_id);
   };
 
   const handleLeaveEvent = () => {
-    if (currentUser?.name.startsWith("guest")) {
-      notify("DEMO users cannot leave anything.");
-      return;
+    //@ts-ignore
+    const ended = new Date(end) < new Date();
+    if (!ended) {
+      if (currentUser?.name.startsWith("guest")) {
+        notify("DEMO users cannot leave anything.");
+        return;
+      }
+      if (creator?._id === currentUser?._id) {
+        notify("You can't join your own event.");
+        return;
+      }
+      onLeaveEvent?.(_id);
+    } else {
+      notify("This event is ended.");
     }
-    if (creator?._id === currentUser?._id) {
-      notify("You can't join your own event.");
-      return;
-    }
-    onLeaveEvent?.(_id);
   };
 
   const handleOpenDialog = () => {
@@ -141,6 +154,29 @@ const EventHeader = ({
       selected={_id === selectedEvent?._id}
       onClick={() => (variant === "list" ? handleSelect() : null)}
     >
+      {/* @ts-ignore */}
+      {variant === "masonry" && new Date(end) < new Date() ? (
+        <Box
+          sx={{
+            display: "flex",
+            justifySelf: "center",
+            alignSelf: "center",
+            fontWeight: "bold",
+            marginBottom: ".5rem",
+          }}
+        >
+          <DoNotDisturb
+            sx={{
+              color: palette?.warning,
+              width: "1.2rem",
+              marginRight: ".2rem",
+            }}
+          />
+          <Typography color={palette?.warning} sx={{ fontWeight: "bold" }}>
+            Ended
+          </Typography>
+        </Box>
+      ) : null}
       {variant === "masonry" ? (
         <Box
           sx={{
@@ -189,6 +225,32 @@ const EventHeader = ({
         disableTypography
         primary={
           <>
+            {/* @ts-ignore */}
+            {variant === "list" && new Date(end) < new Date() ? (
+              <Box
+                sx={{
+                  display: "flex",
+                  justifySelf: "center",
+                  alignSelf: "center",
+                  fontWeight: "bold",
+                  marginBottom: ".5rem",
+                }}
+              >
+                <DoNotDisturb
+                  sx={{
+                    color: palette?.warning,
+                    width: "1.2rem",
+                    marginRight: ".2rem",
+                  }}
+                />
+                <Typography
+                  color={palette?.warning}
+                  sx={{ fontWeight: "bold" }}
+                >
+                  Ended
+                </Typography>
+              </Box>
+            ) : null}
             <Typography
               sx={{ display: "block", fontWeight: "500", mb: ".5rem" }}
               component="span"

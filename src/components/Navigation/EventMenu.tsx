@@ -8,7 +8,7 @@ import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import SearchField from "../Elements/SearchField";
 import { Event, ItemMenuProps } from "../../utils/interfaces";
-import { TravelExplore, Check, AccessTime } from "@mui/icons-material";
+import { TravelExplore, Check, DoNotDisturb } from "@mui/icons-material";
 
 export const EventMenu = ({
   items,
@@ -25,17 +25,15 @@ export const EventMenu = ({
     handleFilter(joined);
   };
 
-  const handleEndingEvents = (data: Event[] | null | undefined) => {
+  const handlePastEvents = (data: Event[] | null | undefined) => {
     const currentMoment = new Date();
-    const ending = data?.filter((item: Event | null) => {
+    const ended = data?.filter((item: Event | null) => {
       return (
         //@ts-ignore
-        new Date(item?.end) - 86400000 <= currentMoment &&
-        //@ts-ignore
-        new Date(item?.end) >= currentMoment
+        new Date(item?.end) < currentMoment
       );
     });
-    handleFilter(ending);
+    handleFilter(ended);
   };
 
   return (
@@ -99,7 +97,7 @@ export const EventMenu = ({
         </Button>
         <Button
           variant="outlined"
-          startIcon={<AccessTime />}
+          startIcon={<DoNotDisturb />}
           sx={{
             border: `1px solid ${palette?.background.tertiary}`,
             marginLeft: "0 !important",
@@ -107,9 +105,9 @@ export const EventMenu = ({
             marginTop: "0.5rem !important",
             color: palette?.warning,
           }}
-          onClick={() => handleEndingEvents(items)}
+          onClick={() => handlePastEvents(items)}
         >
-          Ending
+          Past
         </Button>
       </CardActions>
     </Box>
