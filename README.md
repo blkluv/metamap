@@ -1,8 +1,8 @@
 # GEOEVENTS
 
-[LIVE SITE - FRONTEND](https://geoevents.pages.dev)
+[WEBSITE - FRONTEND](https://geoevents.pages.dev)
 
-[API](https://geoevents-api-production.up.railway.app)
+[API - BACKEND](https://geoevents-api-production.up.railway.app)
 
 ## Table of contents
 
@@ -14,12 +14,14 @@
 
 ## About the project
 
-It allows you to create events and businesses on an interactive world map. You can comment, rate and join them. You can also search for places, connect with friends and chat with them in real time. On the board you can write posts that your friends will see. They will be able to comment and like them.
+It is a platform for creating contacts, spending time together and promoting activities or businesses. Users can create their own events on the map (e.g. presentation of a new application in the office or training together in the park). They can also sign up and participate in existing ones. In addition, users can place their own business on the map in order to attract customers (e.g. computer service). Each user has a board where they can create posts and comment on the posts of people they follow. They get notifications about the activities of others too. There is also a chat to arrange various details of meetings, etc.
 
 ## What do you need to build this application
 
 node.js >= 10.16
+
 npm >= 5.6
+
 [Download and install both](https://nodejs.org/)
 
 ## Getting started
