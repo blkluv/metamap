@@ -13,6 +13,7 @@ const MenuItem = ({ label, icon, color, link }: MenuItemProps) => {
   return (
     <ListItem
       sx={{
+        cursor: "pointer",
         paddingLeft: "0",
         paddingRight: "0",
         "&:first-of-type": {
