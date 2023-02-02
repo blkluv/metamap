@@ -279,13 +279,13 @@ const User = () => {
             </Box>
           </Box>
           <Box
-            sx={{ display: "flex", m: 1, gridGap: "1rem", flexWrap: "wrap" }}
+            sx={{ display: "flex", m: 1, gridGap: ".5rem", flexWrap: "wrap" }}
           >
             <Box sx={{ margin: { xs: "16px 16px 10px 0", md: 2 } }}>
               <Typography sx={{ fontWeight: 500, fontSize: "1.2rem" }}>
                 {getUsersItems([...events, ...businesses]).length}
               </Typography>
-              <Typography>Events</Typography>
+              <Typography>Markers</Typography>
             </Box>
             <Box sx={{ m: 2 }}>
               <Typography sx={{ fontWeight: 500, fontSize: "1.2rem" }}>
@@ -520,7 +520,7 @@ const User = () => {
         }}
       >
         <Box ref={userItemsRef}></Box>
-        <Masonry columns={{ md: 2, sm: 2, sx: 1 }} spacing={2}>
+        <Masonry columns={{ lg: 2, md: 1, sm: 1, sx: 1 }} spacing={2}>
           {getUsersItems([...events, ...businesses]).map((item: any) => {
             return item.type === "event" ? (
               <EventHeader key={item._id} variant={"masonry"} event={item} />

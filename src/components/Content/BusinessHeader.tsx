@@ -173,13 +173,17 @@ const BusinessHeader = ({
                 sx={{
                   display: "flex",
                   alignItems: "center",
-                  justifyContent: "space-between",
                   flexWrap: "wrap",
                   color: palette?.text.primary,
                 }}
               >
                 <Typography
-                  sx={{ display: "block", fontWeight: "500", mb: ".5rem" }}
+                  sx={{
+                    display: "block",
+                    fontWeight: "500",
+                    mb: ".5rem",
+                    mr: ".3rem",
+                  }}
                   component="span"
                   variant="body2"
                   color={palette?.text.tertiary}
