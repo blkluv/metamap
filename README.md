@@ -1,5 +1,7 @@
 # GEOEVENTS
 
+<img width="370" alt="ge" src="https://user-images.githubusercontent.com/88770213/216424986-96c906ec-45da-46e1-aba5-69209f0506ef.png">
+
 [WEBSITE - FRONTEND](https://geoevents.pages.dev)
 
 [API - BACKEND](https://geoevents-api-production.up.railway.app)
@@ -14,7 +16,7 @@
 
 ## About the project
 
-It is a platform for creating contacts, spending time together and promoting activities or businesses. Users can create their own events on the map (e.g. presentation of a new application in the office or training together in the park). They can also sign up and participate in existing ones. In addition, users can place their own business on the map in order to attract customers (e.g. computer service). Each user has a board where they can create posts and comment on the posts of people they follow. They get notifications about the activities of others too. There is also a chat to arrange various details of meetings, etc.
+It is a platform for making contacts, spending time together and promoting activities or businesses. Users can create their own events on the map (e.g. presentation of a new application in the office or training together in the park). They can also sign up and participate in existing ones. In addition, users can place their own business on the map in order to attract customers (e.g. computer service). Each user has a board where they can create posts and comment on the posts of people they follow. They get notifications about the activities of others too. There is also a chat to arrange various details of meetings, etc.
 
 ## What do you need to build this application
 
