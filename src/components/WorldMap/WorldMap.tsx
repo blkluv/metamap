@@ -11,6 +11,7 @@ import EventContext from "../../context/eventContext";
 import BusinessContext from "../../context/businessContext";
 import UserContext from "../../context/userContext";
 import ThemeContext from "../../context/themeContext";
+// library bugfix
 // @ts-ignore
 // eslint-disable-next-line import/no-webpack-loader-syntax
 import maplibregl from "!maplibre-gl";
@@ -22,6 +23,7 @@ import EventHeader from "../Content/EventHeader";
 import BusinessHeader from "../Content/BusinessHeader";
 import PopupController from "./PopupController";
 import Geocoder from "./Coder";
+import Legend from "./Legend";
 
 const WorldMap = () => {
   const { selectedEvent } = useContext(EventContext);
@@ -166,6 +168,7 @@ const WorldMap = () => {
             ) : null}
           </Popup>
         ) : null}
+        <Legend />
       </Map>
     </Box>
   );
