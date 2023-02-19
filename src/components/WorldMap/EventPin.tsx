@@ -50,7 +50,11 @@ const EventPin = ({ lng, lat, onClose }: PinCardProps) => {
     const category = data.category?.trim();
     const location = data.location?.trim();
 
-    if (!description || !title || !start || !end || !category || !location) {
+    if (!category) {
+      return notify("Please select a category.");
+    }
+
+    if (!description || !title || !start || !end || !location) {
       return notify("Please complete all fields.");
     }
 
@@ -213,9 +217,7 @@ const EventPin = ({ lng, lat, onClose }: PinCardProps) => {
                 },
               },
             }}
-            {...registerEvent("category", {
-              required: true,
-            })}
+            {...registerEvent("category", {})}
           >
             <MenuItem value={"art"}>Art</MenuItem>
             <MenuItem value={"business"}>Business</MenuItem>

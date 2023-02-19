@@ -54,12 +54,15 @@ const BusinessPin = ({ lng, lat, onClose }: PinCardProps) => {
     const email = data.email?.trim();
     const website = data.website?.trim();
 
+    if (!category) {
+      return notify("Please select a category.");
+    }
+
     if (
       !description ||
       !name ||
       !openingtime ||
       !address ||
-      !category ||
       !phone ||
       !email ||
       !website
@@ -200,9 +203,7 @@ const BusinessPin = ({ lng, lat, onClose }: PinCardProps) => {
                 },
               },
             }}
-            {...registerBusiness("category", {
-              required: true,
-            })}
+            {...registerBusiness("category", {})}
           >
             <MenuItem value={"community"}>Community</MenuItem>
             <MenuItem value={"education"}>Education</MenuItem>

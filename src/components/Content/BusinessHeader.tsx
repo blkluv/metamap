@@ -94,7 +94,7 @@ const BusinessHeader = ({
       ref={innerRef}
       alignItems="flex-start"
       sx={{
-        width: "fit-content",
+        width: variant === "list" ? "100%" : "fit-content",
         cursor: "pointer",
         borderRadius: "15px",
         background: popup
