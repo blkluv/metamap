@@ -1,11 +1,13 @@
-import { useContext, useEffect, useState } from "react";
-import CommunicationContext from "../../context/communicationContext";
+import { useEffect, useState } from "react";
 import { Box, List, Typography } from "@mui/material";
-import { ChatMessage } from "../../utils/interfaces";
+import { ChatMessage, ReduxState } from "../../utils/interfaces";
 import MessageHeader from "./MessageHeader";
+import { useSelector } from "react-redux";
 
 const Messages = () => {
-  const { userMessages } = useContext(CommunicationContext);
+  const { userMessages } = useSelector(
+    (state: ReduxState) => state.communication.data
+  );
   const [messages, setMessages] = useState<ChatMessage[]>([]);
 
   useEffect(() => {

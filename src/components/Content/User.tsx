@@ -1,4 +1,4 @@
-import { useContext, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   Avatar,
   Box,
@@ -11,53 +11,75 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import EventHeader from "./EventHeader";
 import Post from "./Post";
-import Masonry from "@mui/lab/Masonry";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
-import UserContext from "../../context/userContext";
-import EventContext from "../../context/eventContext";
-import BusinessContext from "../../context/businessContext";
-import PostContext from "../../context/postContext";
-import ThemeContext from "../../context/themeContext";
 import {
   Event,
   UserHeader,
   User as LoggedUser,
   Business,
+  ReduxState,
 } from "../../utils/interfaces";
 import convertImage from "../../utils/imageConverter";
 import debounce from "../../utils/debounce";
-import BusinessHeader from "./BusinessHeader";
 import { Check, Close, Edit } from "@mui/icons-material";
 import ScrollToTheTop from "../Elements/ScrollToTheTop";
+import { useSelector } from "react-redux";
+import { getUser } from "../../store/users";
+import { getUserPosts } from "../../store/posts";
+import { updateUser, followUser } from "../../store/currentUser";
+import { useAppDispatch } from "../../store/store";
+import { getBusinesses } from "../../store/businesses";
+import { getEvents } from "../../store/events";
+import UserItemsGallery from "./UserItemsGallery";
 
 const User = () => {
-  const { events } = useContext(EventContext);
-  const { businesses } = useContext(BusinessContext);
-  const { palette } = useContext(ThemeContext);
-  const { usersPosts, onGetUsersPosts } = useContext(PostContext);
+  const palette = useSelector((state: ReduxState) => state.theme.palette);
+  const currentUser = useSelector(
+    (state: ReduxState) => state.currentUser.data
+  );
+  const { userPosts } = useSelector((state: ReduxState) => state.posts.data);
   const {
-    user,
-    onSetUser,
-    currentUser,
-    onGetUser,
-    onUpdateUser,
-    onFollowUser,
-  } = useContext(UserContext);
+    data: { events },
+  } = useSelector((state: ReduxState) => state.events);
+  const {
+    data: { businesses },
+    status,
+  } = useSelector((state: ReduxState) => state.businesses);
   const { id } = useParams();
+  const navigate = useNavigate();
   const [file, setFile] = useState<File | null>(null);
+  const [user, setUser] = useState<UserHeader | undefined>(undefined);
   const [editDescription, setEditDescription] = useState<boolean>(false);
   const userMenuRef = useRef();
-  const userItemsRef = useRef();
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {}, [dispatch]);
 
   useEffect(() => {
-    onGetUser?.(id);
-    onGetUsersPosts?.(id);
-    return () => onSetUser?.(null);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [id, currentUser]);
+    const onGetUser = async (id: string) => {
+      const result = await getUser(id);
+      if (result) {
+        setUser(result);
+      } else {
+        navigate("/dashboard");
+      }
+    };
+
+    const onGetUserPosts = (id: string) => {
+      dispatch(getUserPosts(id));
+    };
+
+    if (id) {
+      onGetUser(id);
+      onGetUserPosts(id);
+      dispatch(getEvents());
+      dispatch(getBusinesses());
+    }
+
+    return () => setUser(undefined);
+  }, [dispatch, id, navigate]);
 
   const {
     register: registerDescription,
@@ -82,7 +104,7 @@ const User = () => {
     }
 
     try {
-      await onUpdateUser?.({ dataType: "avatar", data: String(convertedFile) });
+      dispatch(updateUser({ dataType: "avatar", data: String(convertedFile) }));
       setFile(null);
     } catch (err) {}
   };
@@ -93,10 +115,12 @@ const User = () => {
     const description = data.description?.trim();
     if (description) {
       try {
-        await onUpdateUser?.({
-          dataType: "description",
-          data: String(description),
-        });
+        dispatch(
+          updateUser({
+            dataType: "description",
+            data: String(description),
+          })
+        );
       } catch (err) {}
     }
     resetDescription();
@@ -142,7 +166,7 @@ const User = () => {
           overflow: "scroll",
           marginBottom: { xs: "2rem", md: "-2rem", lg: "-2.5rem" },
           minHeight: "15rem",
-          color: palette?.text.tertiary,
+          color: palette.text.tertiary,
         }}
       >
         <Box
@@ -226,10 +250,13 @@ const User = () => {
                 </Typography>
                 {currentUser?.name !== id ? (
                   <Button
-                    onClick={debounce(() => onFollowUser?.(user?._id), 400)}
+                    onClick={debounce(
+                      () => user && dispatch(followUser(user._id)),
+                      400
+                    )}
                     sx={{
                       color: ifFollowing(currentUser, user?._id)
-                        ? palette?.warning
+                        ? palette.warning
                         : "default",
                       borderRadius: "15px",
                       fontSize: ".8rem",
@@ -289,7 +316,7 @@ const User = () => {
             </Box>
             <Box sx={{ m: 2 }}>
               <Typography sx={{ fontWeight: 500, fontSize: "1.2rem" }}>
-                {usersPosts.length}
+                {userPosts.length}
               </Typography>
               <Typography>Posts</Typography>
             </Box>
@@ -321,7 +348,7 @@ const User = () => {
                         margin="dense"
                         maxRows={3}
                         InputProps={{ disableUnderline: true }}
-                        inputProps={{ style: { color: palette?.text.primary } }}
+                        inputProps={{ style: { color: palette.text.primary } }}
                         fullWidth
                         id="userDescription"
                         autoComplete="userDescription"
@@ -370,11 +397,14 @@ const User = () => {
           </Typography>
           {currentUser?.name !== id ? (
             <Button
-              onClick={debounce(() => onFollowUser?.(user?._id), 400)}
+              onClick={debounce(
+                () => user && dispatch(followUser(user._id)),
+                400
+              )}
               sx={{
                 color: ifFollowing(currentUser, user?._id)
-                  ? palette?.warning
-                  : palette?.blue,
+                  ? palette.warning
+                  : palette.blue,
                 borderRadius: "15px",
                 fontSize: ".8rem",
                 padding: "0 .5rem",
@@ -437,7 +467,7 @@ const User = () => {
                       margin="dense"
                       maxRows={3}
                       InputProps={{ disableUnderline: true }}
-                      inputProps={{ style: { color: palette?.text.primary } }}
+                      inputProps={{ style: { color: palette.text.primary } }}
                       fullWidth
                       id="userDescription"
                       autoComplete="userDescription"
@@ -477,14 +507,14 @@ const User = () => {
             marginBottom: { xs: "0", md: "-2rem", lg: "-3rem" },
           }}
         >
-          {usersPosts.length > 0 ? (
+          {userPosts.length > 0 ? (
             <List sx={{ padding: 1 }}>
-              {usersPosts.map((element: any) => (
+              {userPosts.map((element: any) => (
                 <Post key={element._id} post={element} />
               ))}
               <ScrollToTheTop
                 minLength={5}
-                data={usersPosts}
+                data={userPosts}
                 scrollRef={userMenuRef}
               />
             </List>
@@ -498,10 +528,10 @@ const User = () => {
                   flexDirection: "column",
                   padding: "1rem 1.5rem",
                   alignItems: "flex-start",
-                  border: `1px solid ${palette?.background.tertiary}`,
+                  border: `1px solid ${palette.background.tertiary}`,
                   WebkitBoxShadow: "0px 0px 16px -8px rgba(0, 0, 0, 0.68)",
                   boxShadow: "0px 0px 16px -8px rgba(0, 0, 0, 0.68)",
-                  color: palette?.text.primary,
+                  color: palette.text.primary,
                   width: "fit-content",
                 }}
               >
@@ -511,34 +541,10 @@ const User = () => {
           )}
         </Box>
       </Box>
-      <Box
-        sx={{
-          width: { xs: "100%", md: "60%" },
-          padding: 1,
-          marginBottom: { xs: "0", md: "-2rem", lg: "-2.5rem" },
-          overflow: "scroll",
-        }}
-      >
-        <Box ref={userItemsRef}></Box>
-        <Masonry columns={{ lg: 2, md: 1, sm: 1, sx: 1 }} spacing={2}>
-          {getUsersItems([...events, ...businesses]).map((item: any) => {
-            return item.type === "event" ? (
-              <EventHeader key={item._id} variant={"masonry"} event={item} />
-            ) : (
-              <BusinessHeader
-                key={item._id}
-                variant={"masonry"}
-                business={item}
-              />
-            );
-          })}
-        </Masonry>
-        <ScrollToTheTop
-          minLength={5}
-          data={getUsersItems([...events, ...businesses])}
-          scrollRef={userItemsRef}
-        />
-      </Box>
+      <UserItemsGallery
+        status={status}
+        userItems={getUsersItems([...events, ...businesses])}
+      />
     </Box>
   );
 };

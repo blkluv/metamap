@@ -1,9 +1,13 @@
-import { useContext } from "react";
-import ThemeContext from "../../context/themeContext";
 import { styled, alpha } from "@mui/material/styles";
 import InputBase from "@mui/material/InputBase";
 import SearchIcon from "@mui/icons-material/Search";
-import { Event, SearchFieldProps, UserHeader } from "../../utils/interfaces";
+import {
+  Event,
+  ReduxState,
+  SearchFieldProps,
+  UserHeader,
+} from "../../utils/interfaces";
+import { useSelector } from "react-redux";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -46,7 +50,7 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 }));
 
 const SearchField = ({ data, filter, vertical }: SearchFieldProps) => {
-  const { palette } = useContext(ThemeContext);
+  const palette = useSelector((state: ReduxState) => state.theme.palette);
 
   const handleFilter = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.value.trim().length >= 1) {
@@ -72,7 +76,7 @@ const SearchField = ({ data, filter, vertical }: SearchFieldProps) => {
         margin: vertical
           ? "0 .5rem 1.5rem 0 !important"
           : ".5rem .5rem 0 0 !important",
-        background: palette?.background.tertiary,
+        background: palette.background.tertiary,
       }}
     >
       <SearchIconWrapper>
@@ -80,7 +84,7 @@ const SearchField = ({ data, filter, vertical }: SearchFieldProps) => {
       </SearchIconWrapper>
       <StyledInputBase
         type="text"
-        placeholder="Search…"
+        placeholder="Start typing…"
         inputProps={{ "aria-label": "search" }}
         onChange={handleFilter}
       />

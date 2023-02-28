@@ -1,17 +1,17 @@
 import { Box } from "@mui/material";
 import { GoogleLogin } from "@react-oauth/google";
-import { useContext } from "react";
-import UserContext from "../../context/userContext";
+import { useAppDispatch } from "../../store/store";
+import { externalSignin } from "../../store/currentUser";
 import { notify } from "../../utils/notifications";
 
 const GoogleLoginButton = () => {
-  const { onExternalSignIn } = useContext(UserContext);
+  const dispatch = useAppDispatch();
 
   const googleSuccess = async (credentialResponse: any) => {
     const response = await credentialResponse;
 
     try {
-      onExternalSignIn?.(response);
+      dispatch(externalSignin(response));
     } catch (error: unknown) {
       if (error instanceof Error) {
         notify(error.message);

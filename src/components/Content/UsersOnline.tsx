@@ -1,31 +1,40 @@
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Box } from "@mui/material";
-import UserContext from "../../context/userContext";
-import ThemeContext from "../../context/themeContext";
-import CommunicationContext from "../../context/communicationContext";
 import UserHeaderSimple from "./UserHeaderSimple";
 import SearchField from "../Elements/SearchField";
 import { Link as RouterLink } from "react-router-dom";
 import { Link } from "@mui/material";
-import { ChatProps, UserHeader } from "../../utils/interfaces";
+import { ReduxState, UserHeader } from "../../utils/interfaces";
+import { useSelector } from "react-redux";
+import { getMembersConversation } from "../../store/communication";
+import { useAppDispatch } from "../../store/store";
 
-const UsersOnline = ({ onlineUsers }: ChatProps) => {
-  const { currentUser } = useContext(UserContext);
-  const { palette } = useContext(ThemeContext);
-  const { onGetMembersConversation } = useContext(CommunicationContext);
+const UsersOnline = () => {
+  const currentUser = useSelector(
+    (state: ReduxState) => state.currentUser.data
+  );
+  const { onlineUsers } = useSelector(
+    (state: ReduxState) => state.communication.data
+  );
+  const palette = useSelector((state: ReduxState) => state.theme.palette);
   const [online, setOnline] = useState<(string | null | undefined)[]>([]);
   const [filteredItems, setFilteredItems] = useState<
     UserHeader[] | null | undefined
   >(null);
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
-    if (onlineUsers) {
+    if (onlineUsers && onlineUsers.length > 0) {
       setOnline(onlineUsers.map((user: UserHeader) => user.userId));
     }
   }, [currentUser, onlineUsers]);
 
   const handleClick = (user: UserHeader) => {
-    onGetMembersConversation?.(currentUser?._id, user?._id);
+    const membersData = {
+      firstUserId: currentUser._id,
+      secondUserId: user._id,
+    };
+    dispatch(getMembersConversation(membersData));
   };
 
   const handleFilter = (data: UserHeader[] | null | undefined) => {
@@ -67,9 +76,9 @@ const UsersOnline = ({ onlineUsers }: ChatProps) => {
             fontSize: "1rem",
             textDecoration: "none",
             fontWeight: 500,
-            color: palette?.text.tertiary,
+            color: palette.text.tertiary,
             "&:hover": {
-              color: palette?.text.primary,
+              color: palette.text.primary,
             },
           }}
         >

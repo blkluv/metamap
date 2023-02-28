@@ -1,4 +1,4 @@
-import { useContext, useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
@@ -15,26 +15,32 @@ import MenuItem from "@mui/material/MenuItem";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import { Link as RouterLink } from "react-router-dom";
 import { Badge, Link } from "@mui/material";
-import UserContext from "../../context/userContext";
-import ThemeContext from "../../context/themeContext";
-import CommunicationContext from "../../context/communicationContext";
-import { ChatMessage, Notification } from "../../utils/interfaces";
+import { ChatMessage, Notification, ReduxState } from "../../utils/interfaces";
 import Toggler from "../Elements/Switch";
 import { EventMenuItems } from "../../constants/menuItems";
 import NotificationIcon from "../Content/NotificationIcon";
 import MessageIcon from "../Content/MessageIcon";
 import styled from "@emotion/styled";
+import { useSelector } from "react-redux";
+import { useAppDispatch } from "../../store/store";
+import { logout } from "../../store/currentUser";
+import { getNotifications } from "../../store/communication";
 
 const ResponsiveAppBar = () => {
-  const { currentUser, onLogout } = useContext(UserContext);
-  const { palette } = useContext(ThemeContext);
-  const { userMessages, notifications } = useContext(CommunicationContext);
+  const currentUser = useSelector(
+    (state: ReduxState) => state.currentUser.data
+  );
+  const { userMessages, notifications } = useSelector(
+    (state: ReduxState) => state.communication.data
+  );
+  const palette = useSelector((state: ReduxState) => state.theme.palette);
   const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
+  const dispatch = useAppDispatch();
 
   const StyledBadge = styled(Badge)(() => ({
     "& .MuiBadge-badge": {
-      backgroundColor: palette?.warning,
+      backgroundColor: palette.warning,
       color: "white",
       WebkitBoxShadow: "0px 0px 16px -8px rgba(0, 0, 0, 0.68)",
       boxShadow: "0px 0px 16px -8px rgba(0, 0, 0, 0.68)",
@@ -74,14 +80,18 @@ const ResponsiveAppBar = () => {
     [notifications, userMessages]
   );
 
+  useEffect(() => {
+    dispatch(getNotifications(currentUser._id));
+  }, [currentUser._id, dispatch]);
+
   return (
     <AppBar
       elevation={0}
       position="static"
       color="inherit"
       sx={{
-        background: palette?.background.primary,
-        color: palette?.text.primary,
+        background: palette.background.primary,
+        color: palette.text.primary,
       }}
     >
       <Container maxWidth={false} sx={{ padding: { md: "0.5rem 2.5rem" } }}>
@@ -92,9 +102,9 @@ const ResponsiveAppBar = () => {
               padding: ".5rem 1.5rem",
               borderRadius: "15px",
               display: { xs: "none", md: "flex" },
-              color: palette?.text.tertiary,
+              color: palette.text.tertiary,
               alignItems: "center",
-              border: `1px solid ${palette?.background.tertiary}`,
+              border: `1px solid ${palette.background.tertiary}`,
               WebkitBoxShadow: "0px 0px 16px -8px rgba(0, 0, 0, 0.68)",
               boxShadow: "0px 0px 16px -8px rgba(0, 0, 0, 0.68)",
             }}
@@ -104,7 +114,7 @@ const ResponsiveAppBar = () => {
                 marginLeft: "-.5rem",
                 marginRight: ".5rem",
                 width: "1.2rem",
-                color: palette?.green,
+                color: palette.green,
               }}
             />
             {new Date().toLocaleString("en-GB", {
@@ -142,8 +152,8 @@ const ResponsiveAppBar = () => {
               }}
               MenuListProps={{
                 style: {
-                  background: palette?.background.primary,
-                  color: palette?.text.primary,
+                  background: palette.background.primary,
+                  color: palette.text.primary,
                 },
               }}
             >
@@ -239,8 +249,8 @@ const ResponsiveAppBar = () => {
               <Menu
                 MenuListProps={{
                   style: {
-                    background: palette?.background.primary,
-                    color: palette?.text.primary,
+                    background: palette.background.primary,
+                    color: palette.text.primary,
                   },
                 }}
                 sx={{ mt: "45px" }}
@@ -306,12 +316,12 @@ const ResponsiveAppBar = () => {
                 <MenuItem
                   onClick={() => {
                     handleCloseUserMenu();
-                    onLogout?.();
+                    dispatch(logout());
                   }}
                 >
                   <Typography
                     textAlign="center"
-                    color={palette?.warning}
+                    color={palette.warning}
                     sx={{ fontWeight: 500 }}
                   >
                     {"Logout"}

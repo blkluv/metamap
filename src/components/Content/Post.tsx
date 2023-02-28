@@ -1,10 +1,7 @@
-import { useContext, useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { NavLink } from "react-router-dom";
 import Comments from "./Comments";
 import ConfirmationDialog from "../Elements/ConfirmationDialog";
-import UserContext from "../../context/userContext";
-import PostContext from "../../context/postContext";
-import ThemeContext from "../../context/themeContext";
 import {
   Avatar,
   Box,
@@ -13,7 +10,7 @@ import {
   ListItem,
   Typography,
 } from "@mui/material";
-import { PostHeader } from "../../utils/interfaces";
+import { PostHeader, ReduxState } from "../../utils/interfaces";
 import { notify } from "../../utils/notifications";
 import moment from "moment";
 import debounce from "../../utils/debounce";
@@ -24,31 +21,29 @@ import {
 } from "@mui/icons-material";
 // @ts-ignore
 import ReactEmoji from "react-emoji";
+import { useSelector } from "react-redux";
+import { getUser } from "../../store/users";
+import { likePost, deletePost } from "../../store/posts";
+import { useAppDispatch } from "../../store/store";
 
 const Post = ({ post, innerRef }: PostHeader) => {
-  const { currentUser, onGetAvatar } = useContext(UserContext);
-  const {
-    onLikePost,
-    onDeletePost,
-    onAddComment,
-    onDeleteComment,
-    onLikeComment,
-    onDislikeComment,
-  } = useContext(PostContext);
-  const { palette } = useContext(ThemeContext);
+  const currentUser = useSelector(
+    (state: ReduxState) => state.currentUser.data
+  );
+  const palette = useSelector((state: ReduxState) => state.theme.palette);
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [avatar, setAvatar] = useState<any>(null);
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
-    getAvatar(post.creator?.name);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentUser]);
+    post.creator && getAvatar(post.creator.name);
+  }, [currentUser, post.creator]);
 
   const handleLikePost = () => {
     if (post.creator?._id === currentUser?._id) {
       notify("You can't like your own post.");
     } else {
-      onLikePost?.(post._id);
+      post._id && dispatch(likePost(post._id));
     }
   };
 
@@ -59,13 +54,15 @@ const Post = ({ post, innerRef }: PostHeader) => {
     setIsOpen(false);
   };
   const handleConfirmDialog = async () => {
-    await onDeletePost?.(post._id);
-    setIsOpen(false);
+    if (post._id) {
+      dispatch(deletePost(post._id));
+      setIsOpen(false);
+    }
   };
 
-  const getAvatar = async (id: any) => {
-    const avatar = await onGetAvatar?.(id);
-    return setAvatar(avatar);
+  const getAvatar = async (id: string) => {
+    const user = await getUser(id);
+    return setAvatar(user?.avatar);
   };
 
   return (
@@ -73,7 +70,7 @@ const Post = ({ post, innerRef }: PostHeader) => {
       ref={innerRef}
       sx={{
         borderRadius: "25px",
-        background: palette?.background.tertiary,
+        background: palette.background.tertiary,
         marginBottom: "1rem",
         display: "flex",
         flexDirection: "column",
@@ -128,7 +125,7 @@ const Post = ({ post, innerRef }: PostHeader) => {
                 }}
                 component="span"
                 variant="body2"
-                color={palette?.text.tertiary}
+                color={palette.text.tertiary}
                 fontSize={".9rem"}
                 fontWeight={500}
               >
@@ -152,7 +149,7 @@ const Post = ({ post, innerRef }: PostHeader) => {
             alignItems: "center",
             margin: "0",
             flexWrap: "wrap",
-            color: palette?.text.primary,
+            color: palette.text.primary,
           }}
         >
           {post.likes?.find((user) => user._id === currentUser?._id) ? (
@@ -160,7 +157,7 @@ const Post = ({ post, innerRef }: PostHeader) => {
               sx={{
                 fontSize: "1.4rem",
                 cursor: "pointer",
-                color: palette?.warning,
+                color: palette.warning,
               }}
               onClick={debounce(() => handleLikePost(), 300)}
             />
@@ -191,7 +188,7 @@ const Post = ({ post, innerRef }: PostHeader) => {
             <RemoveCircleOutline
               sx={{
                 cursor: "pointer",
-                color: palette?.text.primary,
+                color: palette.text.primary,
                 fontSize: "1.2rem",
                 marginLeft: ".3rem",
               }}
@@ -213,7 +210,7 @@ const Post = ({ post, innerRef }: PostHeader) => {
           }}
           component="p"
           variant="body2"
-          color={palette?.text.tertiary}
+          color={palette.text.tertiary}
           fontSize={"1rem"}
         >
           {ReactEmoji.emojify(post.description)}
@@ -243,13 +240,7 @@ const Post = ({ post, innerRef }: PostHeader) => {
           width: "100%",
         }}
       />
-      <Comments
-        item={post}
-        onAdd={onAddComment}
-        onDelete={onDeleteComment}
-        onLike={onLikeComment}
-        onDislike={onDislikeComment}
-      />
+      <Comments item={post} />
       <ConfirmationDialog
         title={"Delete this post?"}
         confirmLabel={"delete"}

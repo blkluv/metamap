@@ -1,24 +1,39 @@
-import { useContext, useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Box } from "@mui/material";
-import ThemeContext from "../../context/themeContext";
-import UserContext from "../../context/userContext";
-import CommunicationContext from "../../context/communicationContext";
 import ChatAccordion from "../Content/ChatAccordion";
 import ChatMessageForm from "../Elements/ChatMessageForm";
 import MessagesList from "../Content/MessagesList";
+import { ReduxState, UserHeader } from "../../utils/interfaces";
+import { useSelector } from "react-redux";
+import { getUsers } from "../../store/users";
+import {
+  setCurrentConversation,
+  getUserMessages,
+} from "../../store/communication";
+import { useAppDispatch } from "../../store/store";
 
 const Chat = () => {
-  const { palette } = useContext(ThemeContext);
-  const { onGetUsers } = useContext(UserContext);
-  const { onlineUsers, userMessages, onSetCurrentConversation } =
-    useContext(CommunicationContext);
+  const palette = useSelector((state: ReduxState) => state.theme.palette);
+  const currentUser = useSelector(
+    (state: ReduxState) => state.currentUser.data
+  );
+  const { currentConversation } = useSelector(
+    (state: ReduxState) => state.communication.data
+  );
+  const dispatch = useAppDispatch();
+  const [users, setUsers] = useState<UserHeader[]>([]);
 
+  const getAllUsers = async () => {
+    const users = await getUsers();
+    users && setUsers(users);
+  };
+
+  // @ts-ignore
   useEffect(() => {
-    onGetUsers?.();
-
-    return () => onSetCurrentConversation?.(null);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+    getAllUsers();
+    dispatch(getUserMessages(currentUser._id));
+    return () => dispatch(setCurrentConversation(null));
+  }, [currentUser._id, dispatch]);
 
   return (
     <Box
@@ -31,7 +46,7 @@ const Chat = () => {
           md: "1rem 2rem 1.5rem 2rem",
           overflow: "hidden",
         },
-        background: palette?.background.primary,
+        background: palette.background.primary,
         gridGap: "1rem",
         height: "auto",
         justifyContent: "space-between",
@@ -48,9 +63,14 @@ const Chat = () => {
         }}
       >
         <MessagesList />
-        <ChatMessageForm />
+        {currentConversation ? (
+          <ChatMessageForm
+            users={users}
+            currentConversation={currentConversation}
+          />
+        ) : null}
       </Box>
-      <ChatAccordion onlineUsers={onlineUsers} userMessages={userMessages} />
+      <ChatAccordion />
     </Box>
   );
 };

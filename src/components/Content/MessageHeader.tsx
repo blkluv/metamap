@@ -1,25 +1,28 @@
-import { useContext, memo } from "react";
+import { memo } from "react";
 import ListItem from "@mui/material/ListItem";
 import { NavLink } from "react-router-dom";
 import { Box, Button, Typography } from "@mui/material";
-import { MessageProps } from "../../utils/interfaces";
+import { MessageProps, ReduxState } from "../../utils/interfaces";
 import { Chat, Send } from "@mui/icons-material";
-import ThemeContext from "../../context/themeContext";
-import CommunicationContext from "../../context/communicationContext";
 import moment from "moment";
+import { useSelector } from "react-redux";
+import { setCurrentConversation } from "../../store/communication";
+import { useAppDispatch } from "../../store/store";
 
 const MessageHeader = ({
   message: { text, sender, conversationId, createdAt },
 }: MessageProps) => {
-  const { palette } = useContext(ThemeContext);
-  const { conversations, onSetCurrentConversation } =
-    useContext(CommunicationContext);
+  const palette = useSelector((state: ReduxState) => state.theme.palette);
+  const { conversations } = useSelector(
+    (state: ReduxState) => state.communication.data
+  );
+  const dispatch = useAppDispatch();
 
   return (
     <ListItem
       sx={{
         borderRadius: "15px",
-        background: palette?.background.tertiary,
+        background: palette.background.tertiary,
         marginBottom: "1rem",
         paddingRight: ".2rem",
         display: "flex",
@@ -32,7 +35,7 @@ const MessageHeader = ({
         sx={{
           display: "flex",
           alignItems: "center",
-          color: palette?.text.tertiary,
+          color: palette.text.tertiary,
         }}
       >
         <Chat sx={{ marginRight: ".5rem", width: "1rem" }} />
@@ -42,7 +45,7 @@ const MessageHeader = ({
               to={`/dashboard/profile/${sender?.name}`}
               style={{
                 textDecoration: "none",
-                color: palette?.text.tertiary,
+                color: palette.text.tertiary,
                 fontWeight: 700,
               }}
             >
@@ -71,10 +74,12 @@ const MessageHeader = ({
       >
         <Button
           onClick={() =>
-            onSetCurrentConversation?.(
-              conversations.find(
-                (conversation) => conversation._id === conversationId
-              ) || null
+            dispatch(
+              setCurrentConversation(
+                conversations.find(
+                  (conversation) => conversation._id === conversationId
+                ) || null
+              )
             )
           }
           sx={{ borderRadius: "15px", paddingRight: 0 }}

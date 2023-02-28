@@ -1,18 +1,18 @@
-import { useContext } from "react";
 import { Box } from "@mui/material";
-import UserContext from "../../context/userContext";
-import ThemeContext from "../../context/themeContext";
 import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import SearchField from "../Elements/SearchField";
-import { UserHeader } from "../../utils/interfaces";
+import { ReduxState, UserHeader } from "../../utils/interfaces";
 import { Check, Close, Visibility } from "@mui/icons-material";
+import { useSelector } from "react-redux";
 
 export const SocialMenu = ({ handleFilter, users, scrollRef }: any) => {
-  const { currentUser } = useContext(UserContext);
-  const { palette } = useContext(ThemeContext);
+  const currentUser = useSelector(
+    (state: ReduxState) => state.currentUser.data
+  );
+  const palette = useSelector((state: ReduxState) => state.theme.palette);
 
   const handleFollowing = (data: UserHeader[]) => {
     const followingUsers = data.filter((item: UserHeader | null) => {
@@ -33,8 +33,8 @@ export const SocialMenu = ({ handleFilter, users, scrollRef }: any) => {
       ref={scrollRef}
       sx={{
         width: "100%",
-        background: palette?.background.primary,
-        color: palette?.text.tertiary,
+        background: palette.background.primary,
+        color: palette.text.tertiary,
         marginBottom: "1rem",
       }}
     >
@@ -63,8 +63,8 @@ export const SocialMenu = ({ handleFilter, users, scrollRef }: any) => {
           startIcon={<Close />}
           disableElevation
           sx={{
-            color: palette?.text.primary,
-            background: palette?.background.tertiary,
+            color: palette.text.primary,
+            background: palette.background.tertiary,
             marginLeft: "0 !important",
             marginRight: "0.5rem !important",
             marginTop: "0.5rem !important",
@@ -78,11 +78,11 @@ export const SocialMenu = ({ handleFilter, users, scrollRef }: any) => {
           variant="outlined"
           startIcon={<Check />}
           sx={{
-            border: `1px solid ${palette?.background.tertiary}`,
+            border: `1px solid ${palette.background.tertiary}`,
             marginLeft: "0 !important",
             marginRight: "0.5rem !important",
             marginTop: "0.5rem !important",
-            color: palette?.blue,
+            color: palette.blue,
           }}
         >
           Following
@@ -92,11 +92,11 @@ export const SocialMenu = ({ handleFilter, users, scrollRef }: any) => {
           variant="outlined"
           startIcon={<Visibility />}
           sx={{
-            border: `1px solid ${palette?.background.tertiary}`,
+            border: `1px solid ${palette.background.tertiary}`,
             marginLeft: "0 !important",
             marginRight: "0.5rem !important",
             marginTop: "0.5rem !important",
-            color: palette?.green,
+            color: palette.green,
           }}
         >
           Followers

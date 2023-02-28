@@ -1,4 +1,3 @@
-import { useContext } from "react";
 import Timeline from "@mui/lab/Timeline";
 import TimelineItem from "@mui/lab/TimelineItem";
 import TimelineSeparator from "@mui/lab/TimelineSeparator";
@@ -6,11 +5,12 @@ import TimelineConnector from "@mui/lab/TimelineConnector";
 import TimelineContent from "@mui/lab/TimelineContent";
 import TimelineDot from "@mui/lab/TimelineDot";
 import Typography from "@mui/material/Typography";
-import ThemeContext from "../../context/themeContext";
 import { Favorite, Create, Chat } from "@mui/icons-material";
+import { useSelector } from "react-redux";
+import { ReduxState } from "../../utils/interfaces";
 
 const FeedTimeline = () => {
-  const { palette } = useContext(ThemeContext);
+  const palette = useSelector((state: ReduxState) => state.theme.palette);
 
   return (
     <Timeline
@@ -19,7 +19,7 @@ const FeedTimeline = () => {
       onResize={undefined}
       onResizeCapture={undefined}
       sx={{
-        color: palette?.text.tertiary,
+        color: palette.text.tertiary,
       }}
     >
       <TimelineItem>
@@ -27,8 +27,8 @@ const FeedTimeline = () => {
           <TimelineConnector
             sx={{ bgcolor: "secondary.main", height: "1.5rem" }}
           />
-          <TimelineDot sx={{ background: palette?.text.secondary }}>
-            <Create sx={{ color: palette?.text.primary }} />
+          <TimelineDot sx={{ background: palette.text.secondary }}>
+            <Create sx={{ color: palette.text.primary }} />
           </TimelineDot>
           <TimelineConnector
             sx={{ bgcolor: "secondary.main", height: "1.5rem" }}
@@ -46,7 +46,7 @@ const FeedTimeline = () => {
           <TimelineConnector
             sx={{ bgcolor: "secondary.main", height: "1.5rem" }}
           />
-          <TimelineDot sx={{ background: palette?.blue }}>
+          <TimelineDot sx={{ background: palette.blue }}>
             <Favorite sx={{ padding: ".1rem" }} />
           </TimelineDot>
           <TimelineConnector

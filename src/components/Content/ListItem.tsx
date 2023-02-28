@@ -1,14 +1,13 @@
-import { useContext } from "react";
 import ListItem from "@mui/material/ListItem";
 import ListItemAvatar from "@mui/material/ListItemAvatar";
 import Avatar from "@mui/material/Avatar";
-import { MenuItemProps } from "../../utils/interfaces";
+import { MenuItemProps, ReduxState } from "../../utils/interfaces";
 import { Link as RouterLink } from "react-router-dom";
 import { Link } from "@mui/material";
-import ThemeContext from "../../context/themeContext";
+import { useSelector } from "react-redux";
 
 const MenuItem = ({ label, icon, color, link }: MenuItemProps) => {
-  const { palette } = useContext(ThemeContext);
+  const palette = useSelector((state: ReduxState) => state.theme.palette);
 
   return (
     <ListItem
@@ -27,7 +26,7 @@ const MenuItem = ({ label, icon, color, link }: MenuItemProps) => {
             color,
             bgcolor: "transparent",
             borderRadius: "10px",
-            border: `1px solid ${palette?.border}`,
+            border: `1px solid ${palette.border}`,
             WebkitBoxShadow: "0px 0px 16px -8px rgba(0, 0, 0, 0.68)",
             boxShadow: "0px 0px 16px -8px rgba(0, 0, 0, 0.68)",
             width: 32,
@@ -50,7 +49,7 @@ const MenuItem = ({ label, icon, color, link }: MenuItemProps) => {
           textDecoration: "none",
           fontWeight: 500,
           "&:hover": {
-            color: palette?.text.primary,
+            color: palette.text.primary,
           },
         }}
       >

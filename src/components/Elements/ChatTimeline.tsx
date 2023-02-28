@@ -1,4 +1,3 @@
-import { useContext } from "react";
 import Timeline from "@mui/lab/Timeline";
 import TimelineItem from "@mui/lab/TimelineItem";
 import TimelineSeparator from "@mui/lab/TimelineSeparator";
@@ -6,7 +5,6 @@ import TimelineConnector from "@mui/lab/TimelineConnector";
 import TimelineContent from "@mui/lab/TimelineContent";
 import TimelineDot from "@mui/lab/TimelineDot";
 import Typography from "@mui/material/Typography";
-import ThemeContext from "../../context/themeContext";
 import {
   Check,
   SwapHoriz,
@@ -14,9 +12,11 @@ import {
   ArrowRight,
   Chat,
 } from "@mui/icons-material";
+import { ReduxState } from "../../utils/interfaces";
+import { useSelector } from "react-redux";
 
 const ChatTimeline = () => {
-  const { palette } = useContext(ThemeContext);
+  const palette = useSelector((state: ReduxState) => state.theme.palette);
 
   return (
     <Timeline
@@ -25,7 +25,7 @@ const ChatTimeline = () => {
       onResize={undefined}
       onResizeCapture={undefined}
       sx={{
-        color: palette?.text.tertiary,
+        color: palette.text.tertiary,
       }}
     >
       <TimelineItem>
@@ -33,8 +33,8 @@ const ChatTimeline = () => {
           <TimelineConnector
             sx={{ bgcolor: "secondary.main", height: "1.5rem" }}
           />
-          <TimelineDot sx={{ background: palette?.text.secondary }}>
-            <Check sx={{ color: palette?.text.primary }} />
+          <TimelineDot sx={{ background: palette.text.secondary }}>
+            <Check sx={{ color: palette.text.primary }} />
           </TimelineDot>
           <TimelineConnector
             sx={{ bgcolor: "secondary.main", height: "1.5rem" }}
@@ -45,6 +45,9 @@ const ChatTimeline = () => {
             Follow People
           </Typography>
           <Typography fontSize={".9rem"}>to make contact</Typography>
+          <Typography sx={{ mt: ".1rem" }} fontSize={".7rem"}>
+            (Community tab)
+          </Typography>
         </TimelineContent>
       </TimelineItem>
       <TimelineItem>
@@ -52,7 +55,7 @@ const ChatTimeline = () => {
           <TimelineConnector
             sx={{ bgcolor: "secondary.main", height: "1.5rem" }}
           />
-          <TimelineDot sx={{ background: palette?.blue }}>
+          <TimelineDot sx={{ background: palette.blue }}>
             <SwapHoriz />
           </TimelineDot>
           <TimelineConnector

@@ -1,13 +1,24 @@
-import { useContext, useEffect, useState } from "react";
-import UserContext from "../../context/userContext";
-import { ChatConversationProps, UserHeader } from "../../utils/interfaces";
-import CommunicationContext from "../../context/communicationContext";
+import { useEffect, useState } from "react";
+import {
+  ChatConversationProps,
+  ReduxState,
+  UserHeader,
+} from "../../utils/interfaces";
 import UserHeaderSimple from "./UserHeaderSimple";
+import { useSelector } from "react-redux";
+import { getUsers } from "../../store/users";
+import { setCurrentConversation } from "../../store/communication";
+import { useAppDispatch } from "../../store/store";
 
 const Conversation = ({ conversation }: ChatConversationProps) => {
-  const { users, currentUser } = useContext(UserContext);
-  const { userMessages, onSetCurrentConversation } =
-    useContext(CommunicationContext);
+  const [users, setUsers] = useState<UserHeader[]>([]);
+  const dispatch = useAppDispatch();
+  const currentUser = useSelector(
+    (state: ReduxState) => state.currentUser.data
+  );
+  const { userMessages } = useSelector(
+    (state: ReduxState) => state.communication.data
+  );
   const [user, setUser] = useState<UserHeader | undefined>(undefined);
 
   useEffect(() => {
@@ -24,6 +35,15 @@ const Conversation = ({ conversation }: ChatConversationProps) => {
     return message ? true : false;
   };
 
+  const getAllUsers = async () => {
+    const users = await getUsers();
+    users && setUsers(users);
+  };
+
+  useEffect(() => {
+    getAllUsers();
+  }, []);
+
   return (
     <>
       {user ? (
@@ -32,7 +52,7 @@ const Conversation = ({ conversation }: ChatConversationProps) => {
           user={user}
           isOnline={false}
           unreadCheck={ifUnread()}
-          onClick={() => onSetCurrentConversation?.(conversation)}
+          onClick={() => dispatch(setCurrentConversation(conversation))}
         />
       ) : null}
     </>

@@ -1,10 +1,11 @@
-import { useContext } from "react";
+import { useSelector } from "react-redux";
 import { Outlet, Navigate } from "react-router-dom";
-import UserContext from "../../context/userContext";
-import { ProtectedRoutesProps } from "../../utils/interfaces";
+import { ProtectedRoutesProps, ReduxState } from "../../utils/interfaces";
 
 const ProtectedRoutes = ({ logged, redirect }: ProtectedRoutesProps) => {
-  const { currentUser } = useContext(UserContext);
+  const currentUser = useSelector(
+    (state: ReduxState) => state.currentUser.data
+  );
 
   const checkProtection = () => {
     if (logged) return currentUser;

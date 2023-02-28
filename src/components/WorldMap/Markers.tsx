@@ -1,22 +1,24 @@
-import { useContext } from "react";
 import { Marker } from "react-map-gl";
-import BusinessContext from "../../context/businessContext";
-import EventContext from "../../context/eventContext";
-import ThemeContext from "../../context/themeContext";
 import StoreIcon from "@mui/icons-material/Store";
 import RoomIcon from "@mui/icons-material/Room";
+import { ReduxState } from "../../utils/interfaces";
+import { useSelector } from "react-redux";
+import {
+  setSelectedBusiness,
+  removeSelectedBusiness,
+} from "../../store/businesses";
+import { useAppDispatch } from "../../store/store";
+import { setSelectedEvent, removeSelectedEvent } from "../../store/events";
 
-const Markers = ({ setPopup }: any) => {
-  const { events, selectedEvent, onSetSelectedEvent, onRemoveSelectedEvent } =
-    useContext(EventContext);
-  const {
-    businesses,
-    selectedBusiness,
-    onSetSelectedBusiness,
-    onRemoveSelectedBusiness,
-  } = useContext(BusinessContext);
-  const { palette } = useContext(ThemeContext);
-
+const Markers = () => {
+  const { events, selectedEvent } = useSelector(
+    (state: ReduxState) => state.events.data
+  );
+  const { businesses, selectedBusiness } = useSelector(
+    (state: ReduxState) => state.businesses.data
+  );
+  const palette = useSelector((state: ReduxState) => state.theme.palette);
+  const dispatch = useAppDispatch();
   const markers = [...events, ...businesses];
 
   return (
@@ -30,14 +32,12 @@ const Markers = ({ setPopup }: any) => {
             onClick={
               type === "event"
                 ? () => {
-                    onRemoveSelectedBusiness?.();
-                    onSetSelectedEvent?.(_id);
-                    setPopup(true);
+                    dispatch(removeSelectedBusiness());
+                    dispatch(setSelectedEvent(_id));
                   }
                 : () => {
-                    onRemoveSelectedEvent?.();
-                    onSetSelectedBusiness?.(_id);
-                    setPopup(true);
+                    dispatch(removeSelectedEvent());
+                    dispatch(setSelectedBusiness(_id));
                   }
             }
           >
@@ -47,8 +47,8 @@ const Markers = ({ setPopup }: any) => {
                   fontSize: "2.5rem",
                   color:
                     _id === selectedEvent?._id || _id === selectedBusiness?._id
-                      ? palette?.warning
-                      : palette?.text.primary,
+                      ? palette.warning
+                      : palette.text.primary,
                 }}
               />
             ) : null}
@@ -58,8 +58,8 @@ const Markers = ({ setPopup }: any) => {
                   fontSize: "2.2rem",
                   color:
                     _id === selectedEvent?._id || _id === selectedBusiness?._id
-                      ? palette?.warning
-                      : palette?.text.primary,
+                      ? palette.warning
+                      : palette.text.primary,
                 }}
               />
             ) : null}

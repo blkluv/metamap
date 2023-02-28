@@ -1,20 +1,26 @@
-import { useContext, useEffect } from "react";
+import { useEffect } from "react";
 import { Badge } from "@mui/material";
 import { styled } from "@mui/system";
-import CommunicationContext from "../../context/communicationContext";
-import ThemeContext from "../../context/themeContext";
-import UserContext from "../../context/userContext";
 import MailOutlineIcon from "@mui/icons-material/MailOutline";
 import { NavLink } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { ReduxState } from "../../utils/interfaces";
+import { getUserMessages } from "../../store/communication";
+import { useAppDispatch } from "../../store/store";
 
 const MessageIcon = () => {
-  const { currentUser } = useContext(UserContext);
-  const { userMessages, onGetUserMessages } = useContext(CommunicationContext);
-  const { palette } = useContext(ThemeContext);
+  const currentUser = useSelector(
+    (state: ReduxState) => state.currentUser.data
+  );
+  const palette = useSelector((state: ReduxState) => state.theme.palette);
+  const { userMessages } = useSelector(
+    (state: ReduxState) => state.communication.data
+  );
+  const dispatch = useAppDispatch();
 
   const StyledBadge = styled(Badge)(() => ({
     "& .MuiBadge-badge": {
-      backgroundColor: palette?.warning,
+      backgroundColor: palette.warning,
       color: "white",
       WebkitBoxShadow: "0px 0px 16px -8px rgba(0, 0, 0, 0.68)",
       boxShadow: "0px 0px 16px -8px rgba(0, 0, 0, 0.68)",
@@ -22,8 +28,8 @@ const MessageIcon = () => {
   }));
 
   useEffect(() => {
-    onGetUserMessages?.(currentUser?._id);
-  }, [currentUser?._id, onGetUserMessages]);
+    dispatch(getUserMessages?.(currentUser?._id));
+  }, [currentUser?._id, dispatch]);
 
   return (
     <>

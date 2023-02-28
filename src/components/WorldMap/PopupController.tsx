@@ -1,13 +1,13 @@
-import { useContext } from "react";
 import { Box, Button } from "@mui/material";
 import { Popup } from "react-map-gl";
 import EventPin from "./EventPin";
 import BusinessPin from "./BusinessPin";
-import ThemeContext from "../../context/themeContext";
 import "./popupStyles.css";
+import { ReduxState } from "../../utils/interfaces";
+import { useSelector } from "react-redux";
 
 const PopupController = ({ newMarker, setNewMarker }: any) => {
-  const { palette } = useContext(ThemeContext);
+  const palette = useSelector((state: ReduxState) => state.theme.palette);
 
   return (
     <>
@@ -24,8 +24,8 @@ const PopupController = ({ newMarker, setNewMarker }: any) => {
             <Box
               sx={{
                 padding: ".8rem",
-                background: palette?.background.tertiary,
-                color: palette?.text.primary,
+                background: palette.background.tertiary,
+                color: palette.text.primary,
               }}
             >
               <Button

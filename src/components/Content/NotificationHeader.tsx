@@ -1,10 +1,8 @@
-import { useContext, memo } from "react";
+import { memo } from "react";
 import ListItem from "@mui/material/ListItem";
 import { NavLink, useNavigate } from "react-router-dom";
-import { NotificationProps } from "../../utils/interfaces";
+import { NotificationProps, ReduxState } from "../../utils/interfaces";
 import { Box, Button, Typography } from "@mui/material";
-import ThemeContext from "../../context/themeContext";
-import CommunicationContext from "../../context/communicationContext";
 import debounce from "../../utils/debounce";
 import moment from "moment";
 import {
@@ -18,13 +16,20 @@ import {
   Close,
   Drafts,
 } from "@mui/icons-material";
+import { useSelector } from "react-redux";
+import {
+  deleteNotification,
+  readNotification,
+  setTargetElement,
+} from "../../store/communication";
+import { useAppDispatch } from "../../store/store";
 
 const NotificationHeader = ({
   notification: { _id, text, read, type, senderName, createdAt, payload },
 }: NotificationProps) => {
-  const { palette } = useContext(ThemeContext);
-  const { onDeleteNotification, onReadNotification, onSetTargetElement } =
-    useContext(CommunicationContext);
+  const palette = useSelector((state: ReduxState) => state.theme.palette);
+  const dispatch = useAppDispatch();
+
   let navigate = useNavigate();
 
   const renderIcon = (type: string | undefined) => {
@@ -40,16 +45,16 @@ const NotificationHeader = ({
     if (_id) {
       if (type === "event") {
         navigate("/dashboard/events");
-        onSetTargetElement?.(_id);
+        dispatch(setTargetElement(_id));
         return;
       }
       if (type === "business") {
         navigate("/dashboard/business");
-        onSetTargetElement?.(_id);
+        dispatch(setTargetElement(_id));
         return;
       }
       if (type === "post") {
-        onSetTargetElement?.(_id);
+        dispatch(setTargetElement(_id));
         return;
       }
     }
@@ -105,7 +110,7 @@ const NotificationHeader = ({
     <ListItem
       sx={{
         borderRadius: "15px",
-        background: palette?.background.tertiary,
+        background: palette.background.tertiary,
         marginBottom: "1rem",
         display: "flex",
         alignItems: "center",
@@ -117,7 +122,7 @@ const NotificationHeader = ({
         sx={{
           display: "flex",
           alignItems: "center",
-          color: palette?.text.tertiary,
+          color: palette.text.tertiary,
         }}
       >
         {renderIcon(type)}
@@ -127,7 +132,7 @@ const NotificationHeader = ({
               to={`/dashboard/profile/${senderName}`}
               style={{
                 textDecoration: "none",
-                color: palette?.text.tertiary,
+                color: palette.text.tertiary,
                 fontWeight: 700,
                 marginRight: ".2rem",
               }}
@@ -156,9 +161,9 @@ const NotificationHeader = ({
         }}
       >
         <Button
-          onClick={debounce(() => onReadNotification?.(_id), 200)}
+          onClick={debounce(() => _id && dispatch(readNotification(_id)), 200)}
           sx={{
-            color: !read ? palette?.warning : palette?.green,
+            color: !read ? palette.warning : palette.green,
             borderRadius: "15px",
             minWidth: "0",
           }}
@@ -166,9 +171,12 @@ const NotificationHeader = ({
           {read ? <Drafts /> : <Markunread />}
         </Button>
         <Close
-          onClick={debounce(() => onDeleteNotification?.(_id), 200)}
+          onClick={debounce(
+            () => _id && dispatch(deleteNotification(_id)),
+            200
+          )}
           sx={{
-            color: palette?.warning,
+            color: palette.warning,
             borderRadius: "15px",
             cursor: "pointer",
           }}

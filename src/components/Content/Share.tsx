@@ -1,14 +1,11 @@
-import { useContext, useState } from "react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
-import PostContext from "../../context/postContext";
-import UserContext from "../../context/userContext";
 import convertImage from "../../utils/imageConverter";
-import { Post } from "../../utils/interfaces";
+import { Post, ReduxState } from "../../utils/interfaces";
 import { Cancel, Image } from "@mui/icons-material";
 import { NavLink } from "react-router-dom";
 import { notify } from "../../utils/notifications";
 import debounce from "../../utils/debounce";
-import ThemeContext from "../../context/themeContext";
 import {
   Avatar,
   Box,
@@ -19,11 +16,16 @@ import {
   Input,
   TextField,
 } from "@mui/material";
+import { useSelector } from "react-redux";
+import { addPost } from "../../store/posts";
+import { useAppDispatch } from "../../store/store";
 
 const Share = ({ scrollRef }: any) => {
-  const { onAddPost } = useContext(PostContext);
-  const { currentUser } = useContext(UserContext);
-  const { palette } = useContext(ThemeContext);
+  const currentUser = useSelector(
+    (state: ReduxState) => state.currentUser.data
+  );
+  const dispatch = useAppDispatch();
+  const palette = useSelector((state: ReduxState) => state.theme.palette);
   const [file, setFile] = useState<File | null>(null);
 
   const {
@@ -53,7 +55,7 @@ const Share = ({ scrollRef }: any) => {
     }
 
     try {
-      onAddPost?.(postData);
+      dispatch(addPost(postData));
       setFile(null);
       resetPost();
     } catch (err) {}
@@ -75,7 +77,7 @@ const Share = ({ scrollRef }: any) => {
           padding: "1rem 1.5rem",
           margin: "0 .5rem",
           borderRadius: "25px",
-          background: palette?.background.tertiary,
+          background: palette.background.tertiary,
           WebkitBoxShadow: "0px 0px 16px -8px rgba(0, 0, 0, 0.68)",
           boxShadow: "0px 0px 16px -8px rgba(0, 0, 0, 0.68)",
         }}
@@ -103,7 +105,7 @@ const Share = ({ scrollRef }: any) => {
             margin="dense"
             maxRows={3}
             InputProps={{ disableUnderline: true }}
-            inputProps={{ style: { color: palette?.text.tertiary } }}
+            inputProps={{ style: { color: palette.text.tertiary } }}
             fullWidth
             id="postShareDescription"
             autoComplete="postShareDescription"
@@ -145,7 +147,7 @@ const Share = ({ scrollRef }: any) => {
         )}
         <Divider
           variant="middle"
-          sx={{ background: palette?.divider, margin: "1rem 0" }}
+          sx={{ background: palette.divider, margin: "1rem 0" }}
         />
         <Box
           sx={{
@@ -176,7 +178,7 @@ const Share = ({ scrollRef }: any) => {
               <Image
                 sx={{
                   fontSize: "1.2rem",
-                  color: palette?.warning,
+                  color: palette.warning,
                   marginRight: "-.2rem",
                 }}
               />
@@ -190,7 +192,7 @@ const Share = ({ scrollRef }: any) => {
                   fontWeight: "500",
                   marginRight: "0.5rem",
                   cursor: "pointer",
-                  color: palette?.text.tertiary,
+                  color: palette.text.tertiary,
                 }}
               >
                 Photo
@@ -214,7 +216,7 @@ const Share = ({ scrollRef }: any) => {
                 borderRadius: "5px",
                 fontWeight: "500",
                 cursor: "pointer",
-                color: palette?.text.tertiary,
+                color: palette.text.tertiary,
               }}
             >
               Share

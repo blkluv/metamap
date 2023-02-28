@@ -1,17 +1,16 @@
-import { useContext } from "react";
 import List from "@mui/material/List";
-import ThemeContext from "../../context/themeContext";
-import { MenuItemListProps } from "../../utils/interfaces";
+import { MenuItemListProps, ReduxState } from "../../utils/interfaces";
 import MenuItem from "../Content/ListItem";
+import { useSelector } from "react-redux";
 
 const MenuItemList = ({ items }: MenuItemListProps) => {
-  const { palette } = useContext(ThemeContext);
+  const palette = useSelector((state: ReduxState) => state.theme.palette);
 
   return (
     <List
       sx={{
         width: "100%",
-        color: palette?.text.secondary,
+        color: palette.text.secondary,
         paddingTop: "0",
       }}
     >

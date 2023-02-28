@@ -1,12 +1,11 @@
-import { useContext } from "react";
 import { Box } from "@mui/material";
 import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogTitle from "@mui/material/DialogTitle";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
-import { ConfirmationDialogProps } from "../../utils/interfaces";
-import ThemeContext from "../../context/themeContext";
+import { ConfirmationDialogProps, ReduxState } from "../../utils/interfaces";
+import { useSelector } from "react-redux";
 
 const ConfirmationDialog = ({
   isOpen,
@@ -15,7 +14,7 @@ const ConfirmationDialog = ({
   onConfirm,
   confirmLabel,
 }: ConfirmationDialogProps) => {
-  const { palette } = useContext(ThemeContext);
+  const palette = useSelector((state: ReduxState) => state.theme.palette);
 
   return (
     <Dialog
@@ -26,7 +25,7 @@ const ConfirmationDialog = ({
     >
       <Box
         sx={{
-          background: palette?.background.primary,
+          background: palette.background.primary,
           display: "flex",
           flexDirection: "column",
           justifyContent: "center",
@@ -34,7 +33,7 @@ const ConfirmationDialog = ({
         }}
       >
         <DialogTitle
-          sx={{ color: palette?.text.primary }}
+          sx={{ color: palette.text.primary }}
           id="alert-dialog-title"
         >
           {title}
@@ -43,7 +42,7 @@ const ConfirmationDialog = ({
           <Button
             variant="outlined"
             sx={{
-              border: `1px solid ${palette?.background.tertiary}`,
+              border: `1px solid ${palette.background.tertiary}`,
             }}
             onClick={onClose}
           >
@@ -54,8 +53,8 @@ const ConfirmationDialog = ({
             variant="outlined"
             startIcon={<DeleteForeverIcon />}
             sx={{
-              border: `1px solid ${palette?.background.tertiary}`,
-              color: palette?.warning,
+              border: `1px solid ${palette.background.tertiary}`,
+              color: palette.warning,
             }}
           >
             {confirmLabel}

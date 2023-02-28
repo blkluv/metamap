@@ -1,12 +1,9 @@
-import { useContext, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { NavLink } from "react-router-dom";
 import ListItem from "@mui/material/ListItem";
 import ListItemText from "@mui/material/ListItemText";
 import Typography from "@mui/material/Typography";
-import EventContext from "../../context/eventContext";
-import UserContext from "../../context/userContext";
-import ThemeContext from "../../context/themeContext";
-import { EventHeader as Header } from "../../utils/interfaces";
+import { EventHeader as Header, ReduxState } from "../../utils/interfaces";
 import { Box, Button, CardMedia } from "@mui/material";
 import {
   Check,
@@ -19,10 +16,19 @@ import {
 } from "@mui/icons-material";
 import debounce from "../../utils/debounce";
 import preview from "../../images/preview.png";
-import BusinessContext from "../../context/businessContext";
 import Rating from "../Elements/Rating";
 import { notify } from "../../utils/notifications";
 import ConfirmationDialog from "../Elements/ConfirmationDialog";
+import { useSelector } from "react-redux";
+import { useAppDispatch } from "../../store/store";
+import { removeSelectedBusiness } from "../../store/businesses";
+import {
+  setSelectedEvent,
+  joinEvent,
+  leaveEvent,
+  deleteEvent,
+  rateEvent,
+} from "../../store/events";
 
 const EventHeader = ({
   event: {
@@ -41,17 +47,14 @@ const EventHeader = ({
   popup,
   innerRef,
 }: Header) => {
-  const {
-    selectedEvent,
-    onSetSelectedEvent,
-    onJoinEvent,
-    onLeaveEvent,
-    onRateEvent,
-    onDeleteEvent,
-  } = useContext(EventContext);
-  const { onRemoveSelectedBusiness } = useContext(BusinessContext);
-  const { currentUser } = useContext(UserContext);
-  const { palette } = useContext(ThemeContext);
+  const currentUser = useSelector(
+    (state: ReduxState) => state.currentUser.data
+  );
+  const { selectedEvent } = useSelector(
+    (state: ReduxState) => state.events.data
+  );
+  const palette = useSelector((state: ReduxState) => state.theme.palette);
+  const dispatch = useAppDispatch();
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
   const ifJoined = useMemo(
@@ -70,15 +73,15 @@ const EventHeader = ({
   };
 
   const handleSelect = () => {
-    onRemoveSelectedBusiness?.();
-    onSetSelectedEvent?.(_id);
+    dispatch(removeSelectedBusiness());
+    dispatch(setSelectedEvent(_id));
   };
 
   const handleRate = (newRating: number) => {
     if (creator?._id === currentUser?._id) {
       notify("You can't rate your own event.");
     } else {
-      onRateEvent?.(_id, newRating);
+      dispatch(rateEvent({ id: _id, rating: newRating }));
     }
   };
 
@@ -94,7 +97,7 @@ const EventHeader = ({
         notify("You can't join your own event.");
         return;
       }
-      onJoinEvent?.(_id);
+      _id && dispatch(joinEvent(_id));
     } else {
       notify("This event is ended.");
     }
@@ -112,7 +115,7 @@ const EventHeader = ({
         notify("You can't join your own event.");
         return;
       }
-      onLeaveEvent?.(_id);
+      _id && dispatch(leaveEvent(_id));
     } else {
       notify("This event is ended.");
     }
@@ -124,8 +127,8 @@ const EventHeader = ({
   const handleCloseDialog = () => {
     setIsOpen(false);
   };
-  const handleConfirmDialog = async () => {
-    await onDeleteEvent?.(_id);
+  const handleConfirmDialog = () => {
+    _id && dispatch(deleteEvent(_id));
     setIsOpen(false);
   };
 
@@ -138,8 +141,8 @@ const EventHeader = ({
         cursor: "pointer",
         borderRadius: "15px",
         background: popup
-          ? `${palette?.background.tertiary} !important`
-          : palette?.background.tertiary,
+          ? `${palette.background.tertiary} !important`
+          : palette.background.tertiary,
         marginBottom: popup ? 0 : "1rem",
         display: "flex",
         flexDirection:
@@ -168,12 +171,12 @@ const EventHeader = ({
         >
           <DoNotDisturb
             sx={{
-              color: palette?.warning,
+              color: palette.warning,
               width: "1.2rem",
               marginRight: ".2rem",
             }}
           />
-          <Typography color={palette?.warning} sx={{ fontWeight: "bold" }}>
+          <Typography color={palette.warning} sx={{ fontWeight: "bold" }}>
             Ended
           </Typography>
         </Box>
@@ -187,18 +190,14 @@ const EventHeader = ({
             width: "100%",
           }}
         >
-          <Typography
-            component="h3"
-            variant="h6"
-            color={palette?.text.tertiary}
-          >
+          <Typography component="h3" variant="h6" color={palette.text.tertiary}>
             Event
           </Typography>
           {currentUser?._id === creator?._id ? (
             <RemoveCircleOutline
               sx={{
                 cursor: "pointer",
-                color: palette?.text.primary,
+                color: palette.text.primary,
                 fontSize: "1.2rem",
               }}
               onClick={() => handleOpenDialog()}
@@ -239,15 +238,12 @@ const EventHeader = ({
               >
                 <DoNotDisturb
                   sx={{
-                    color: palette?.warning,
+                    color: palette.warning,
                     width: "1.2rem",
                     marginRight: ".2rem",
                   }}
                 />
-                <Typography
-                  color={palette?.warning}
-                  sx={{ fontWeight: "bold" }}
-                >
+                <Typography color={palette.warning} sx={{ fontWeight: "bold" }}>
                   Ended
                 </Typography>
               </Box>
@@ -256,7 +252,7 @@ const EventHeader = ({
               sx={{ display: "block", fontWeight: "500", mb: ".5rem" }}
               component="span"
               variant="body2"
-              color={palette?.text.tertiary}
+              color={palette.text.tertiary}
               fontSize={"1rem"}
             >
               {title}
@@ -278,7 +274,7 @@ const EventHeader = ({
                   margin: ".1rem .7rem .3rem 0",
                 }}
                 component="span"
-                color={palette?.text.primary}
+                color={palette.text.primary}
               >
                 <Home
                   sx={{
@@ -296,7 +292,7 @@ const EventHeader = ({
                   margin: ".1rem .7rem .3rem 0",
                 }}
                 component="span"
-                color={palette?.text.primary}
+                color={palette.text.primary}
                 fontSize={".8rem"}
               >
                 <Person
@@ -309,7 +305,7 @@ const EventHeader = ({
                   to={`/dashboard/profile/${creator?.name}`}
                   style={{
                     textDecoration: "none",
-                    color: palette?.text.tertiary,
+                    color: palette.text.tertiary,
                     fontWeight: "bold",
                   }}
                 >
@@ -325,7 +321,7 @@ const EventHeader = ({
               sx={{ display: "block", marginTop: "0.4rem", fontSize: ".8rem" }}
               component="span"
               variant="body2"
-              color={palette?.text.primary}
+              color={palette.text.primary}
             >
               {`Starts: ${displayDate(start)}`}
             </Typography>
@@ -333,14 +329,14 @@ const EventHeader = ({
               sx={{ display: "block", marginTop: "0.2rem", fontSize: ".8rem" }}
               component="span"
               variant="body2"
-              color={palette?.text.primary}
+              color={palette.text.primary}
             >
               {`Ends: ${displayDate(end)}`}
             </Typography>
             <Typography
               sx={{
                 display: "block",
-                color: palette?.text.tertiary,
+                color: palette.text.tertiary,
                 margin: "0.8rem 0",
                 fontSize: ".9rem",
               }}
@@ -353,7 +349,7 @@ const EventHeader = ({
               <Typography
                 sx={{
                   display: "flex",
-                  color: palette?.text.primary,
+                  color: palette.text.primary,
                 }}
                 component="div"
                 variant="body2"
@@ -373,7 +369,7 @@ const EventHeader = ({
                     : debounce(handleJoinEvent, 400)
                 }
                 sx={{
-                  color: ifJoined ? palette?.warning : palette?.blue,
+                  color: ifJoined ? palette.warning : palette.blue,
                   paddingLeft: 0,
                   borderRadius: "15px",
                   fontSize: ".8rem",

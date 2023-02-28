@@ -1,23 +1,28 @@
-import { useContext, useEffect } from "react";
-import { ChatConversation } from "../../utils/interfaces";
+import { useEffect } from "react";
+import { ChatConversation, ReduxState } from "../../utils/interfaces";
 import Conversation from "./Conversation";
-import CommunicationContext from "../../context/communicationContext";
-import UserContext from "../../context/userContext";
+import { useSelector } from "react-redux";
+import { getConversations } from "../../store/communication";
+import { useAppDispatch } from "../../store/store";
 
 const ConversationList = () => {
-  const { conversations, onGetConversations } =
-    useContext(CommunicationContext);
-  const { currentUser } = useContext(UserContext);
+  const currentUser = useSelector(
+    (state: ReduxState) => state.currentUser.data
+  );
+  const { conversations } = useSelector(
+    (state: ReduxState) => state.communication.data
+  );
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
-    onGetConversations?.(currentUser?._id);
-  }, [currentUser, onGetConversations]);
+    dispatch(getConversations?.(currentUser?._id));
+  }, [currentUser?._id, dispatch]);
 
   return (
     <>
       {conversations.length > 0
         ? conversations.map((conversation: ChatConversation) => (
-            <Conversation conversation={conversation} key={conversation._id} />
+            <Conversation conversation={conversation} key={conversation?._id} />
           ))
         : null}
     </>

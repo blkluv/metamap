@@ -1,19 +1,20 @@
-import { useContext } from "react";
 import { Button, TextField, Typography } from "@mui/material";
 import { Box } from "@mui/system";
-import ThemeContext from "../../context/themeContext";
 import { RemoveCircleOutline, Send } from "@mui/icons-material";
-
 import { useForm } from "react-hook-form";
-import CommunicationContext from "../../context/communicationContext";
-import UserContext from "../../context/userContext";
 import { notify } from "../../utils/notifications";
+import { ReduxState, UserHeader } from "../../utils/interfaces";
+import { useSelector } from "react-redux";
+import { addMessage, deleteConversation } from "../../store/communication";
+import { useAppDispatch } from "../../store/store";
 
-const ChatMessageForm = () => {
-  const { palette } = useContext(ThemeContext);
-  const { currentUser, users } = useContext(UserContext);
-  const { onAddMessage, currentConversation, onDeleteConversation } =
-    useContext(CommunicationContext);
+const ChatMessageForm = ({ users, currentConversation }: any) => {
+  const palette = useSelector((state: ReduxState) => state.theme.palette);
+  const currentUser = useSelector(
+    (state: ReduxState) => state.currentUser.data
+  );
+
+  const dispatch = useAppDispatch();
 
   const {
     register: registerMessage,
@@ -32,7 +33,9 @@ const ChatMessageForm = () => {
       const receiverId = currentConversation?.members.find(
         (member: string | undefined) => member !== currentUser?._id
       );
-      const receiver = users?.find((user) => user._id === receiverId);
+      const receiver = users?.find(
+        (user: UserHeader) => user._id === receiverId
+      );
 
       if (receiver) {
         const message = {
@@ -42,7 +45,7 @@ const ChatMessageForm = () => {
           read: false,
           text,
         };
-        onAddMessage?.(message);
+        dispatch(addMessage(message));
       } else {
         notify("Message receiver doesn't exist.");
       }
@@ -61,7 +64,7 @@ const ChatMessageForm = () => {
             alignItems: "center",
             padding: "1rem 1.5rem",
             borderRadius: "25px",
-            background: palette?.background.tertiary,
+            background: palette.background.tertiary,
             WebkitBoxShadow: "0px 0px 16px -8px rgba(0, 0, 0, 0.68)",
             boxShadow: "0px 0px 16px -8px rgba(0, 0, 0, 0.68)",
           }}
@@ -73,7 +76,7 @@ const ChatMessageForm = () => {
                 width: "100%",
                 alignItems: "center",
                 justifyContent: "space-between",
-                color: palette?.text.primary,
+                color: palette.text.primary,
               }}
             >
               <Typography>
@@ -84,11 +87,11 @@ const ChatMessageForm = () => {
                 <RemoveCircleOutline
                   sx={{
                     cursor: "pointer",
-                    color: palette?.text.primary,
+                    color: palette.text.primary,
                     fontSize: "1.2rem",
                   }}
                   onClick={() =>
-                    onDeleteConversation?.(currentConversation._id)
+                    dispatch(deleteConversation(currentConversation._id))
                   }
                 />
               </Button>
@@ -102,7 +105,7 @@ const ChatMessageForm = () => {
                 margin="dense"
                 required
                 InputProps={{ disableUnderline: true }}
-                inputProps={{ style: { color: palette?.text.primary } }}
+                inputProps={{ style: { color: palette.text.primary } }}
                 fullWidth
                 id="message"
                 autoComplete="message"

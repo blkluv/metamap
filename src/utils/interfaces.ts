@@ -1,3 +1,23 @@
+// Redux state
+export interface ReduxState {
+  currentUser: { status: string; data: User };
+  users: { status: string; data: { user: User; users: User[] } };
+  events: {
+    status: string;
+    data: { events: Event[]; selectedEvent: Event | null };
+  };
+  businesses: {
+    status: string;
+    data: { businesses: Business[]; selectedBusiness: Business | null };
+  };
+  posts: {
+    status: string;
+    data: { followingPosts: Post[]; userPosts: Post[] };
+  };
+  theme: { mode: string; palette: any };
+  communication: { status: string; data: CommunicationContext };
+}
+
 // Comment
 export interface Comment {
   _id?: string;
@@ -43,13 +63,24 @@ export interface User {
   _id: string;
   name: string;
   password?: string;
-  email: string;
+  email?: string;
   following?: UserHeader[];
   followers?: UserHeader[];
   newsletter?: boolean;
   external?: boolean;
   description?: string;
   avatar?: any;
+}
+
+export interface UserForm {
+  token?: string;
+  username?: string;
+  password?: string;
+  oldpassword?: string;
+  newpassword?: string;
+  confirmpassword?: string;
+  email?: string;
+  external?: boolean;
 }
 
 export interface UserHeaderSimpleProps {
@@ -86,6 +117,8 @@ export interface FollowResponse {
 export interface SocialListProps {
   data: UserHeader[];
   scrollRef: any;
+  loading: boolean;
+  users: UserHeader[];
 }
 
 export interface UsersContext {
@@ -158,6 +191,7 @@ export interface EventHeader {
 export interface EventsListProps {
   items: Event[];
   scrollRef?: any;
+  loading: string;
 }
 
 export interface ItemMenuProps {
@@ -206,10 +240,10 @@ export interface BusinessHeader {
 export interface BusinessesListProps {
   items: Business[];
   scrollRef?: any;
+  loading: string;
 }
 
 export interface BusinessesContext {
-  businesses: Business[];
   selectedBusiness?: Business;
   onAddBusiness?: (business: Business) => Promise<void>;
   onGetBusinesses?: () => Promise<void>;
@@ -357,6 +391,7 @@ export interface ChatConversation {
 
 export interface CommunicationContext {
   socket?: any;
+  arrivalMessage?: ChatMessage;
   targetElement?: any;
   messages: ChatMessage[];
   userMessages: ChatMessage[];
@@ -448,4 +483,9 @@ export interface ScrollToTheTopProps {
   minLength: number;
   data: any;
   scrollRef?: any;
+}
+
+export interface UserItemsGalleryProps {
+  status: string;
+  userItems: any[];
 }

@@ -1,4 +1,3 @@
-import { useContext } from "react";
 import { Box } from "@mui/material";
 import ContentWindow from "./ContentWindow";
 import Sidebar from "../Navigation/Sidebar";
@@ -7,17 +6,18 @@ import Profile from "../Pages/Profile";
 import Chat from "../Pages/Chat";
 import User from "../Content/User";
 import Account from "../Pages/Account";
-import ThemeContext from "../../context/themeContext";
+import { ReduxState } from "../../utils/interfaces";
+import { useSelector } from "react-redux";
 
 const MainWindow = () => {
-  const { palette } = useContext(ThemeContext);
+  const palette = useSelector((state: ReduxState) => state.theme.palette);
 
   return (
     <Box
       sx={{
         display: "flex",
         width: "100%",
-        background: palette?.background.secondary,
+        background: palette.background.secondary,
         height: "auto",
       }}
     >

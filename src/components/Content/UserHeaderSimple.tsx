@@ -1,10 +1,10 @@
-import { useCallback, useContext, useEffect, useState, memo } from "react";
+import { useCallback, useEffect, useState, memo } from "react";
 import { Avatar, Badge, Box, Typography } from "@mui/material";
 import CircleIcon from "@mui/icons-material/Circle";
 import { styled } from "@mui/system";
-import UserContext from "../../context/userContext";
-import { UserHeaderSimpleProps } from "../../utils/interfaces";
-import ThemeContext from "../../context/themeContext";
+import { ReduxState, UserHeaderSimpleProps } from "../../utils/interfaces";
+import { useSelector } from "react-redux";
+import { getUser } from "../../store/users";
 
 const UserHeaderSimple = ({
   user,
@@ -12,8 +12,7 @@ const UserHeaderSimple = ({
   onClick,
   unreadCheck,
 }: UserHeaderSimpleProps) => {
-  const { onGetAvatar } = useContext(UserContext);
-  const { palette } = useContext(ThemeContext);
+  const palette = useSelector((state: ReduxState) => state.theme.palette);
   const [avatar, setAvatar] = useState<string | null | undefined>(null);
 
   const StyledBadge = styled(Badge)(() => ({
@@ -28,13 +27,10 @@ const UserHeaderSimple = ({
     },
   }));
 
-  const getAvatar = useCallback(
-    async (id: string) => {
-      const avatar = await onGetAvatar?.(id);
-      return setAvatar(avatar);
-    },
-    [onGetAvatar]
-  );
+  const getAvatar = useCallback(async (id: string) => {
+    const user = await getUser(id);
+    return setAvatar(user?.avatar);
+  }, []);
 
   useEffect(() => {
     getAvatar(user?.name);
@@ -91,7 +87,7 @@ const UserHeaderSimple = ({
         {unreadCheck ? (
           <CircleIcon
             sx={{
-              color: palette?.green,
+              color: palette.green,
               marginLeft: ".5rem",
               width: ".8rem",
             }}

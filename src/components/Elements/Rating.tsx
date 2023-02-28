@@ -1,11 +1,10 @@
-import { useState, useContext } from "react";
+import { useState } from "react";
 import { Box } from "@mui/material";
-import ThemeContext from "../../context/themeContext";
-import UserContext from "../../context/userContext";
 import MUIRating from "@mui/material/Rating";
 import StarIcon from "@mui/icons-material/Star";
-import { RatingProps } from "../../utils/interfaces";
+import { RatingProps, ReduxState } from "../../utils/interfaces";
 import { notify } from "../../utils/notifications";
+import { useSelector } from "react-redux";
 
 const Rating = ({
   rating: { rates, ratesNumber, average },
@@ -13,8 +12,10 @@ const Rating = ({
   readOnly,
   margin,
 }: RatingProps) => {
-  const { currentUser } = useContext(UserContext);
-  const { palette } = useContext(ThemeContext);
+  const currentUser = useSelector(
+    (state: ReduxState) => state.currentUser.data
+  );
+  const palette = useSelector((state: ReduxState) => state.theme.palette);
   const [hover, setHover] = useState(-1);
 
   const labels: { [index: string]: string } = {
@@ -64,7 +65,7 @@ const Rating = ({
         alignItems: "center",
         margin: margin ? margin : "1rem 0 0 0",
         flexWrap: "wrap",
-        color: palette?.text.tertiary,
+        color: palette.text.tertiary,
       }}
     >
       <MUIRating
@@ -80,7 +81,7 @@ const Rating = ({
         }}
         emptyIcon={
           <StarIcon
-            style={{ opacity: 0.4, color: palette?.text.primary }}
+            style={{ opacity: 0.4, color: palette.text.primary }}
             fontSize="inherit"
           />
         }
@@ -101,7 +102,7 @@ const Rating = ({
           sx={{
             ml: 1,
             fontSize: ".7rem",
-            color: palette?.text.primary,
+            color: palette.text.primary,
           }}
         >{`(${ratesNumber} review${ratesNumber !== 1 ? "s" : ""})`}</Box>
       ) : null}

@@ -1,7 +1,5 @@
-import { useContext, useState } from "react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
-import EventContext from "../../context/eventContext";
-import ThemeContext from "../../context/themeContext";
 import {
   Box,
   Button,
@@ -16,16 +14,19 @@ import {
   Typography,
 } from "@mui/material";
 import { notify } from "../../utils/notifications";
-import { Event, PinCardProps } from "../../utils/interfaces";
+import { Event, PinCardProps, ReduxState } from "../../utils/interfaces";
 import convertImage from "../../utils/imageConverter";
 import { Cancel } from "@mui/icons-material";
 import debounce from "../../utils/debounce";
 import styled from "@emotion/styled";
+import { useSelector } from "react-redux";
+import { addEvent } from "../../store/events";
+import { useAppDispatch } from "../../store/store";
 
 const EventPin = ({ lng, lat, onClose }: PinCardProps) => {
-  const { palette } = useContext(ThemeContext);
-  const { onAddEvent } = useContext(EventContext);
+  const palette = useSelector((state: ReduxState) => state.theme.palette);
   const [logo, setLogo] = useState<File | null>(null);
+  const dispatch = useAppDispatch();
 
   const {
     register: registerEvent,
@@ -81,7 +82,7 @@ const EventPin = ({ lng, lat, onClose }: PinCardProps) => {
     }
 
     try {
-      onAddEvent?.(eventData);
+      dispatch(addEvent(eventData));
       setLogo(null);
       onClose?.(null);
       resetEventForm();
@@ -92,38 +93,38 @@ const EventPin = ({ lng, lat, onClose }: PinCardProps) => {
     "& > div": {
       borderBottom: "1px solid rgb(120,120,126)",
     },
-    label: { color: palette?.text.tertiary },
+    label: { color: palette.text.tertiary },
     "& .MuiSvgIcon-root": {
-      color: palette?.text.tertiary,
+      color: palette.text.tertiary,
     },
     "& .MuiSelect-select": {
-      color: palette?.text.tertiary,
+      color: palette.text.tertiary,
     },
   });
 
   const CssTextField = styled(TextField)({
     input: {
-      color: palette?.text.tertiary,
+      color: palette.text.tertiary,
     },
     textarea: {
-      color: palette?.text.tertiary,
+      color: palette.text.tertiary,
     },
-    label: { color: palette?.text.tertiary },
+    label: { color: palette.text.tertiary },
     "& label.Mui-focused": {
-      color: palette?.text.tertiary,
+      color: palette.text.tertiary,
     },
     "& .MuiInput-underline:after": {
-      borderBottomColor: palette?.text.tertiary,
+      borderBottomColor: palette.text.tertiary,
     },
     "& .MuiOutlinedInput-root": {
       "& fieldset": {
         borderColor: "rgb(120,120,126)",
       },
       "&:hover fieldset": {
-        borderColor: palette?.text.tertiary,
+        borderColor: palette.text.tertiary,
       },
       "&.Mui-focused fieldset": {
-        borderColor: palette?.text.tertiary,
+        borderColor: palette.text.tertiary,
       },
     },
   });
@@ -132,8 +133,8 @@ const EventPin = ({ lng, lat, onClose }: PinCardProps) => {
     <Box
       sx={{
         padding: ".8rem",
-        background: palette?.background.tertiary,
-        color: palette?.text.primary,
+        background: palette.background.tertiary,
+        color: palette.text.primary,
       }}
     >
       <Typography component="h3" variant="h6">
@@ -161,8 +162,8 @@ const EventPin = ({ lng, lat, onClose }: PinCardProps) => {
               right: "5px",
               cursor: "pointer",
               opacity: "0.8",
-              background: palette?.background.tertiary,
-              color: palette?.text.tertiary,
+              background: palette.background.tertiary,
+              color: palette.text.tertiary,
               borderRadius: "50%",
             }}
             onClick={() => setLogo(null)}
@@ -199,7 +200,7 @@ const EventPin = ({ lng, lat, onClose }: PinCardProps) => {
           })}
         />
         <FormControl variant="standard" sx={{ width: "100%" }}>
-          <InputLabel id="eventCategory" sx={{ color: palette?.text.tertiary }}>
+          <InputLabel id="eventCategory" sx={{ color: palette.text.tertiary }}>
             Category
           </InputLabel>
           <CssSelect
@@ -212,8 +213,8 @@ const EventPin = ({ lng, lat, onClose }: PinCardProps) => {
             MenuProps={{
               PaperProps: {
                 sx: {
-                  bgcolor: palette?.background.tertiary,
-                  color: palette?.text.tertiary,
+                  bgcolor: palette.background.tertiary,
+                  color: palette.text.tertiary,
                 },
               },
             }}

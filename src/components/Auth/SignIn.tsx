@@ -1,4 +1,3 @@
-import { useContext } from "react";
 import { useForm } from "react-hook-form";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
@@ -9,17 +8,19 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { Link as RouterLink } from "react-router-dom";
-import UserContext from "../../context/userContext";
-import ThemeContext from "../../context/themeContext";
 import GoogleLoginButton from "./GoogleLogin";
 import { Divider, TextField } from "@mui/material";
 import { notify } from "../../utils/notifications";
 import debounce from "../../utils/debounce";
 import styled from "@emotion/styled";
+import { useAppDispatch } from "../../store/store";
+import { signin, signUpDemo } from "../../store/currentUser";
+import { ReduxState } from "../../utils/interfaces";
+import { useSelector } from "react-redux";
 
 const SignIn = () => {
-  const { onSignIn, onSignUpDemo } = useContext(UserContext);
-  const { palette } = useContext(ThemeContext);
+  const dispatch = useAppDispatch();
+  const palette = useSelector((state: ReduxState) => state.theme.palette);
 
   const {
     register: registerSignIn,
@@ -44,30 +45,30 @@ const SignIn = () => {
       return;
     }
 
-    onSignIn?.(Object({ email, password }));
+    dispatch(signin({ email, password }));
     resetSignIn();
   };
 
   const CssTextField = styled(TextField)({
     input: {
-      color: palette?.text.tertiary,
+      color: palette.text.tertiary,
     },
-    label: { color: palette?.text.tertiary },
+    label: { color: palette.text.tertiary },
     "& label.Mui-focused": {
-      color: palette?.text.tertiary,
+      color: palette.text.tertiary,
     },
     "& .MuiInput-underline:after": {
-      borderBottomColor: palette?.text.tertiary,
+      borderBottomColor: palette.text.tertiary,
     },
     "& .MuiOutlinedInput-root": {
       "& fieldset": {
         borderColor: "rgb(120,120,126)",
       },
       "&:hover fieldset": {
-        borderColor: palette?.text.tertiary,
+        borderColor: palette.text.tertiary,
       },
       "&.Mui-focused fieldset": {
-        borderColor: palette?.text.tertiary,
+        borderColor: palette.text.tertiary,
       },
     },
   });
@@ -79,7 +80,7 @@ const SignIn = () => {
       sx={{
         borderRadius: "25px",
         height: "fit-content",
-        background: palette?.background.tertiary,
+        background: palette.background.tertiary,
         WebkitBoxShadow: "0px 0px 16px -8px rgba(0, 0, 0, 0.68)",
         boxShadow: "0px 0px 16px -8px rgba(0, 0, 0, 0.68)",
       }}
@@ -90,10 +91,10 @@ const SignIn = () => {
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
-          color: palette?.text.tertiary,
+          color: palette.text.tertiary,
         }}
       >
-        <Avatar sx={{ m: 1, bgcolor: palette?.warning }}>
+        <Avatar sx={{ m: 1, bgcolor: palette.warning }}>
           <LockOutlinedIcon />
         </Avatar>
         <Typography component="h1" variant="h5">
@@ -144,14 +145,14 @@ const SignIn = () => {
             Sign In
           </Button>
           <Button
-            onClick={() => onSignUpDemo?.()}
+            onClick={() => dispatch(signUpDemo())}
             fullWidth
             variant="outlined"
             sx={{
               mt: 1,
               mb: 1,
-              color: palette?.text.tertiary,
-              background: palette?.background.tertiary,
+              color: palette.text.tertiary,
+              background: palette.background.tertiary,
             }}
           >
             DEMO
@@ -168,7 +169,7 @@ const SignIn = () => {
                 component={RouterLink}
                 to="/account/resetpassword"
                 variant="body2"
-                sx={{ color: palette?.text.tertiary, textDecoration: "none" }}
+                sx={{ color: palette.text.tertiary, textDecoration: "none" }}
               >
                 Forgot password?
               </Link>
@@ -179,7 +180,7 @@ const SignIn = () => {
                 component={RouterLink}
                 to="/account/signup"
                 variant="body2"
-                sx={{ color: palette?.text.tertiary, textDecoration: "none" }}
+                sx={{ color: palette.text.tertiary, textDecoration: "none" }}
               >
                 {"Don't have an account? Sign Up"}
               </Link>

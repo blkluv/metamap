@@ -1,20 +1,21 @@
-import { useContext } from "react";
 import { useForm } from "react-hook-form";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Container from "@mui/material/Container";
-import UserContext from "../../context/userContext";
 import { notify } from "../../utils/notifications";
 import debounce from "../../utils/debounce";
-import ThemeContext from "../../context/themeContext";
 import styled from "@emotion/styled";
 import { TextField } from "@mui/material";
+import { useSelector } from "react-redux";
+import { ReduxState } from "../../utils/interfaces";
+import { useAppDispatch } from "../../store/store";
+import { updatePassword } from "../../store/currentUser";
 
 const UpdatePassword = ({ transparent }: { transparent?: boolean }) => {
-  const { onUpdatePassword } = useContext(UserContext);
-  const { palette } = useContext(ThemeContext);
+  const dispatch = useAppDispatch();
+  const palette = useSelector((state: ReduxState) => state.theme.palette);
 
   const {
     register: registerUpdatePassword,
@@ -44,30 +45,30 @@ const UpdatePassword = ({ transparent }: { transparent?: boolean }) => {
     if (newpassword !== confirmnewpassword)
       return notify("Passwords don't match.");
 
-    onUpdatePassword?.({ oldpassword, newpassword });
+    dispatch(updatePassword({ oldpassword, newpassword }));
     resetForm();
   };
 
   const CssTextField = styled(TextField)({
     input: {
-      color: palette?.text.tertiary,
+      color: palette.text.tertiary,
     },
-    label: { color: palette?.text.tertiary },
+    label: { color: palette.text.tertiary },
     "& label.Mui-focused": {
-      color: palette?.text.tertiary,
+      color: palette.text.tertiary,
     },
     "& .MuiInput-underline:after": {
-      borderBottomColor: palette?.text.tertiary,
+      borderBottomColor: palette.text.tertiary,
     },
     "& .MuiOutlinedInput-root": {
       "& fieldset": {
         borderColor: "rgb(120,120,126)",
       },
       "&:hover fieldset": {
-        borderColor: palette?.text.tertiary,
+        borderColor: palette.text.tertiary,
       },
       "&.Mui-focused fieldset": {
-        borderColor: palette?.text.tertiary,
+        borderColor: palette.text.tertiary,
       },
     },
   });
@@ -79,8 +80,8 @@ const UpdatePassword = ({ transparent }: { transparent?: boolean }) => {
       sx={{
         height: "fit-content",
         background: transparent
-          ? palette?.background.primary
-          : palette?.background.tertiary,
+          ? palette.background.primary
+          : palette.background.tertiary,
       }}
     >
       <Box
@@ -90,7 +91,7 @@ const UpdatePassword = ({ transparent }: { transparent?: boolean }) => {
           alignItems: "center",
         }}
       >
-        <Avatar sx={{ m: 1, bgcolor: palette?.warning }}>
+        <Avatar sx={{ m: 1, bgcolor: palette.warning }}>
           <LockOutlinedIcon />
         </Avatar>
         <Box

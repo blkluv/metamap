@@ -1,22 +1,23 @@
-import { useContext, useEffect } from "react";
-import CommunicationContext from "../../context/communicationContext";
-import ThemeContext from "../../context/themeContext";
+import { useEffect } from "react";
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 import { Avatar, Box, Typography } from "@mui/material";
-import { ChatMessageProps } from "../../utils/interfaces";
+import { ChatMessageProps, ReduxState } from "../../utils/interfaces";
 // @ts-ignore
 import ReactEmoji from "react-emoji";
 import moment from "moment";
+import { useSelector } from "react-redux";
+import { readMessage } from "../../store/communication";
+import { useAppDispatch } from "../../store/store";
 
 const Message = ({
   message: { _id, read, text, createdAt },
   own,
 }: ChatMessageProps) => {
-  const { onReadMessage } = useContext(CommunicationContext);
-  const { palette } = useContext(ThemeContext);
+  const palette = useSelector((state: ReduxState) => state.theme.palette);
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
-    !own && !read && onReadMessage?.(_id);
+    _id && !own && !read && dispatch(readMessage(_id));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -41,8 +42,8 @@ const Message = ({
         >
           <Typography
             sx={{
-              background: `${own ? palette?.blue : palette?.green}`,
-              color: palette?.text.tertiary,
+              background: `${own ? palette.blue : palette.green}`,
+              color: palette.text.tertiary,
               borderRadius: "20px",
               padding: "10px 16px",
               fontSize: ".9rem",

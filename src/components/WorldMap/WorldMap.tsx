@@ -1,4 +1,4 @@
-import { useState, useEffect, useContext, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import Map, {
   NavigationControl,
   GeolocateControl,
@@ -7,29 +7,32 @@ import Map, {
   MapLayerMouseEvent,
 } from "react-map-gl";
 import Markers from "./Markers";
-import EventContext from "../../context/eventContext";
-import BusinessContext from "../../context/businessContext";
-import UserContext from "../../context/userContext";
-import ThemeContext from "../../context/themeContext";
 // library bugfix
 // @ts-ignore
 // eslint-disable-next-line import/no-webpack-loader-syntax
 import maplibregl from "!maplibre-gl";
 import "maplibre-gl/dist/maplibre-gl.css";
 import { Box } from "@mui/material";
-import { PinCardProps } from "../../utils/interfaces";
+import { PinCardProps, ReduxState } from "../../utils/interfaces";
 import { notify } from "../../utils/notifications";
 import EventHeader from "../Content/EventHeader";
 import BusinessHeader from "../Content/BusinessHeader";
 import PopupController from "./PopupController";
 import Geocoder from "./Coder";
 import Legend from "./Legend";
+import { useSelector } from "react-redux";
 
 const WorldMap = () => {
-  const { selectedEvent } = useContext(EventContext);
-  const { selectedBusiness } = useContext(BusinessContext);
-  const { currentUser } = useContext(UserContext);
-  const { palette } = useContext(ThemeContext);
+  const { selectedEvent } = useSelector(
+    (state: ReduxState) => state.events.data
+  );
+  const { selectedBusiness } = useSelector(
+    (state: ReduxState) => state.businesses.data
+  );
+  const currentUser = useSelector(
+    (state: ReduxState) => state.currentUser.data
+  );
+  const palette = useSelector((state: ReduxState) => state.theme.palette);
   const [newMarker, setNewMarker] = useState<PinCardProps | null>(null);
   const [key, setKey] = useState<number>(Math.random());
   const geoMap = useRef<any>();
@@ -98,7 +101,7 @@ const WorldMap = () => {
         width: { xs: "100%", md: "45%" },
         minHeight: { xs: "90vh", md: "100%" },
         maxHeight: "fit-content",
-        background: palette?.background.primary,
+        background: palette.background.primary,
         WebkitBoxShadow: "0px 0px 16px -8px rgba(0, 0, 0, 0.68)",
         boxShadow: "0px 0px 16px -8px rgba(0, 0, 0, 0.68)",
         borderRadius: "25px",
@@ -114,7 +117,7 @@ const WorldMap = () => {
           height: "100%",
           borderRadius: "25px",
         }}
-        mapStyle={`https://api.maptiler.com/maps/${palette?.map.style}/style.json?key=${process.env.REACT_APP_MAP_API_KEY}`}
+        mapStyle={`https://api.maptiler.com/maps/${palette.map.style}/style.json?key=${process.env.REACT_APP_MAP_API_KEY}`}
         doubleClickZoom={false}
         onDblClick={handleDoubleClick}
       >

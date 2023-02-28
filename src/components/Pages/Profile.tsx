@@ -1,18 +1,18 @@
-import { useContext } from "react";
 import { Box } from "@mui/material";
+import { useSelector } from "react-redux";
 import { Outlet } from "react-router-dom";
-import ThemeContext from "../../context/themeContext";
+import { ReduxState } from "../../utils/interfaces";
 
 const Profile = () => {
-  const { palette } = useContext(ThemeContext);
+  const palette = useSelector((state: ReduxState) => state.theme.palette);
 
   return (
     <Box
       sx={{
         width: "100%",
         padding: { xs: "2rem 1rem", md: "0 2rem" },
-        background: palette?.background.primary,
-        color: palette?.text.primary,
+        background: palette.background.primary,
+        color: palette.text.primary,
       }}
     >
       <Box

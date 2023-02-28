@@ -1,16 +1,24 @@
-import { useContext, useEffect, useState, useRef } from "react";
-import BusinessContext from "../../context/businessContext";
+import { useEffect, useState, useRef } from "react";
 import { Box } from "@mui/material";
 import BusinessMenu from "../Navigation/BusinessMenu";
 import BusinessesList from "./BusinessesList";
-import { Business } from "../../utils/interfaces";
-import EventContext from "../../context/eventContext";
+import { Business, ReduxState } from "../../utils/interfaces";
+import { getBusinesses } from "../../store/businesses";
+import { useSelector } from "react-redux";
+import { useAppDispatch } from "../../store/store";
+import { removeSelectedBusiness } from "../../store/businesses";
+import { removeSelectedEvent } from "../../store/events";
 
 const Businesses = () => {
-  const { businesses, selectedBusiness, onRemoveSelectedBusiness } =
-    useContext(BusinessContext);
-  const { selectedEvent, onRemoveSelectedEvent } = useContext(EventContext);
   const [filteredItems, setFilteredItems] = useState(null);
+  const {
+    data: { businesses, selectedBusiness },
+    status,
+  } = useSelector((state: ReduxState) => state.businesses);
+  const {
+    data: { selectedEvent },
+  } = useSelector((state: ReduxState) => state.events);
+  const dispatch = useAppDispatch();
   const businessMenuRef = useRef();
 
   useEffect(() => {
@@ -23,15 +31,15 @@ const Businesses = () => {
       );
     }
     return () => {
-      onRemoveSelectedBusiness?.();
+      dispatch(removeSelectedBusiness());
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [businesses]);
 
   useEffect(() => {
     if (selectedEvent || selectedBusiness) {
-      onRemoveSelectedBusiness?.();
-      onRemoveSelectedEvent?.();
+      dispatch(removeSelectedBusiness());
+      dispatch(removeSelectedEvent());
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [filteredItems]);
@@ -43,6 +51,10 @@ const Businesses = () => {
       setFilteredItems(null);
     }
   };
+
+  useEffect(() => {
+    dispatch(getBusinesses());
+  }, [dispatch]);
 
   return (
     <Box
@@ -60,6 +72,7 @@ const Businesses = () => {
         scrollRef={businessMenuRef}
       />
       <BusinessesList
+        loading={status}
         items={filteredItems ? filteredItems : businesses}
         scrollRef={businessMenuRef}
       />

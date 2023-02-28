@@ -1,22 +1,22 @@
-import { useContext } from "react";
 import { Box } from "@mui/material";
 import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
-import ThemeContext from "../../context/themeContext";
-import UserContext from "../../context/userContext";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import SearchField from "../Elements/SearchField";
-import { Event, ItemMenuProps } from "../../utils/interfaces";
+import { Event, ItemMenuProps, ReduxState } from "../../utils/interfaces";
 import { TravelExplore, Check, DoNotDisturb } from "@mui/icons-material";
+import { useSelector } from "react-redux";
 
 export const EventMenu = ({
   items,
   handleFilter,
   scrollRef,
 }: ItemMenuProps) => {
-  const { currentUser } = useContext(UserContext);
-  const { palette } = useContext(ThemeContext);
+  const currentUser = useSelector(
+    (state: ReduxState) => state.currentUser.data
+  );
+  const palette = useSelector((state: ReduxState) => state.theme.palette);
 
   const handleJoinedEvents = (data: Event[] | null | undefined) => {
     const joined = data?.filter((item: Event | null) => {
@@ -41,8 +41,8 @@ export const EventMenu = ({
       ref={scrollRef}
       sx={{
         width: "100%",
-        background: palette?.background.primary,
-        color: palette?.text.tertiary,
+        background: palette.background.primary,
+        color: palette.text.tertiary,
         marginBottom: "1rem",
       }}
     >
@@ -71,8 +71,8 @@ export const EventMenu = ({
           startIcon={<TravelExplore />}
           disableElevation
           sx={{
-            color: palette?.text.primary,
-            background: palette?.background.tertiary,
+            color: palette.text.primary,
+            background: palette.background.tertiary,
             marginLeft: "0 !important",
             marginRight: "0.5rem !important",
             marginTop: "0.5rem !important",
@@ -85,11 +85,11 @@ export const EventMenu = ({
           variant="outlined"
           startIcon={<Check />}
           sx={{
-            border: `1px solid ${palette?.background.tertiary}`,
+            border: `1px solid ${palette.background.tertiary}`,
             marginLeft: "0 !important",
             marginRight: "0.5rem !important",
             marginTop: "0.5rem !important",
-            color: palette?.blue,
+            color: palette.blue,
           }}
           onClick={() => handleJoinedEvents(items)}
         >
@@ -99,11 +99,11 @@ export const EventMenu = ({
           variant="outlined"
           startIcon={<DoNotDisturb />}
           sx={{
-            border: `1px solid ${palette?.background.tertiary}`,
+            border: `1px solid ${palette.background.tertiary}`,
             marginLeft: "0 !important",
             marginRight: "0.5rem !important",
             marginTop: "0.5rem !important",
-            color: palette?.warning,
+            color: palette.warning,
           }}
           onClick={() => handlePastEvents(items)}
         >

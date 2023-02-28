@@ -1,17 +1,13 @@
-import { useContext, useState } from "react";
+import { useState } from "react";
 import { NavLink } from "react-router-dom";
 import ListItem from "@mui/material/ListItem";
 import ListItemText from "@mui/material/ListItemText";
 import Typography from "@mui/material/Typography";
-import BusinessContext from "../../context/businessContext";
-import UserContext from "../../context/userContext";
-import ThemeContext from "../../context/themeContext";
-import { BusinessHeader as Header } from "../../utils/interfaces";
+import { BusinessHeader as Header, ReduxState } from "../../utils/interfaces";
 import { Box, CardMedia } from "@mui/material";
 import debounce from "../../utils/debounce";
 import preview from "../../images/preview.png";
 import { notify } from "../../utils/notifications";
-import EventContext from "../../context/eventContext";
 import Rating from "../Elements/Rating";
 import ConfirmationDialog from "../Elements/ConfirmationDialog";
 import {
@@ -23,6 +19,15 @@ import {
   Home,
   Language,
 } from "@mui/icons-material";
+import { useSelector } from "react-redux";
+import {
+  likeBusiness,
+  rateBusiness,
+  deleteBusiness,
+  setSelectedBusiness,
+} from "../../store/businesses";
+import { useAppDispatch } from "../../store/store";
+import { removeSelectedEvent } from "../../store/events";
 
 const BusinessHeader = ({
   business: {
@@ -41,17 +46,15 @@ const BusinessHeader = ({
   popup,
   innerRef,
 }: Header) => {
-  const {
-    selectedBusiness,
-    onSetSelectedBusiness,
-    onLikeBusiness,
-    onRateBusiness,
-    onDeleteBusiness,
-  } = useContext(BusinessContext);
-  const { onRemoveSelectedEvent } = useContext(EventContext);
-  const { currentUser } = useContext(UserContext);
-  const { palette } = useContext(ThemeContext);
+  const currentUser = useSelector(
+    (state: ReduxState) => state.currentUser.data
+  );
+  const { selectedBusiness } = useSelector(
+    (state: ReduxState) => state.businesses.data
+  );
+  const palette = useSelector((state: ReduxState) => state.theme.palette);
   const [isOpen, setIsOpen] = useState<boolean>(false);
+  const dispatch = useAppDispatch();
 
   const handleLikeBusiness = () => {
     if (currentUser?.name.startsWith("guest")) {
@@ -62,19 +65,19 @@ const BusinessHeader = ({
       notify("You can't like your own business.");
       return;
     }
-    onLikeBusiness?.(_id);
+    _id && dispatch(likeBusiness(_id));
   };
 
   const handleSelect = () => {
-    onRemoveSelectedEvent?.();
-    onSetSelectedBusiness?.(_id);
+    dispatch(removeSelectedEvent());
+    dispatch(setSelectedBusiness(_id));
   };
 
   const handleRate = (newRating: number) => {
     if (creator?._id === currentUser?._id) {
       notify("You can't rate your own business.");
     } else {
-      onRateBusiness?.(_id, newRating);
+      dispatch(rateBusiness?.({ id: _id, rating: newRating }));
     }
   };
 
@@ -84,8 +87,8 @@ const BusinessHeader = ({
   const handleCloseDialog = () => {
     setIsOpen(false);
   };
-  const handleConfirmDialog = async () => {
-    await onDeleteBusiness?.(_id);
+  const handleConfirmDialog = () => {
+    _id && dispatch(deleteBusiness(_id));
     setIsOpen(false);
   };
 
@@ -98,8 +101,8 @@ const BusinessHeader = ({
         cursor: "pointer",
         borderRadius: "15px",
         background: popup
-          ? `${palette?.background.tertiary} !important`
-          : palette?.background.tertiary,
+          ? `${palette.background.tertiary} !important`
+          : palette.background.tertiary,
         marginBottom: popup ? 0 : "1rem",
         display: "flex",
         flexDirection:
@@ -124,18 +127,14 @@ const BusinessHeader = ({
             width: "100%",
           }}
         >
-          <Typography
-            component="h3"
-            variant="h6"
-            color={palette?.text.tertiary}
-          >
+          <Typography component="h3" variant="h6" color={palette.text.tertiary}>
             Business
           </Typography>
           {currentUser?._id === creator?._id ? (
             <RemoveCircleOutline
               sx={{
                 cursor: "pointer",
-                color: palette?.text.primary,
+                color: palette.text.primary,
                 fontSize: "1.2rem",
               }}
               onClick={() => handleOpenDialog()}
@@ -175,7 +174,7 @@ const BusinessHeader = ({
                   display: "flex",
                   alignItems: "center",
                   flexWrap: "wrap",
-                  color: palette?.text.primary,
+                  color: palette.text.primary,
                 }}
               >
                 <Typography
@@ -187,7 +186,7 @@ const BusinessHeader = ({
                   }}
                   component="span"
                   variant="body2"
-                  color={palette?.text.tertiary}
+                  color={palette.text.tertiary}
                   fontSize={"1rem"}
                 >
                   {name}
@@ -196,7 +195,7 @@ const BusinessHeader = ({
               <Box
                 sx={{
                   display: "flex",
-                  color: palette?.text.tertiary,
+                  color: palette.text.tertiary,
                 }}
               >
                 <Typography
@@ -212,7 +211,7 @@ const BusinessHeader = ({
                     sx={{
                       fontSize: "1.2rem",
                       cursor: "pointer",
-                      color: palette?.warning,
+                      color: palette.warning,
                     }}
                     onClick={debounce(() => handleLikeBusiness(), 400)}
                   />
@@ -228,7 +227,7 @@ const BusinessHeader = ({
               sx={{ display: "block" }}
               component="span"
               variant="body2"
-              color={palette?.text.primary}
+              color={palette.text.primary}
               fontSize={".8rem"}
             >
               Owners:{" "}
@@ -236,7 +235,7 @@ const BusinessHeader = ({
                 to={`/dashboard/profile/${creator?.name}`}
                 style={{
                   textDecoration: "none",
-                  color: palette?.text.tertiary,
+                  color: palette.text.tertiary,
                   fontWeight: "bold",
                 }}
               >
@@ -256,7 +255,7 @@ const BusinessHeader = ({
               }}
               component="span"
               variant="body2"
-              color={palette?.text.primary}
+              color={palette.text.primary}
             >
               {`Opening time: ${openingtime}`}
             </Typography>
@@ -268,7 +267,7 @@ const BusinessHeader = ({
                 fontSize: ".8rem",
                 flexWrap: "wrap",
               }}
-              color={palette?.text.primary}
+              color={palette.text.primary}
             >
               <Box
                 sx={{
@@ -338,7 +337,7 @@ const BusinessHeader = ({
             <Typography
               sx={{
                 display: "block",
-                color: palette?.text.tertiary,
+                color: palette.text.tertiary,
                 margin: "0.5rem 0 0.8rem 0",
                 fontSize: ".9rem",
               }}

@@ -1,4 +1,3 @@
-import { useContext } from "react";
 import { useForm } from "react-hook-form";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
@@ -9,16 +8,18 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { Link as RouterLink } from "react-router-dom";
-import UserContext from "../../context/userContext";
 import { notify } from "../../utils/notifications";
 import debounce from "../../utils/debounce";
 import styled from "@emotion/styled";
 import { TextField } from "@mui/material";
-import ThemeContext from "../../context/themeContext";
+import { useSelector } from "react-redux";
+import { ReduxState } from "../../utils/interfaces";
+import { useAppDispatch } from "../../store/store";
+import { externalSignin } from "../../store/currentUser";
 
 const ResetPassword = () => {
-  const { onResetPassword } = useContext(UserContext);
-  const { palette } = useContext(ThemeContext);
+  const palette = useSelector((state: ReduxState) => state.theme.palette);
+  const dispatch = useAppDispatch();
 
   const {
     register: registerResetPassword,
@@ -37,30 +38,30 @@ const ResetPassword = () => {
       return notify("Please complete all fields.");
     }
 
-    onResetPassword?.(useremail);
+    dispatch(externalSignin(useremail));
     resetForm();
   };
 
   const CssTextField = styled(TextField)({
     input: {
-      color: palette?.text.tertiary,
+      color: palette.text.tertiary,
     },
-    label: { color: palette?.text.tertiary },
+    label: { color: palette.text.tertiary },
     "& label.Mui-focused": {
-      color: palette?.text.tertiary,
+      color: palette.text.tertiary,
     },
     "& .MuiInput-underline:after": {
-      borderBottomColor: palette?.text.tertiary,
+      borderBottomColor: palette.text.tertiary,
     },
     "& .MuiOutlinedInput-root": {
       "& fieldset": {
         borderColor: "rgb(120,120,126)",
       },
       "&:hover fieldset": {
-        borderColor: palette?.text.tertiary,
+        borderColor: palette.text.tertiary,
       },
       "&.Mui-focused fieldset": {
-        borderColor: palette?.text.tertiary,
+        borderColor: palette.text.tertiary,
       },
     },
   });
@@ -72,7 +73,7 @@ const ResetPassword = () => {
       sx={{
         borderRadius: "25px",
         height: "fit-content",
-        background: palette?.background.tertiary,
+        background: palette.background.tertiary,
         WebkitBoxShadow: "0px 0px 16px -8px rgba(0, 0, 0, 0.68)",
         boxShadow: "0px 0px 16px -8px rgba(0, 0, 0, 0.68)",
       }}
@@ -83,10 +84,10 @@ const ResetPassword = () => {
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
-          color: palette?.text.tertiary,
+          color: palette.text.tertiary,
         }}
       >
-        <Avatar sx={{ m: 1, bgcolor: palette?.warning }}>
+        <Avatar sx={{ m: 1, bgcolor: palette.warning }}>
           <LockOutlinedIcon />
         </Avatar>
         <Typography component="h1" variant="h5">
@@ -131,7 +132,7 @@ const ResetPassword = () => {
                 to="/account/signin"
                 replace
                 variant="body2"
-                sx={{ color: palette?.text.tertiary, textDecoration: "none" }}
+                sx={{ color: palette.text.tertiary, textDecoration: "none" }}
               >
                 {"Back"}
               </Link>

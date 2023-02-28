@@ -1,23 +1,30 @@
-import { useContext, useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 import { Box, Divider } from "@mui/material";
-import PostContext from "../../context/postContext";
 import Share from "./Share";
 import PostList from "./PostsList";
-import CommunicationContext from "../../context/communicationContext";
 import FeedTimeline from "../Elements/FeedTimeline";
+import { ReduxState } from "../../utils/interfaces";
+import { useSelector } from "react-redux";
+import { setTargetElement } from "../../store/communication";
+import { getFollowingPosts } from "../../store/posts";
+import { useAppDispatch } from "../../store/store";
 
 const Feed = () => {
-  const { posts, onGetFollowingPosts } = useContext(PostContext);
-  const { targetElement, onSetTargetElement } =
-    useContext(CommunicationContext);
+  const { targetElement } = useSelector(
+    (state: ReduxState) => state.communication.data
+  );
+  const { followingPosts } = useSelector(
+    (state: ReduxState) => state.posts.data
+  );
   const targetRef = useRef<any>(null);
   const feedMenuRef = useRef();
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
-    onGetFollowingPosts?.();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+    dispatch(getFollowingPosts());
+  }, [dispatch]);
 
+  // @ts-ignore
   useEffect(() => {
     if (targetElement) {
       targetRef?.current?.scrollIntoView({
@@ -26,8 +33,8 @@ const Feed = () => {
         inline: "start",
       });
     }
-    return () => onSetTargetElement?.(null);
-  }, [onSetTargetElement, targetElement]);
+    return () => setTargetElement(null);
+  }, [targetElement]);
 
   return (
     <Box
@@ -47,9 +54,9 @@ const Feed = () => {
           margin: "1rem 3rem 1rem 3rem",
         }}
       />
-      {posts.length ? (
+      {followingPosts.length ? (
         <PostList
-          items={posts}
+          items={followingPosts}
           targetElement={targetElement}
           targetRef={targetRef}
           scrollRef={feedMenuRef}

@@ -1,17 +1,25 @@
-import { useContext, useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef } from "react";
 import { Box } from "@mui/material";
-import UserContext from "../../context/userContext";
 import SocialMenu from "../Navigation/SocialMenu";
 import SocialList from "./SocialList";
+import { getUsers } from "../../store/users";
+import { UserHeader } from "../../utils/interfaces";
 
 const Social = () => {
-  const { users, onGetUsers } = useContext(UserContext);
   const [filteredData, setFilteredData] = useState([]);
+  const [users, setUsers] = useState<UserHeader[]>([]);
+  const [loading, setLoading] = useState<boolean>(false);
   const socialMenuRef = useRef();
 
+  const getAllUsers = async () => {
+    setLoading(true);
+    const users = await getUsers();
+    users && setUsers(users);
+    setLoading(false);
+  };
+
   useEffect(() => {
-    onGetUsers?.();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    getAllUsers();
   }, []);
 
   return (
@@ -30,6 +38,8 @@ const Social = () => {
         scrollRef={socialMenuRef}
       />
       <SocialList
+        users={users}
+        loading={loading}
         data={filteredData ? filteredData : []}
         scrollRef={socialMenuRef}
       />

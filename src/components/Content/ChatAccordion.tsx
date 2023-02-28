@@ -1,13 +1,11 @@
-import { useContext } from "react";
 import { Box } from "@mui/material";
 import Accordion from "@mui/material/Accordion";
 import ConversationList from "./ConversationList";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import Typography from "@mui/material/Typography";
-import ThemeContext from "../../context/themeContext";
 import UsersOnline from "./UsersOnline";
-import { ChatProps } from "../../utils/interfaces";
+import { ReduxState } from "../../utils/interfaces";
 import Messages from "./Messages";
 import {
   ExpandMore,
@@ -16,9 +14,13 @@ import {
   Chat,
   Group,
 } from "@mui/icons-material";
+import { useSelector } from "react-redux";
 
-const ChatAccordion = ({ onlineUsers, userMessages }: ChatProps) => {
-  const { palette } = useContext(ThemeContext);
+const ChatAccordion = () => {
+  const palette = useSelector((state: ReduxState) => state.theme.palette);
+  const { userMessages } = useSelector(
+    (state: ReduxState) => state.communication.data
+  );
 
   return (
     <Box
@@ -33,10 +35,10 @@ const ChatAccordion = ({ onlineUsers, userMessages }: ChatProps) => {
     >
       <Accordion
         sx={{
-          color: palette?.text.tertiary,
+          color: palette.text.tertiary,
           borderRadius: "25px !important",
-          background: palette?.background.primary,
-          border: `1px solid ${palette?.background.tertiary}`,
+          background: palette.background.primary,
+          border: `1px solid ${palette.background.tertiary}`,
           WebkitBoxShadow: "0px 0px 16px -8px rgba(0, 0, 0, 0.68)",
           boxShadow: "0px 0px 16px -8px rgba(0, 0, 0, 0.68)",
           marginBottom: "0.5rem",
@@ -46,7 +48,7 @@ const ChatAccordion = ({ onlineUsers, userMessages }: ChatProps) => {
         }}
       >
         <AccordionSummary
-          expandIcon={<ExpandMore sx={{ color: palette?.text.tertiary }} />}
+          expandIcon={<ExpandMore sx={{ color: palette.text.tertiary }} />}
           aria-controls="panel1a-content"
           id="panel1a-header"
         >
@@ -55,7 +57,7 @@ const ChatAccordion = ({ onlineUsers, userMessages }: ChatProps) => {
           {userMessages?.find((message) => !message.read) ? (
             <Circle
               sx={{
-                color: palette?.green,
+                color: palette.green,
                 marginLeft: ".5rem",
                 width: ".8rem",
               }}
@@ -68,10 +70,10 @@ const ChatAccordion = ({ onlineUsers, userMessages }: ChatProps) => {
       </Accordion>
       <Accordion
         sx={{
-          color: palette?.text.tertiary,
+          color: palette.text.tertiary,
           borderRadius: "25px !important",
-          background: palette?.background.primary,
-          border: `1px solid ${palette?.background.tertiary}`,
+          background: palette.background.primary,
+          border: `1px solid ${palette.background.tertiary}`,
           WebkitBoxShadow: "0px 0px 16px -8px rgba(0, 0, 0, 0.68)",
           boxShadow: "0px 0px 16px -8px rgba(0, 0, 0, 0.68)",
           marginBottom: "0.5rem",
@@ -81,7 +83,7 @@ const ChatAccordion = ({ onlineUsers, userMessages }: ChatProps) => {
         }}
       >
         <AccordionSummary
-          expandIcon={<ExpandMore sx={{ color: palette?.text.tertiary }} />}
+          expandIcon={<ExpandMore sx={{ color: palette.text.tertiary }} />}
           aria-controls="panel1a-content"
           id="panel1a-header"
         >
@@ -94,10 +96,10 @@ const ChatAccordion = ({ onlineUsers, userMessages }: ChatProps) => {
       </Accordion>
       <Accordion
         sx={{
-          color: palette?.text.tertiary,
+          color: palette.text.tertiary,
           borderRadius: "25px !important",
-          background: palette?.background.primary,
-          border: `1px solid ${palette?.background.tertiary}`,
+          background: palette.background.primary,
+          border: `1px solid ${palette.background.tertiary}`,
           WebkitBoxShadow: "0px 0px 16px -8px rgba(0, 0, 0, 0.68)",
           boxShadow: "0px 0px 16px -8px rgba(0, 0, 0, 0.68)",
           marginBottom: "0.5rem",
@@ -107,7 +109,7 @@ const ChatAccordion = ({ onlineUsers, userMessages }: ChatProps) => {
         }}
       >
         <AccordionSummary
-          expandIcon={<ExpandMore sx={{ color: palette?.text.tertiary }} />}
+          expandIcon={<ExpandMore sx={{ color: palette.text.tertiary }} />}
           aria-controls="panel2a-content"
           id="panel2a-header"
         >
@@ -115,7 +117,7 @@ const ChatAccordion = ({ onlineUsers, userMessages }: ChatProps) => {
           <Typography sx={{ fontWeight: 500 }}>Contacts</Typography>
         </AccordionSummary>
         <AccordionDetails>
-          <UsersOnline onlineUsers={onlineUsers} />
+          <UsersOnline />
         </AccordionDetails>
       </Accordion>
     </Box>

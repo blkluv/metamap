@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
@@ -6,16 +6,27 @@ import Box from "@mui/material/Box";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
-import UserContext from "../../context/userContext";
 import { notify } from "../../utils/notifications";
 import debounce from "../../utils/debounce";
 import styled from "@emotion/styled";
 import { TextField } from "@mui/material";
-import ThemeContext from "../../context/themeContext";
+import { ReduxState } from "../../utils/interfaces";
+import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { changePassword } from "../../store/currentUser";
+import { useAppDispatch } from "../../store/store";
 
 const ChangePassword = () => {
-  const { onChangePassword } = useContext(UserContext);
-  const { palette } = useContext(ThemeContext);
+  const dispatch = useAppDispatch();
+  const palette = useSelector((state: ReduxState) => state.theme.palette);
+  const status = useSelector((state: ReduxState) => state.currentUser.status);
+  let navigate = useNavigate();
+
+  useEffect(() => {
+    if (status === "success") {
+      navigate("/account/signin");
+    }
+  }, [navigate, status]);
 
   const {
     register: registerChangePassword,
@@ -44,30 +55,30 @@ const ChangePassword = () => {
     const url = window.location;
     const token = url.hash.split("#access_token=")[1];
 
-    onChangePassword?.(token, { password, confirmpassword });
+    dispatch(changePassword({ token, password, confirmpassword }));
     resetSignUp();
   };
 
   const CssTextField = styled(TextField)({
     input: {
-      color: palette?.text.tertiary,
+      color: palette.text.tertiary,
     },
-    label: { color: palette?.text.tertiary },
+    label: { color: palette.text.tertiary },
     "& label.Mui-focused": {
-      color: palette?.text.tertiary,
+      color: palette.text.tertiary,
     },
     "& .MuiInput-underline:after": {
-      borderBottomColor: palette?.text.tertiary,
+      borderBottomColor: palette.text.tertiary,
     },
     "& .MuiOutlinedInput-root": {
       "& fieldset": {
         borderColor: "rgb(120,120,126)",
       },
       "&:hover fieldset": {
-        borderColor: palette?.text.tertiary,
+        borderColor: palette.text.tertiary,
       },
       "&.Mui-focused fieldset": {
-        borderColor: palette?.text.tertiary,
+        borderColor: palette.text.tertiary,
       },
     },
   });
@@ -79,7 +90,7 @@ const ChangePassword = () => {
       sx={{
         borderRadius: "25px",
         height: "fit-content",
-        background: palette?.background.tertiary,
+        background: palette.background.tertiary,
         WebkitBoxShadow: "0px 0px 16px -8px rgba(0, 0, 0, 0.68)",
         boxShadow: "0px 0px 16px -8px rgba(0, 0, 0, 0.68)",
       }}
@@ -90,10 +101,10 @@ const ChangePassword = () => {
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
-          color: palette?.text.tertiary,
+          color: palette.text.tertiary,
         }}
       >
-        <Avatar sx={{ m: 1, bgcolor: palette?.warning }}>
+        <Avatar sx={{ m: 1, bgcolor: palette.warning }}>
           <LockOutlinedIcon />
         </Avatar>
         <Typography component="h1" variant="h5">

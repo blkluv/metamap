@@ -1,7 +1,5 @@
-import { useContext, useState } from "react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
-import BusinessContext from "../../context/businessContext";
-import ThemeContext from "../../context/themeContext";
 import {
   Box,
   Button,
@@ -16,16 +14,19 @@ import {
   Typography,
 } from "@mui/material";
 import { notify } from "../../utils/notifications";
-import { Business, PinCardProps } from "../../utils/interfaces";
+import { Business, PinCardProps, ReduxState } from "../../utils/interfaces";
 import convertImage from "../../utils/imageConverter";
 import { Cancel } from "@mui/icons-material";
 import debounce from "../../utils/debounce";
 import styled from "@emotion/styled";
+import { useSelector } from "react-redux";
+import { addBusiness } from "../../store/businesses";
+import { useAppDispatch } from "../../store/store";
 
 const BusinessPin = ({ lng, lat, onClose }: PinCardProps) => {
-  const { palette } = useContext(ThemeContext);
-  const { onAddBusiness } = useContext(BusinessContext);
+  const palette = useSelector((state: ReduxState) => state.theme.palette);
   const [logo, setLogo] = useState<File | null>(null);
+  const dispatch = useAppDispatch();
 
   const {
     register: registerBusiness,
@@ -89,7 +90,7 @@ const BusinessPin = ({ lng, lat, onClose }: PinCardProps) => {
     }
 
     try {
-      onAddBusiness?.(businessData);
+      dispatch(addBusiness(businessData));
       setLogo(null);
       onClose?.(null);
       resetBusinessForm();
@@ -100,38 +101,38 @@ const BusinessPin = ({ lng, lat, onClose }: PinCardProps) => {
     "& > div": {
       borderBottom: "1px solid rgb(120,120,126)",
     },
-    label: { color: palette?.text.tertiary },
+    label: { color: palette.text.tertiary },
     "& .MuiSvgIcon-root": {
-      color: palette?.text.tertiary,
+      color: palette.text.tertiary,
     },
     "& .MuiSelect-select": {
-      color: palette?.text.tertiary,
+      color: palette.text.tertiary,
     },
   });
 
   const CssTextField = styled(TextField)({
     input: {
-      color: palette?.text.tertiary,
+      color: palette.text.tertiary,
     },
     textarea: {
-      color: palette?.text.tertiary,
+      color: palette.text.tertiary,
     },
-    label: { color: palette?.text.tertiary },
+    label: { color: palette.text.tertiary },
     "& label.Mui-focused": {
-      color: palette?.text.tertiary,
+      color: palette.text.tertiary,
     },
     "& .MuiInput-underline:after": {
-      borderBottomColor: palette?.text.tertiary,
+      borderBottomColor: palette.text.tertiary,
     },
     "& .MuiOutlinedInput-root": {
       "& fieldset": {
         borderColor: "rgb(120,120,126)",
       },
       "&:hover fieldset": {
-        borderColor: palette?.text.tertiary,
+        borderColor: palette.text.tertiary,
       },
       "&.Mui-focused fieldset": {
-        borderColor: palette?.text.tertiary,
+        borderColor: palette.text.tertiary,
       },
     },
   });
@@ -140,8 +141,8 @@ const BusinessPin = ({ lng, lat, onClose }: PinCardProps) => {
     <Box
       sx={{
         padding: ".8rem",
-        background: palette?.background.tertiary,
-        color: palette?.text.primary,
+        background: palette.background.tertiary,
+        color: palette.text.primary,
       }}
     >
       <Typography component="h3" variant="h6">
@@ -170,8 +171,8 @@ const BusinessPin = ({ lng, lat, onClose }: PinCardProps) => {
               cursor: "pointer",
               opacity: "0.8",
               borderRadius: "50%",
-              background: palette?.background.tertiary,
-              color: palette?.text.tertiary,
+              background: palette.background.tertiary,
+              color: palette.text.tertiary,
             }}
             onClick={() => setLogo(null)}
           />
@@ -184,7 +185,7 @@ const BusinessPin = ({ lng, lat, onClose }: PinCardProps) => {
         <FormControl variant="standard" sx={{ width: "100%" }}>
           <InputLabel
             id="businessCategory"
-            sx={{ color: palette?.text.tertiary }}
+            sx={{ color: palette.text.tertiary }}
           >
             Category
           </InputLabel>
@@ -198,8 +199,8 @@ const BusinessPin = ({ lng, lat, onClose }: PinCardProps) => {
             MenuProps={{
               PaperProps: {
                 sx: {
-                  bgcolor: palette?.background.tertiary,
-                  color: palette?.text.tertiary,
+                  bgcolor: palette.background.tertiary,
+                  color: palette.text.tertiary,
                 },
               },
             }}

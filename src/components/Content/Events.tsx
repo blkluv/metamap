@@ -1,17 +1,27 @@
-import { useContext, useEffect, useState, useRef } from "react";
-import EventContext from "../../context/eventContext";
+import { useEffect, useState, useRef } from "react";
 import { Box } from "@mui/material";
 import EventMenu from "../Navigation/EventMenu";
 import EventsList from "./EventsList";
-import { Event } from "../../utils/interfaces";
-import BusinessContext from "../../context/businessContext";
+import { Event, ReduxState } from "../../utils/interfaces";
+import { getEvents } from "../../store/events";
+import { useSelector } from "react-redux";
+import { useAppDispatch } from "../../store/store";
+import { removeSelectedBusiness } from "../../store/businesses";
+import { removeSelectedEvent } from "../../store/events";
 
 const Events = () => {
-  const { events, selectedEvent, onRemoveSelectedEvent } =
-    useContext(EventContext);
-  const { selectedBusiness, onRemoveSelectedBusiness } =
-    useContext(BusinessContext);
   const [filteredItems, setFilteredItems] = useState(null);
+  const {
+    data: { events },
+    status,
+  } = useSelector((state: ReduxState) => state.events);
+  const { selectedBusiness } = useSelector(
+    (state: ReduxState) => state.businesses.data
+  );
+  const { selectedEvent } = useSelector(
+    (state: ReduxState) => state.events.data
+  );
+  const dispatch = useAppDispatch();
   const eventMenuRef = useRef();
 
   useEffect(() => {
@@ -24,15 +34,15 @@ const Events = () => {
       );
     }
     return () => {
-      onRemoveSelectedEvent?.();
+      dispatch(removeSelectedEvent());
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [events]);
 
   useEffect(() => {
     if (selectedEvent || selectedBusiness) {
-      onRemoveSelectedEvent?.();
-      onRemoveSelectedBusiness?.();
+      dispatch(removeSelectedEvent());
+      dispatch(removeSelectedBusiness());
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [filteredItems]);
@@ -44,6 +54,10 @@ const Events = () => {
       setFilteredItems(null);
     }
   };
+
+  useEffect(() => {
+    dispatch(getEvents());
+  }, [dispatch]);
 
   return (
     <Box
@@ -61,6 +75,7 @@ const Events = () => {
         scrollRef={eventMenuRef}
       />
       <EventsList
+        loading={status}
         items={filteredItems ? filteredItems : events}
         scrollRef={eventMenuRef}
       />

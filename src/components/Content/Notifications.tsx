@@ -1,14 +1,15 @@
-import { useContext, useRef } from "react";
-import ThemeContext from "../../context/themeContext";
-import CommunicationContext from "../../context/communicationContext";
+import { useRef } from "react";
 import { Box, List, Typography } from "@mui/material";
-import { Notification } from "../../utils/interfaces";
+import { Notification, ReduxState } from "../../utils/interfaces";
 import NotificationHeader from "./NotificationHeader";
 import ScrollToTheTop from "../Elements/ScrollToTheTop";
+import { useSelector } from "react-redux";
 
 const Notifications = () => {
-  const { notifications } = useContext(CommunicationContext);
-  const { palette } = useContext(ThemeContext);
+  const { notifications } = useSelector(
+    (state: ReduxState) => state.communication.data
+  );
+  const palette = useSelector((state: ReduxState) => state.theme.palette);
   const headerRef = useRef();
 
   const visibleNotifications = notifications.filter(
@@ -19,14 +20,14 @@ const Notifications = () => {
     <Box
       sx={{
         borderRadius: "25px",
-        background: palette?.background.primary,
+        background: palette.background.primary,
         display: "flex",
         flexDirection: "column",
         padding: "1rem 1.5rem",
         alignItems: "flex-start",
         width: { xs: "100%", md: "45%" },
         height: "fit-content",
-        border: `1px solid ${palette?.background.tertiary}`,
+        border: `1px solid ${palette.background.tertiary}`,
         WebkitBoxShadow: "0px 0px 16px -8px rgba(0, 0, 0, 0.68)",
         boxShadow: "0px 0px 16px -8px rgba(0, 0, 0, 0.68)",
         maxHeight: "85vh",
@@ -44,7 +45,7 @@ const Notifications = () => {
             justifyItems: "center",
             alignItems: "center",
           }}
-          color={palette?.text.tertiary}
+          color={palette.text.tertiary}
           fontSize={".7rem"}
         >
           Notifications
@@ -66,7 +67,7 @@ const Notifications = () => {
         ) : (
           <Typography
             sx={{
-              color: palette?.text.tertiary,
+              color: palette.text.tertiary,
               textTransform: "uppercase",
               marginBottom: ".5rem",
               fontSize: ".7rem",

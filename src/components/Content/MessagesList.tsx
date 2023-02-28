@@ -1,19 +1,25 @@
-import { useContext, useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 import { Box } from "@mui/material";
-import CommunicationContext from "../../context/communicationContext";
-import UserContext from "../../context/userContext";
 import Message from "./Message";
 import ChatTimeline from "../Elements/ChatTimeline";
+import { ReduxState } from "../../utils/interfaces";
+import { useSelector } from "react-redux";
+import { getMessages } from "../../store/communication";
+import { useAppDispatch } from "../../store/store";
 
 const MessagesList = () => {
-  const { messages, arrivalNotification, currentConversation, onGetMessages } =
-    useContext(CommunicationContext);
-  const { currentUser } = useContext(UserContext);
+  const currentUser = useSelector(
+    (state: ReduxState) => state.currentUser.data
+  );
+  const { messages, currentConversation } = useSelector(
+    (state: ReduxState) => state.communication.data
+  );
   const scrollRef = useRef<any>();
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
-    onGetMessages?.(currentConversation?._id);
-  }, [currentConversation, onGetMessages, arrivalNotification]);
+    currentConversation && dispatch(getMessages(currentConversation._id));
+  }, [currentConversation, dispatch]);
 
   useEffect(() => {
     scrollRef.current?.scrollIntoView({ behavior: "smooth" });

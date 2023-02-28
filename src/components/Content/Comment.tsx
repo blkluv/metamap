@@ -1,9 +1,7 @@
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
 import { Avatar, Box, Typography } from "@mui/material";
-import { CommentProps } from "../../utils/interfaces";
-import ThemeContext from "../../context/themeContext";
-import UserContext from "../../context/userContext";
+import { CommentProps, ReduxState } from "../../utils/interfaces";
 import moment from "moment";
 import {
   ThumbUp,
@@ -14,6 +12,8 @@ import {
 import debounce from "../../utils/debounce";
 // @ts-ignore
 import ReactEmoji from "react-emoji";
+import { useSelector } from "react-redux";
+import { getUser } from "../../store/users";
 
 const Comment = ({
   itemId,
@@ -22,18 +22,19 @@ const Comment = ({
   onLike,
   onDislike,
 }: CommentProps) => {
-  const { palette } = useContext(ThemeContext);
-  const { currentUser, onGetAvatar } = useContext(UserContext);
+  const palette = useSelector((state: ReduxState) => state.theme.palette);
+  const currentUser = useSelector(
+    (state: ReduxState) => state.currentUser.data
+  );
   const [avatar, setAvatar] = useState<any>(null);
 
-  const getAvatar = async (id: any) => {
-    const avatar = await onGetAvatar?.(id);
-    return setAvatar(avatar);
-  };
-
   useEffect(() => {
-    getAvatar(comment.creator?.name);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    const onGetUser = async (id: string) => {
+      const result = await getUser(id);
+      result && setAvatar(result.avatar);
+    };
+
+    comment.creator?.name && onGetUser(comment.creator.name);
   }, [comment.creator?.name]);
 
   return (
@@ -41,7 +42,7 @@ const Comment = ({
       sx={{
         display: "flex",
         alignItems: "flex-start",
-        color: palette?.text.tertiary,
+        color: palette.text.tertiary,
         padding: ".5rem 0",
         margin: ".8rem 0",
         "&:first-of-type": {
@@ -81,7 +82,7 @@ const Comment = ({
             to={`/dashboard/profile/${comment.creator?.name}`}
             style={{
               textDecoration: "none",
-              color: palette?.text.tertiary,
+              color: palette.text.tertiary,
               fontWeight: 700,
               marginRight: ".3rem",
             }}
@@ -119,7 +120,7 @@ const Comment = ({
               <Box
                 sx={{
                   margin: 0,
-                  color: palette?.warning,
+                  color: palette.warning,
                   marginRight: ".5rem",
                   fontWeight: 500,
                   fontSize: ".8rem",
@@ -143,7 +144,7 @@ const Comment = ({
                   sx={{
                     fontSize: ".9rem",
                     cursor: "pointer",
-                    color: palette?.text.primary,
+                    color: palette.text.primary,
                   }}
                   onClick={debounce(
                     () => itemId && onLike?.(itemId, comment),
@@ -182,7 +183,7 @@ const Comment = ({
                   sx={{
                     fontSize: ".9rem",
                     cursor: "pointer",
-                    color: palette?.text.primary,
+                    color: palette.text.primary,
                   }}
                   onClick={debounce(
                     () => itemId && onDislike?.(itemId, comment),

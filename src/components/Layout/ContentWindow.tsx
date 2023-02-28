@@ -1,14 +1,14 @@
-import { useContext } from "react";
 import { Box } from "@mui/material";
-import ThemeContext from "../../context/themeContext";
 import WorldMap from "../WorldMap/WorldMap";
 import Sponsored from "../Content/Sponsored";
 import Notifications from "../Content/Notifications";
 import Content from "./Content";
 import { Route, Routes } from "react-router-dom";
+import { ReduxState } from "../../utils/interfaces";
+import { useSelector } from "react-redux";
 
 const ContentWindow = () => {
-  const { palette } = useContext(ThemeContext);
+  const palette = useSelector((state: ReduxState) => state.theme.palette);
 
   return (
     <Box
@@ -21,7 +21,7 @@ const ContentWindow = () => {
           md: "1rem 2rem 1.5rem 2rem",
           overflow: "hidden",
         },
-        background: palette?.background.primary,
+        background: palette.background.primary,
         gridGap: "2rem",
         height: "auto",
       }}

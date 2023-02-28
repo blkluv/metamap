@@ -1,13 +1,12 @@
-import { useContext } from "react";
 import { Button, TextField } from "@mui/material";
 import { Box } from "@mui/system";
-import ThemeContext from "../../context/themeContext";
 import { Send } from "@mui/icons-material";
 import { useForm } from "react-hook-form";
-import { CommentFormProps } from "../../utils/interfaces";
+import { CommentFormProps, ReduxState } from "../../utils/interfaces";
+import { useSelector } from "react-redux";
 
 const CommentForm = ({ item, onAdd }: CommentFormProps) => {
-  const { palette } = useContext(ThemeContext);
+  const palette = useSelector((state: ReduxState) => state.theme.palette);
 
   const {
     register: registerComment,
@@ -41,7 +40,7 @@ const CommentForm = ({ item, onAdd }: CommentFormProps) => {
         margin="dense"
         required
         InputProps={{ disableUnderline: true }}
-        inputProps={{ style: { color: palette?.text.primary } }}
+        inputProps={{ style: { color: palette.text.primary } }}
         fullWidth
         id="comment"
         autoComplete="comment"

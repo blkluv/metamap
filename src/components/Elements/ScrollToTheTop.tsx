@@ -1,15 +1,14 @@
-import { useContext } from "react";
-import ThemeContext from "../../context/themeContext";
 import { Button, ListItem } from "@mui/material";
 import KeyboardDoubleArrowUpIcon from "@mui/icons-material/KeyboardDoubleArrowUp";
-import { ScrollToTheTopProps } from "../../utils/interfaces";
+import { ReduxState, ScrollToTheTopProps } from "../../utils/interfaces";
+import { useSelector } from "react-redux";
 
 const ScrollToTheTop = ({
   data,
   scrollRef,
   minLength,
 }: ScrollToTheTopProps) => {
-  const { palette } = useContext(ThemeContext);
+  const palette = useSelector((state: ReduxState) => state.theme.palette);
 
   return (
     <>
@@ -20,8 +19,8 @@ const ScrollToTheTop = ({
             startIcon={<KeyboardDoubleArrowUpIcon />}
             disableElevation
             sx={{
-              color: palette?.text.primary,
-              background: palette?.background.tertiary,
+              color: palette.text.primary,
+              background: palette.background.tertiary,
               marginLeft: "0 !important",
               marginRight: "0.5rem !important",
               marginTop: "0.5rem !important",

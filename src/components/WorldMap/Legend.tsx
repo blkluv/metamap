@@ -1,10 +1,10 @@
-import { useContext } from "react";
 import { Box, Typography } from "@mui/material";
-import ThemeContext from "../../context/themeContext";
 import "./popupStyles.css";
+import { ReduxState } from "../../utils/interfaces";
+import { useSelector } from "react-redux";
 
 const Legend = () => {
-  const { palette } = useContext(ThemeContext);
+  const palette = useSelector((state: ReduxState) => state.theme.palette);
 
   return (
     <Box
@@ -19,8 +19,8 @@ const Legend = () => {
         zIndex: 100,
         bottom: "10px",
         left: "10px",
-        background: palette?.background.primary,
-        color: palette?.text.primary,
+        background: palette.background.primary,
+        color: palette.text.primary,
         WebkitBoxShadow: "0px 0px 16px -8px rgba(0, 0, 0, 0.68)",
         boxShadow: "0px 0px 16px -8px rgba(0, 0, 0, 0.68)",
         borderRadius: "5px",

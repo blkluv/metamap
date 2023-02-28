@@ -1,19 +1,19 @@
-import { useContext } from "react";
 import { Box, Link } from "@mui/material";
 import { Link as RouterLink } from "react-router-dom";
 import PublicIcon from "@mui/icons-material/Public";
 import ResponsiveAppBar from "./AppBar";
-import ThemeContext from "../../context/themeContext";
+import { ReduxState } from "../../utils/interfaces";
+import { useSelector } from "react-redux";
 
 const TopNavbar = () => {
-  const { palette } = useContext(ThemeContext);
+  const palette = useSelector((state: ReduxState) => state.theme.palette);
 
   return (
     <Box
       sx={{
         display: "flex",
         flexDirection: { xs: "column", md: "row" },
-        background: palette?.background.secondary,
+        background: palette.background.secondary,
       }}
     >
       <Box
@@ -55,7 +55,7 @@ const TopNavbar = () => {
           width: "100%",
           height: "100%",
           alignItems: "center",
-          background: palette?.background.primary,
+          background: palette.background.primary,
         }}
       >
         <ResponsiveAppBar />
