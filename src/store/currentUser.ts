@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { notify } from "../utils/notifications";
 import { getStoreData } from "./utils";
+import { AxiosError } from "axios";
 import * as api from "../api/api";
 import { googleLogout } from "@react-oauth/google";
 import { UserForm, UserHeader, UserUpdateReq } from "../utils/interfaces";
@@ -13,83 +14,163 @@ const INITIAL_STATE = {
 export const signin = createAsyncThunk(
   "currentUser/signin",
   async (formData: UserForm) => {
-    const { data } = await api.signIn(formData);
-    data && notify(`Hello ${data.user.name}`);
-    return data;
+    try {
+      const { data } = await api.signIn(formData);
+      notify(`Hello ${data.user.name}`);
+      return data;
+    } catch (error: unknown) {
+      if (error instanceof AxiosError) {
+        notify(error.response?.data.message);
+      } else if (typeof error === "string") {
+        notify(error);
+      }
+    }
   }
 );
 
 export const externalSignin = createAsyncThunk(
   "currentUser/externalSignin",
   async (token: string) => {
-    const { data } = await api.externalSignIn(token);
-    data && notify(`Hello ${data.user.name}`);
-    return data;
+    try {
+      const { data } = await api.externalSignIn(token);
+      notify(`Hello ${data.user.name}`);
+      return data;
+    } catch (error: unknown) {
+      if (error instanceof AxiosError) {
+        notify(error.response?.data.message);
+      } else if (typeof error === "string") {
+        notify(error);
+      }
+    }
   }
 );
 
 export const signUpDemo = createAsyncThunk(
   "currentUser/signUpDemo",
   async () => {
-    const { data } = await api.signUpDemo();
-    data && notify(`Hello ${data.user.name}`);
-    return data;
+    try {
+      const { data } = await api.signUpDemo();
+      notify(`Hello ${data.user.name}`);
+      return data;
+    } catch (error: unknown) {
+      if (error instanceof AxiosError) {
+        notify(error.response?.data.message);
+      } else if (typeof error === "string") {
+        notify(error);
+      }
+    }
   }
 );
 
 export const signUp = createAsyncThunk(
   "currentUser/signUp",
   async (formData: UserForm) => {
-    const { data } = await api.signUp(formData);
-    data && notify(`Hello ${data.user.name}`);
-    return data;
+    try {
+      const { data } = await api.signUp(formData);
+      notify(`Hello ${data.user.name}`);
+      return data;
+    } catch (error: unknown) {
+      if (error instanceof AxiosError) {
+        notify(error.response?.data.message);
+      } else if (typeof error === "string") {
+        notify(error);
+      }
+    }
   }
 );
 
 export const resetPassword = createAsyncThunk(
   "currentUser/resetPassword",
   async (email: string) => {
-    await api.resetPassword(email);
+    try {
+      await api.resetPassword(email);
+    } catch (error: unknown) {
+      if (error instanceof AxiosError) {
+        notify(error.response?.data.message);
+      } else if (typeof error === "string") {
+        notify(error);
+      }
+    }
   }
 );
 
 export const updatePassword = createAsyncThunk(
   "currentUser/updatePassword",
   async (formData: UserForm) => {
-    const { data } = await api.updatePassword(formData);
-    data && notify("Password updated");
+    try {
+      const { data } = await api.updatePassword(formData);
+      data && notify("Password updated");
+    } catch (error: unknown) {
+      if (error instanceof AxiosError) {
+        notify(error.response?.data.message);
+      } else if (typeof error === "string") {
+        notify(error);
+      }
+    }
   }
 );
 
 export const changePassword = createAsyncThunk(
   "currentUser/changePassword",
   async (formData: UserForm) => {
-    await api.changePassword(formData);
+    try {
+      await api.changePassword(formData);
+    } catch (error: unknown) {
+      if (error instanceof AxiosError) {
+        notify(error.response?.data.message);
+      } else if (typeof error === "string") {
+        notify(error);
+      }
+    }
   }
 );
 
 export const deleteUser = createAsyncThunk(
   "currentUser/deleteUser",
   async () => {
-    const { data } = await api.deleteUser();
-    !data && notify("Account deleted");
+    try {
+      const { data } = await api.deleteUser();
+      !data && notify("Account deleted");
+    } catch (error: unknown) {
+      if (error instanceof AxiosError) {
+        notify(error.response?.data.message);
+      } else if (typeof error === "string") {
+        notify(error);
+      }
+    }
   }
 );
 
 export const updateUser = createAsyncThunk(
   "currentUser/updateUser",
   async (formData: UserUpdateReq) => {
-    const { data } = await api.updateUser(formData);
-    notify("Data updated");
-    return data;
+    try {
+      const { data } = await api.updateUser(formData);
+      notify("Data updated");
+      return data;
+    } catch (error: unknown) {
+      if (error instanceof AxiosError) {
+        notify(error.response?.data.message);
+      } else if (typeof error === "string") {
+        notify(error);
+      }
+    }
   }
 );
 
 export const followUser = createAsyncThunk(
   "currentUser/followUser",
   async (id: string) => {
-    const { data } = await api.followUser(id);
-    return data;
+    try {
+      const { data } = await api.followUser(id);
+      return data;
+    } catch (error: unknown) {
+      if (error instanceof AxiosError) {
+        notify(error.response?.data.message);
+      } else if (typeof error === "string") {
+        notify(error);
+      }
+    }
   }
 );
 
@@ -151,6 +232,9 @@ const slice = createSlice({
         }
         state.status = "success";
       })
+      .addCase(externalSignin.rejected, (state) => {
+        state.status = "failed";
+      })
       .addCase(signUpDemo.pending, (state) => {
         state.status = "loading";
       })
@@ -160,6 +244,9 @@ const slice = createSlice({
           state.data = action.payload.user;
         }
         state.status = "success";
+      })
+      .addCase(signUpDemo.rejected, (state) => {
+        state.status = "failed";
       })
       .addCase(signUp.pending, (state) => {
         state.status = "loading";
