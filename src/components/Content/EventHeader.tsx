@@ -78,10 +78,10 @@ const EventHeader = ({
   };
 
   const handleRate = (newRating: number) => {
-    if (creator?._id === currentUser?._id) {
+    if (creator?._id === currentUser._id) {
       notify("You can't rate your own event.");
     } else {
-      dispatch(rateEvent({ id: _id, rating: newRating }));
+      _id && dispatch(rateEvent({ id: _id, rating: newRating }));
     }
   };
 

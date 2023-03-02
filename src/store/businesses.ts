@@ -2,7 +2,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import * as api from "../api/api";
 import { getStoreData } from "./utils";
-import { AxiosError } from "axios";
 import { notify } from "../utils/notifications";
 import { Business } from "../utils/interfaces";
 
@@ -17,82 +16,42 @@ const INITIAL_STATE = {
 export const addBusiness = createAsyncThunk(
   "businesses/addBusiness",
   async (business: Business) => {
-    try {
-      const { data } = await api.addBusiness(business);
-      notify("Business created");
-      return data;
-    } catch (error: unknown) {
-      if (error instanceof AxiosError) {
-        console.log(error.response?.data.message);
-      } else if (typeof error === "string") {
-        notify(error);
-      }
-    }
+    const { data } = await api.addBusiness(business);
+    notify("Business created");
+    return data;
   }
 );
 
 export const likeBusiness = createAsyncThunk(
   "businesses/likeBusiness",
   async (id: string) => {
-    try {
-      const { data } = await api.likeBusiness(id);
-      return data;
-    } catch (error: unknown) {
-      if (error instanceof AxiosError) {
-        console.log(error.response?.data.message);
-      } else if (typeof error === "string") {
-        notify(error);
-      }
-    }
+    const { data } = await api.likeBusiness(id);
+    return data;
   }
 );
 
 export const rateBusiness = createAsyncThunk(
   "businesses/rateBusiness",
-  async (rateData: { id: string | undefined; rating: number }) => {
-    try {
-      const { data } = await api.rateBusiness(rateData);
-      notify("Rating saved");
-      return data;
-    } catch (error: unknown) {
-      if (error instanceof AxiosError) {
-        console.log(error.response?.data.message);
-      } else if (typeof error === "string") {
-        notify(error);
-      }
-    }
+  async (rateData: { id: string; rating: number }) => {
+    const { data } = await api.rateBusiness(rateData);
+    notify("Rating saved");
+    return data;
   }
 );
 
 export const getBusinesses = createAsyncThunk(
   "businesses/getBusinesses",
   async () => {
-    try {
-      const { data } = await api.getBusinesses();
-      return data;
-    } catch (error: unknown) {
-      if (error instanceof AxiosError) {
-        console.log(error.response?.data.message);
-      } else if (typeof error === "string") {
-        notify(error);
-      }
-    }
+    const { data } = await api.getBusinesses();
+    return data;
   }
 );
 
 export const deleteBusiness = createAsyncThunk(
   "businesses/deleteBusiness",
   async (id: string) => {
-    try {
-      const { data } = await api.deleteBusiness(id);
-      return data;
-    } catch (error: unknown) {
-      if (error instanceof AxiosError) {
-        console.log(error.response?.data.message);
-      } else if (typeof error === "string") {
-        notify(error);
-      }
-    }
+    const { data } = await api.deleteBusiness(id);
+    return data;
   }
 );
 

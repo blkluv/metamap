@@ -28,8 +28,9 @@ const NotificationIcon = () => {
   }));
 
   useEffect(() => {
-    dispatch(getNotifications?.(currentUser?._id));
-  }, [currentUser?._id, dispatch]);
+    dispatch(getNotifications(currentUser._id));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <>

@@ -2,12 +2,13 @@ import { configureStore } from "@reduxjs/toolkit";
 import { useDispatch } from "react-redux";
 import reducer from "./mainReducer";
 import communicationMiddleware from "./middleware/communicationMiddleware";
+import errorMiddleware from "./middleware/errorMiddleware";
 
 const configStore = () => {
   return configureStore({
     reducer,
     middleware: (getDefaultMiddleware) =>
-      getDefaultMiddleware().concat(communicationMiddleware),
+      getDefaultMiddleware().concat([errorMiddleware, communicationMiddleware]),
   });
 };
 

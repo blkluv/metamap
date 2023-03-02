@@ -112,7 +112,7 @@ const Share = ({ scrollRef }: any) => {
             autoFocus
             {...registerPost("description", {
               required: true,
-              minLength: 3,
+              minLength: 1,
               maxLength: 800,
             })}
           />

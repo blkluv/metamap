@@ -1,8 +1,6 @@
-//@ts-nocheck
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import * as api from "../api/api";
 import { getStoreData } from "./utils";
-import { AxiosError } from "axios";
 import { notify } from "../utils/notifications";
 import { Event } from "../utils/interfaces";
 
@@ -15,97 +13,49 @@ const INITIAL_STATE = {
 };
 
 export const getEvents = createAsyncThunk("events/getEvents", async () => {
-  try {
-    const { data } = await api.getEvents();
-    return data;
-  } catch (error: unknown) {
-    if (error instanceof AxiosError) {
-      console.log(error.response?.data.message);
-    } else if (typeof error === "string") {
-      notify(error);
-    }
-  }
+  const { data } = await api.getEvents();
+  return data;
 });
 
 export const joinEvent = createAsyncThunk(
   "events/joinEvent",
   async (id: string) => {
-    try {
-      const { data } = await api.joinEvent(id);
-      return data;
-    } catch (error: unknown) {
-      if (error instanceof AxiosError) {
-        console.log(error.response?.data.message);
-      } else if (typeof error === "string") {
-        notify(error);
-      }
-    }
+    const { data } = await api.joinEvent(id);
+    return data;
   }
 );
 
 export const leaveEvent = createAsyncThunk(
   "events/leaveEvent",
   async (id: string) => {
-    try {
-      const { data } = await api.leaveEvent(id);
-      return data;
-    } catch (error: unknown) {
-      if (error instanceof AxiosError) {
-        console.log(error.response?.data.message);
-      } else if (typeof error === "string") {
-        notify(error);
-      }
-    }
+    const { data } = await api.leaveEvent(id);
+    return data;
   }
 );
 
 export const rateEvent = createAsyncThunk(
   "events/rateEvent",
-  async (rateData: { id: string | undefined; rating: number }) => {
-    try {
-      const { data } = await api.rateEvent(rateData);
-      notify("Rating saved");
-      return data;
-    } catch (error: unknown) {
-      if (error instanceof AxiosError) {
-        console.log(error.response?.data.message);
-      } else if (typeof error === "string") {
-        notify(error);
-      }
-    }
+  async (rateData: { id: string; rating: number }) => {
+    const { data } = await api.rateEvent(rateData);
+    notify("Rating saved");
+    return data;
   }
 );
 
 export const addEvent = createAsyncThunk(
   "events/addEvent",
   async (event: Event) => {
-    try {
-      const { data } = await api.addEvent(event);
-      notify("Event created");
-      return data;
-    } catch (error: unknown) {
-      if (error instanceof AxiosError) {
-        console.log(error.response?.data.message);
-      } else if (typeof error === "string") {
-        notify(error);
-      }
-    }
+    const { data } = await api.addEvent(event);
+    notify("Event created");
+    return data;
   }
 );
 
 export const deleteEvent = createAsyncThunk(
   "events/deleteEvent",
   async (id: string) => {
-    try {
-      const { data } = await api.deleteEvent(id);
-      return data;
-    } catch (error: unknown) {
-      if (error instanceof AxiosError) {
-        console.log(error.response?.data.message);
-      } else if (typeof error === "string") {
-        notify(error);
-      }
-    }
+    const { data } = await api.deleteEvent(id);
+    return data;
   }
 );
 

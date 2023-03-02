@@ -77,7 +77,7 @@ const BusinessHeader = ({
     if (creator?._id === currentUser?._id) {
       notify("You can't rate your own business.");
     } else {
-      dispatch(rateBusiness?.({ id: _id, rating: newRating }));
+      _id && dispatch(rateBusiness?.({ id: _id, rating: newRating }));
     }
   };
 

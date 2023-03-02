@@ -127,32 +127,25 @@ export const deleteConversation = (id: string) =>
 // events
 export const getEvents = () => http.get<Event[]>("/events");
 export const addEvent = (event: Event) => http.post<Event[]>("/events", event);
-export const deleteEvent = (id: string) =>
-  http.delete<Event[]>(`/events/${id}`);
-export const rateEvent = (rateData: {
-  id: string | undefined;
-  rating: number;
-}) =>
-  http.patch<Event[]>(`events/rate/${rateData.id}`, {
+export const deleteEvent = (id: string) => http.delete<Event>(`/events/${id}`);
+export const rateEvent = (rateData: { id: string; rating: number }) =>
+  http.patch<Event>(`events/rate/${rateData.id}`, {
     rating: rateData.rating,
   });
 export const joinEvent = (id: string) =>
-  http.patch<Business[]>(`/events/join/${id}`);
+  http.patch<Event>(`/events/join/${id}`);
 export const leaveEvent = (id: string) =>
-  http.patch<Business[]>(`/events/leave/${id}`);
+  http.patch<Event>(`/events/leave/${id}`);
 
 // businesses
 export const getBusinesses = () => http.get<Business[]>("/businesses");
 export const addBusiness = (business: Business) =>
-  http.post<Business[]>("/businesses", business);
+  http.post<Business>("/businesses", business);
 export const likeBusiness = (id: string) =>
-  http.patch<Business[]>(`/businesses/like/${id}`);
-export const rateBusiness = (rateData: {
-  id: string | undefined;
-  rating: number;
-}) =>
-  http.patch<Business[]>(`businesses/rate/${rateData.id}`, {
+  http.patch<Business>(`/businesses/like/${id}`);
+export const rateBusiness = (rateData: { id: string; rating: number }) =>
+  http.patch<Business>(`businesses/rate/${rateData.id}`, {
     rating: rateData.rating,
   });
 export const deleteBusiness = (id: string) =>
-  http.delete<Business[]>(`/businesses/${id}`);
+  http.delete<Business>(`/businesses/${id}`);
