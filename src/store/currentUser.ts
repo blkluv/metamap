@@ -4,7 +4,7 @@ import { getStoreData } from "./utils";
 import { AxiosError } from "axios";
 import * as api from "../api/api";
 import { googleLogout } from "@react-oauth/google";
-import { UserForm, UserUpdateReq } from "../utils/interfaces";
+import { UserForm, UserHeader, UserUpdateReq } from "../utils/interfaces";
 
 const INITIAL_STATE = {
   status: null,
@@ -180,12 +180,25 @@ const slice = createSlice({
   reducers: {
     logout: (state) => {
       localStorage.removeItem("geoevents");
+      localStorage.removeItem("auth");
       state.data = null;
       state.status = null;
       googleLogout();
     },
     setCurrentUser: (state, action) => {
       state.data = action.payload;
+    },
+    setUserUpdate: (state, action) => {
+      const newFollower = {
+        _id: action.payload.activeUser._id,
+        name: action.payload.activeUser.name,
+      };
+      const ifFollower = state.data.followers.find(
+        (user: UserHeader) => user._id === newFollower._id
+      );
+      if (!ifFollower) {
+        state.data.followers = [...state.data.followers, newFollower];
+      }
     },
     connect: (state) => {
       state.data.connected = true;
@@ -313,5 +326,5 @@ const slice = createSlice({
   },
 });
 
-export const { logout, setCurrentUser } = slice.actions;
+export const { logout, setCurrentUser, setUserUpdate } = slice.actions;
 export default slice.reducer;

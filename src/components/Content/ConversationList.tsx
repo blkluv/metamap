@@ -20,7 +20,7 @@ const ConversationList = () => {
 
   return (
     <>
-      {conversations.length > 0
+      {conversations && conversations.length > 0
         ? conversations.map((conversation: ChatConversation) => (
             <Conversation conversation={conversation} key={conversation?._id} />
           ))

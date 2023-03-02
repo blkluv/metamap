@@ -223,10 +223,9 @@ const slice = createSlice({
       state.data.currentConversation = action.payload;
     },
     setArrivalMessage: (state, action) => {
-      console.log(action.payload);
       if (action.payload) {
-        state.data.messages = [action.payload, ...state.data.messages];
-        state.data.userMessages = [action.payload, ...state.data.userMessages];
+        state.data.messages = [...state.data.messages, action.payload];
+        state.data.userMessages = [...state.data.userMessages, action.payload];
       }
     },
     setArrivalNotification: (state, action) => {
@@ -236,6 +235,16 @@ const slice = createSlice({
           ...state.data.notifications,
         ];
       }
+    },
+    // for reading a message
+    updateMessage: (state, action) => {
+      state.data.messages = state.data.messages.map((message: ChatMessage) =>
+        message._id === action.payload._id ? action.payload : message
+      );
+      state.data.userMessages = state.data.userMessages.map(
+        (message: ChatMessage) =>
+          message._id === action.payload._id ? action.payload : message
+      );
     },
     setMessages: (state, action) => {
       state.data.messages = action.payload;
@@ -344,5 +353,6 @@ export const {
   setUserMessages,
   setOnlineUsers,
   setTargetElement,
+  updateMessage,
 } = slice.actions;
 export default slice.reducer;

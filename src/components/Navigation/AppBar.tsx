@@ -316,6 +316,7 @@ const ResponsiveAppBar = () => {
                 <MenuItem
                   onClick={() => {
                     handleCloseUserMenu();
+                    localStorage.removeItem("auth");
                     dispatch(logout());
                   }}
                 >

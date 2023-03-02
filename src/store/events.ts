@@ -64,6 +64,7 @@ export const rateEvent = createAsyncThunk(
   async (rateData: { id: string | undefined; rating: number }) => {
     try {
       const { data } = await api.rateEvent(rateData);
+      notify("Rating saved");
       return data;
     } catch (error: unknown) {
       if (error instanceof AxiosError) {
@@ -80,6 +81,7 @@ export const addEvent = createAsyncThunk(
   async (event: Event) => {
     try {
       const { data } = await api.addEvent(event);
+      notify("Event created");
       return data;
     } catch (error: unknown) {
       if (error instanceof AxiosError) {

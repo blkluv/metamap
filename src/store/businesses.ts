@@ -19,6 +19,7 @@ export const addBusiness = createAsyncThunk(
   async (business: Business) => {
     try {
       const { data } = await api.addBusiness(business);
+      notify("Business created");
       return data;
     } catch (error: unknown) {
       if (error instanceof AxiosError) {
@@ -51,6 +52,7 @@ export const rateBusiness = createAsyncThunk(
   async (rateData: { id: string | undefined; rating: number }) => {
     try {
       const { data } = await api.rateBusiness(rateData);
+      notify("Rating saved");
       return data;
     } catch (error: unknown) {
       if (error instanceof AxiosError) {

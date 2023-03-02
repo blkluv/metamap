@@ -53,10 +53,9 @@ const Notifications = () => {
         {visibleNotifications.length > 0 ? (
           <List sx={{ overflow: "scroll" }}>
             {visibleNotifications.map((notification: Notification) => (
-              <NotificationHeader
-                key={notification._id}
-                notification={notification}
-              />
+              <Box key={notification._id}>
+                <NotificationHeader notification={notification} />
+              </Box>
             ))}
             <ScrollToTheTop
               minLength={10}

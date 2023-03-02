@@ -14,7 +14,9 @@ const configStore = () => {
 const store = configStore();
 
 store.subscribe(() => {
-  localStorage.setItem("geoevents", JSON.stringify(store.getState()));
+  if (localStorage.getItem("auth")) {
+    localStorage.setItem("geoevents", JSON.stringify(store.getState()));
+  }
 });
 
 export type AppDispatch = typeof store.dispatch;

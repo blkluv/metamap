@@ -28,16 +28,18 @@ const App = () => {
   };
 
   useEffect(() => {
-    const currentuser = JSON.parse(localStorage.getItem("auth") as string);
+    if (!location.pathname.startsWith("/account")) {
+      const currentuser = JSON.parse(localStorage.getItem("auth") as string);
 
-    if (currentuser) {
-      const decodedJWT = decodeJWT(currentuser);
+      if (currentuser) {
+        const decodedJWT = decodeJWT(currentuser);
 
-      if (decodedJWT.exp * 1000 < Date.now()) {
+        if (decodedJWT.exp * 1000 < Date.now()) {
+          dispatch(logout());
+        }
+      } else {
         dispatch(logout());
       }
-    } else {
-      dispatch(logout());
     }
   }, [dispatch, location]);
 
