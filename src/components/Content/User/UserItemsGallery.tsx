@@ -1,10 +1,14 @@
 import { Masonry } from "@mui/lab";
 import { Box, LinearProgress } from "@mui/material";
 import { useRef } from "react";
-import { UserItemsGalleryProps } from "../../utils/interfaces";
-import ScrollToTheTop from "../Elements/ScrollToTheTop";
-import BusinessHeader from "./BusinessHeader";
-import EventHeader from "./EventHeader";
+import ScrollToTheTop from "../../Elements/ScrollToTheTop";
+import BusinessHeader from "../BusinessHeader";
+import EventHeader from "../EventHeader";
+
+export interface UserItemsGalleryProps {
+  status: string;
+  userItems: any[];
+}
 
 const UserItemsGallery = ({ status, userItems }: UserItemsGalleryProps) => {
   const userItemsRef = useRef();

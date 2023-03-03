@@ -1,13 +1,13 @@
 import { useEffect, useRef } from "react";
 import { Box, Divider } from "@mui/material";
-import Share from "./Share";
-import PostList from "./PostsList";
-import FeedTimeline from "../Elements/FeedTimeline";
-import { ReduxState } from "../../utils/interfaces";
+import Share from "../Post/Share";
+import PostList from "../Post/PostsList";
+import FeedTimeline from "../../Elements/FeedTimeline";
+import { ReduxState } from "../../../utils/interfaces";
 import { useSelector } from "react-redux";
-import { setTargetElement } from "../../store/communication";
-import { getFollowingPosts } from "../../store/posts";
-import { useAppDispatch } from "../../store/store";
+import { setTargetElement } from "../../../store/communication";
+import { getFollowingPosts } from "../../../store/posts";
+import { useAppDispatch } from "../../../store/store";
 
 const Feed = () => {
   const { targetElement } = useSelector(

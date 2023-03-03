@@ -1,11 +1,11 @@
 import { useEffect, useRef } from "react";
 import List from "@mui/material/List";
 import { Box, ListItem } from "@mui/material";
-import { PostsListProps, ReduxState } from "../../utils/interfaces";
-import Post from "./Post/Post";
-import ScrollToTheTop from "../Elements/ScrollToTheTop";
+import { PostsListProps, ReduxState } from "../../../utils/interfaces";
+import Post from "./Post";
+import ScrollToTheTop from "../../Elements/ScrollToTheTop";
 import { useSelector } from "react-redux";
-import { setTargetElement } from "../../store/communication";
+import { setTargetElement } from "../../../store/communication";
 
 const PostList = ({ items, scrollRef }: PostsListProps) => {
   const palette = useSelector((state: ReduxState) => state.theme.palette);

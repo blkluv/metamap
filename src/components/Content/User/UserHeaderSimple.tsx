@@ -2,9 +2,9 @@ import { useCallback, useEffect, useState, memo } from "react";
 import { Avatar, Badge, Box, Typography } from "@mui/material";
 import CircleIcon from "@mui/icons-material/Circle";
 import { styled } from "@mui/system";
-import { ReduxState, UserHeaderSimpleProps } from "../../utils/interfaces";
+import { ReduxState, UserHeaderSimpleProps } from "../../../utils/interfaces";
 import { useSelector } from "react-redux";
-import { getUser } from "../../store/users";
+import { getUser } from "../../../store/users";
 
 const UserHeaderSimple = ({
   user,

@@ -1,5 +1,5 @@
 import List from "@mui/material/List";
-import UserHeader from "./UserHeader";
+import UserHeader from "./User/UserHeader";
 import {
   UserHeader as Header,
   SocialListProps,

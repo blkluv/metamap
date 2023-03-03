@@ -4,7 +4,7 @@ import {
   ReduxState,
   UserHeader,
 } from "../../../utils/interfaces";
-import UserHeaderSimple from "../UserHeaderSimple";
+import UserHeaderSimple from "../User/UserHeaderSimple";
 import { useSelector } from "react-redux";
 import { getUsers } from "../../../store/users";
 import { setCurrentConversation } from "../../../store/communication";

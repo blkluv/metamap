@@ -1,7 +1,7 @@
 import ListItem from "@mui/material/ListItem";
 import ListItemAvatar from "@mui/material/ListItemAvatar";
 import Avatar from "@mui/material/Avatar";
-import { MenuItemProps, ReduxState } from "../../utils/interfaces";
+import { MenuItemProps, ReduxState } from "../../../utils/interfaces";
 import { Link as RouterLink } from "react-router-dom";
 import { Link } from "@mui/material";
 import { useSelector } from "react-redux";

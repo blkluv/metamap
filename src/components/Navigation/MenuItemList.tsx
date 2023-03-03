@@ -1,6 +1,6 @@
 import List from "@mui/material/List";
 import { MenuItemListProps, ReduxState } from "../../utils/interfaces";
-import MenuItem from "../Content/ListItem";
+import MenuItem from "./Navbar/ListItem";
 import { useSelector } from "react-redux";
 
 const MenuItemList = ({ items }: MenuItemListProps) => {

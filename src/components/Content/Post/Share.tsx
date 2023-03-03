@@ -1,11 +1,11 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import convertImage from "../../utils/imageConverter";
-import { Post, ReduxState } from "../../utils/interfaces";
+import convertImage from "../../../utils/imageConverter";
+import { Post, ReduxState } from "../../../utils/interfaces";
 import { Cancel, Image } from "@mui/icons-material";
 import { NavLink } from "react-router-dom";
-import { notify } from "../../utils/notifications";
-import debounce from "../../utils/debounce";
+import { notify } from "../../../utils/notifications";
+import debounce from "../../../utils/debounce";
 import {
   Avatar,
   Box,
@@ -17,8 +17,8 @@ import {
   TextField,
 } from "@mui/material";
 import { useSelector } from "react-redux";
-import { addPost } from "../../store/posts";
-import { useAppDispatch } from "../../store/store";
+import { addPost } from "../../../store/posts";
+import { useAppDispatch } from "../../../store/store";
 
 const Share = ({ scrollRef }: any) => {
   const currentUser = useSelector(

@@ -2,20 +2,21 @@ import { useCallback, useEffect, useState, memo } from "react";
 import { NavLink } from "react-router-dom";
 import ListItem from "@mui/material/ListItem";
 import Typography from "@mui/material/Typography";
-import { UserHeader as Header, User, ReduxState } from "../../utils/interfaces";
-import { Avatar, Box, Button } from "@mui/material";
-import { Check, Close, People } from "@mui/icons-material";
-import debounce from "../../utils/debounce";
+import {
+  UserHeader as Header,
+  User,
+  ReduxState,
+} from "../../../utils/interfaces";
+import { Avatar, Box } from "@mui/material";
+import { People } from "@mui/icons-material";
 import { useSelector } from "react-redux";
-import { followUser } from "../../store/currentUser";
-import { getUser } from "../../store/users";
-import { useAppDispatch } from "../../store/store";
+import { getUser } from "../../../store/users";
+import Follow from "./Follow";
 
-const UserHeader = ({ _id, name }: Header) => {
+const UserHeader = (user: Header) => {
   const currentUser = useSelector(
     (state: ReduxState) => state.currentUser.data
   );
-  const dispatch = useAppDispatch();
   const palette = useSelector((state: ReduxState) => state.theme.palette);
   const [avatar, setAvatar] = useState<any>(null);
 
@@ -32,8 +33,8 @@ const UserHeader = ({ _id, name }: Header) => {
   }, []);
 
   useEffect(() => {
-    getAvatar(name);
-  }, [getAvatar, name]);
+    getAvatar(user.name);
+  }, [getAvatar, user.name]);
 
   return (
     <ListItem
@@ -60,7 +61,7 @@ const UserHeader = ({ _id, name }: Header) => {
         }}
       >
         <NavLink
-          to={`/dashboard/profile/${name}`}
+          to={`/dashboard/profile/${user.name}`}
           style={{ textDecoration: "none" }}
         >
           <Avatar
@@ -82,7 +83,7 @@ const UserHeader = ({ _id, name }: Header) => {
           }}
         >
           <NavLink
-            to={`/dashboard/profile/${name}`}
+            to={`/dashboard/profile/${user.name}`}
             style={{ textDecoration: "none" }}
           >
             <Typography
@@ -92,10 +93,10 @@ const UserHeader = ({ _id, name }: Header) => {
               color={palette.text.tertiary}
               fontSize={".9rem"}
             >
-              {name}
+              {user.name}
             </Typography>
           </NavLink>
-          {ifFollowing(currentUser, _id) ? (
+          {ifFollowing(currentUser, user._id) ? (
             <People
               sx={{
                 width: "1.5rem",
@@ -106,26 +107,7 @@ const UserHeader = ({ _id, name }: Header) => {
           ) : null}
         </Box>
       </Box>
-      {currentUser?._id !== _id ? (
-        <Box sx={{ display: "flex", alignItems: "center" }}>
-          <Button
-            onClick={debounce(() => dispatch(followUser(_id)), 400)}
-            sx={{
-              color: ifFollowing(currentUser, _id)
-                ? palette.warning
-                : palette.blue,
-              borderRadius: "15px",
-            }}
-          >
-            {ifFollowing(currentUser, _id) ? (
-              <Close fontSize="small" sx={{ width: "1.5rem" }} />
-            ) : (
-              <Check fontSize="small" sx={{ width: "1.5rem" }} />
-            )}
-            {ifFollowing(currentUser, _id) ? "Unfollow" : "Follow"}
-          </Button>
-        </Box>
-      ) : null}
+      <Follow user={user} />
     </ListItem>
   );
 };

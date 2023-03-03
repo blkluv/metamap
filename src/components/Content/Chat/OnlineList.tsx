@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Box, Link } from "@mui/material";
-import UserHeaderSimple from "../UserHeaderSimple";
+import UserHeaderSimple from "../User/UserHeaderSimple";
 import SearchField from "../../Elements/SearchField";
 import { Link as RouterLink } from "react-router-dom";
 import { ReduxState, UserHeader } from "../../../utils/interfaces";

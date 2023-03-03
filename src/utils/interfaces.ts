@@ -479,8 +479,3 @@ export interface ScrollToTheTopProps {
   data: any;
   scrollRef?: any;
 }
-
-export interface UserItemsGalleryProps {
-  status: string;
-  userItems: any[];
-}

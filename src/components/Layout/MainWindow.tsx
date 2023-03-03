@@ -4,7 +4,7 @@ import Sidebar from "../Navigation/Sidebar";
 import { Route, Routes } from "react-router-dom";
 import Profile from "../Pages/Profile";
 import Chat from "../Pages/Chat";
-import User from "../Content/User";
+import User from "../Content/User/User";
 import Account from "../Pages/Account";
 import { ReduxState } from "../../utils/interfaces";
 import { useSelector } from "react-redux";
