@@ -1,12 +1,19 @@
+import { useSelector } from "react-redux";
 import { Button, TextField } from "@mui/material";
 import { Box } from "@mui/system";
 import { Send } from "@mui/icons-material";
 import { useForm } from "react-hook-form";
-import { CommentFormProps, ReduxState } from "../../utils/interfaces";
-import { useSelector } from "react-redux";
+import { Business, Event, Post, ReduxState } from "../../../utils/interfaces";
+import { useAppDispatch } from "../../../store/store";
+import { addComment } from "../../../store/posts";
 
-const CommentForm = ({ item, onAdd }: CommentFormProps) => {
+export interface CommentFormProps {
+  item: Post | Event | Business;
+}
+
+const CommentForm = ({ item }: CommentFormProps) => {
   const palette = useSelector((state: ReduxState) => state.theme.palette);
+  const dispatch = useAppDispatch();
 
   const {
     register: registerComment,
@@ -20,7 +27,10 @@ const CommentForm = ({ item, onAdd }: CommentFormProps) => {
 
   const handleSubmitComment = (data: { comment: string }) => {
     const text = data.comment.trim();
-    text && item._id && onAdd?.(item._id, { text });
+    if (text && item._id) {
+      const comment = { text };
+      dispatch(addComment({ postId: item._id, comment }));
+    }
     resetComment();
   };
 

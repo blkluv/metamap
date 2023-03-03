@@ -14,15 +14,13 @@ import WebsiteLogo from "./WebsiteLogo";
 import NotificationsBlock from "./NotificationsBlock";
 
 const ResponsiveAppBar = () => {
-  const currentUser = useSelector(
-    (state: ReduxState) => state.currentUser.data
-  );
+  const { _id } = useSelector((state: ReduxState) => state.currentUser.data);
   const palette = useSelector((state: ReduxState) => state.theme.palette);
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    dispatch(getNotifications(currentUser._id));
-  }, [currentUser._id, dispatch]);
+    dispatch(getNotifications(_id));
+  }, [_id, dispatch]);
 
   return (
     <Box

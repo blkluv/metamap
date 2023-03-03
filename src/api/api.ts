@@ -86,7 +86,7 @@ export const dislikeComment = (commentData: {
   commentId: string;
 }) =>
   http.patch<Post>(
-    `/posts/comment/like/${commentData.postId}/${commentData.commentId}`
+    `/posts/comment/dislike/${commentData.postId}/${commentData.commentId}`
   );
 
 // messages

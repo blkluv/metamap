@@ -315,11 +315,6 @@ export interface CommentsProps {
   onDelete?: (itemId: string, comment: Comment) => Promise<void>;
 }
 
-export interface CommentFormProps {
-  item: Post | Event | Business;
-  onAdd: (itemId: string, comment: Comment) => void;
-}
-
 // theme
 export interface Palette {
   primary: string;

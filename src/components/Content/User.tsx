@@ -11,7 +11,7 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import Post from "./Post";
+import Post from "./Post/Post";
 import { useParams, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import {
