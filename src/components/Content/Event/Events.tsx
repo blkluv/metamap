@@ -1,13 +1,13 @@
 import { useEffect, useState, useRef } from "react";
 import { Box } from "@mui/material";
-import EventMenu from "../Navigation/EventMenu";
+import EventMenu from "../../Navigation/EventMenu";
 import EventsList from "./EventsList";
-import { Event, ReduxState } from "../../utils/interfaces";
-import { getEvents } from "../../store/events";
+import { Event, ReduxState } from "../../../utils/interfaces";
+import { getEvents } from "../../../store/events";
 import { useSelector } from "react-redux";
-import { useAppDispatch } from "../../store/store";
-import { removeSelectedBusiness } from "../../store/businesses";
-import { removeSelectedEvent } from "../../store/events";
+import { useAppDispatch } from "../../../store/store";
+import { removeSelectedBusiness } from "../../../store/businesses";
+import { removeSelectedEvent } from "../../../store/events";
 
 const Events = () => {
   const [filteredItems, setFilteredItems] = useState(null);

@@ -4,7 +4,7 @@ import { useRef } from "react";
 import ScrollToTheTop from "../../Elements/ScrollToTheTop";
 import BusinessHeader from "../Business/BusinessHeader";
 
-import EventHeader from "../EventHeader";
+import EventHeader from "../Event/EventHeader";
 
 export interface UserItemsGalleryProps {
   status: string;

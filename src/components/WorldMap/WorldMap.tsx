@@ -15,7 +15,7 @@ import "maplibre-gl/dist/maplibre-gl.css";
 import { Box } from "@mui/material";
 import { PinCardProps, ReduxState } from "../../utils/interfaces";
 import { notify } from "../../utils/notifications";
-import EventHeader from "../Content/EventHeader";
+import EventHeader from "../Content/Event/EventHeader";
 import PopupController from "./PopupController";
 import Geocoder from "./Coder";
 import Legend from "./Legend";

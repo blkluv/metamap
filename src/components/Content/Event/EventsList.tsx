@@ -1,13 +1,13 @@
 import { useEffect, useRef } from "react";
 import List from "@mui/material/List";
 import EventHeader from "./EventHeader";
-import { Event, EventsListProps, ReduxState } from "../../utils/interfaces";
+import { Event, EventsListProps, ReduxState } from "../../../utils/interfaces";
 import { Box, LinearProgress, ListItem } from "@mui/material";
-import ScrollToTheTop from "../Elements/ScrollToTheTop";
+import ScrollToTheTop from "../../Elements/ScrollToTheTop";
 import { useSelector } from "react-redux";
-import { setTargetElement } from "../../store/communication";
-import { setSelectedEvent } from "../../store/events";
-import { useAppDispatch } from "../../store/store";
+import { setTargetElement } from "../../../store/communication";
+import { setSelectedEvent } from "../../../store/events";
+import { useAppDispatch } from "../../../store/store";
 
 const EventsList = ({ items, scrollRef, loading }: EventsListProps) => {
   const palette = useSelector((state: ReduxState) => state.theme.palette);

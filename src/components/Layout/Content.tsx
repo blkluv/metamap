@@ -1,9 +1,9 @@
 import { Box } from "@mui/material";
 import { Navigate, Route, Routes } from "react-router-dom";
 import Businesses from "../Content/Business/Businesses";
-import Events from "../Content/Events";
 import Feed from "../Content/User/Feed";
 import Social from "../Content/Social";
+import Events from "../Content/Event/Events";
 
 const Content = () => {
   return (
