@@ -1,9 +1,8 @@
 import { useEffect, useState } from "react";
-import { AccordionDetails, Box } from "@mui/material";
+import { Box, Link } from "@mui/material";
 import UserHeaderSimple from "../UserHeaderSimple";
 import SearchField from "../../Elements/SearchField";
 import { Link as RouterLink } from "react-router-dom";
-import { Link } from "@mui/material";
 import { ReduxState, UserHeader } from "../../../utils/interfaces";
 import { useSelector } from "react-redux";
 import { getMembersConversation } from "../../../store/communication";
@@ -50,7 +49,7 @@ const OnlineList = () => {
   };
 
   return (
-    <AccordionDetails>
+    <>
       {currentUser?.following && currentUser.following.length > 0 ? (
         <Box>
           <SearchField
@@ -85,7 +84,7 @@ const OnlineList = () => {
           Add some
         </Link>
       )}
-    </AccordionDetails>
+    </>
   );
 };
 

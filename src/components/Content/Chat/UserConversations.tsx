@@ -1,6 +1,11 @@
 import { ReduxState } from "../../../utils/interfaces";
 import { useSelector } from "react-redux";
-import { Accordion, AccordionSummary, Typography } from "@mui/material";
+import {
+  Accordion,
+  AccordionDetails,
+  AccordionSummary,
+  Typography,
+} from "@mui/material";
 import { Chat, ExpandMore } from "@mui/icons-material";
 import ConversationList from "./ConversationList";
 
@@ -30,7 +35,9 @@ const UserConversations = () => {
         <Chat sx={{ marginRight: ".5rem", width: "1rem" }} />
         <Typography sx={{ fontWeight: 500 }}>Conversations</Typography>
       </AccordionSummary>
-      <ConversationList />
+      <AccordionDetails>
+        <ConversationList />
+      </AccordionDetails>
     </Accordion>
   );
 };

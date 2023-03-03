@@ -1,6 +1,11 @@
 import { ReduxState } from "../../../utils/interfaces";
 import { useSelector } from "react-redux";
-import { Accordion, AccordionSummary, Typography } from "@mui/material";
+import {
+  Accordion,
+  AccordionDetails,
+  AccordionSummary,
+  Typography,
+} from "@mui/material";
 import { ExpandMore, Group } from "@mui/icons-material";
 import OnlineList from "./OnlineList";
 
@@ -30,7 +35,9 @@ const UsersOnline = () => {
         <Group sx={{ marginRight: ".5rem", width: "1.1rem" }} />
         <Typography sx={{ fontWeight: 500 }}>Contacts</Typography>
       </AccordionSummary>
-      <OnlineList />
+      <AccordionDetails>
+        <OnlineList />
+      </AccordionDetails>
     </Accordion>
   );
 };

@@ -213,12 +213,12 @@ const BusinessHeader = ({
                       cursor: "pointer",
                       color: palette.warning,
                     }}
-                    onClick={debounce(() => handleLikeBusiness(), 400)}
+                    onClick={debounce(() => handleLikeBusiness(), 300)}
                   />
                 ) : (
                   <FavoriteBorder
                     sx={{ fontSize: "1.2rem", cursor: "pointer" }}
-                    onClick={debounce(() => handleLikeBusiness(), 400)}
+                    onClick={debounce(() => handleLikeBusiness(), 300)}
                   />
                 )}
               </Box>
@@ -234,7 +234,7 @@ const BusinessHeader = ({
               <NavLink
                 to={`/dashboard/profile/${creator?.name}`}
                 style={{
-                  textDecoration: "none",
+                  textDecoration: "underlined",
                   color: palette.text.tertiary,
                   fontWeight: "bold",
                 }}

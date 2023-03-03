@@ -304,7 +304,7 @@ const EventHeader = ({
                 <NavLink
                   to={`/dashboard/profile/${creator?.name}`}
                   style={{
-                    textDecoration: "none",
+                    textDecoration: "underlined",
                     color: palette.text.tertiary,
                     fontWeight: "bold",
                   }}
@@ -365,8 +365,8 @@ const EventHeader = ({
               <Button
                 onClick={
                   ifJoined
-                    ? debounce(handleLeaveEvent, 400)
-                    : debounce(handleJoinEvent, 400)
+                    ? debounce(handleLeaveEvent, 300)
+                    : debounce(handleJoinEvent, 300)
                 }
                 sx={{
                   color: ifJoined ? palette.warning : palette.blue,

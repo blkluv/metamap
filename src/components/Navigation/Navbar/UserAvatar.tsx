@@ -13,9 +13,7 @@ interface UserAvatarProps {
 }
 
 const UserAvatar = ({ openMenu }: UserAvatarProps) => {
-  const currentUser = useSelector(
-    (state: ReduxState) => state.currentUser.data
-  );
+  const { avatar } = useSelector((state: ReduxState) => state.currentUser.data);
   const { userMessages, notifications } = useSelector(
     (state: ReduxState) => state.communication.data
   );
@@ -65,7 +63,7 @@ const UserAvatar = ({ openMenu }: UserAvatarProps) => {
         >
           <Avatar
             alt="User avatar"
-            src={currentUser?.avatar}
+            src={avatar}
             sx={{
               display: { xs: "flex", md: "none" },
               height: { xs: "1.8rem", md: "2rem" },
@@ -77,7 +75,7 @@ const UserAvatar = ({ openMenu }: UserAvatarProps) => {
         </StyledBadge>
         <Avatar
           alt="User avatar"
-          src={currentUser?.avatar}
+          src={avatar}
           sx={{
             display: { xs: "none", md: "flex" },
             height: { xs: "1.8rem", md: "2rem" },

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { AccordionDetails, Box, List, Typography } from "@mui/material";
+import { Box, List, Typography } from "@mui/material";
 import { ChatMessage, ReduxState } from "../../../utils/interfaces";
 import MessageHeader from "./MessageHeader";
 import { useSelector } from "react-redux";
@@ -17,27 +17,25 @@ const Messages = () => {
   }, [userMessages]);
 
   return (
-    <AccordionDetails>
-      <Box sx={{ width: "100%" }}>
-        {messages.length > 0 ? (
-          <List sx={{ overflow: "scroll" }}>
-            {messages.map((message: ChatMessage) => (
-              <MessageHeader key={message.createdAt} message={message} />
-            ))}
-          </List>
-        ) : (
-          <Typography
-            sx={{
-              textTransform: "uppercase",
-              marginBottom: ".5rem",
-              fontSize: ".7rem",
-            }}
-          >
-            Clear
-          </Typography>
-        )}
-      </Box>
-    </AccordionDetails>
+    <Box sx={{ width: "100%" }}>
+      {messages.length > 0 ? (
+        <List sx={{ overflow: "scroll" }}>
+          {messages.map((message: ChatMessage) => (
+            <MessageHeader key={message.createdAt} message={message} />
+          ))}
+        </List>
+      ) : (
+        <Typography
+          sx={{
+            textTransform: "uppercase",
+            marginBottom: ".5rem",
+            fontSize: ".7rem",
+          }}
+        >
+          Clear
+        </Typography>
+      )}
+    </Box>
   );
 };
 

@@ -13,9 +13,7 @@ import { useAppDispatch } from "../../../store/store";
 const Conversation = ({ conversation }: ChatConversationProps) => {
   const [users, setUsers] = useState<UserHeader[]>([]);
   const dispatch = useAppDispatch();
-  const currentUser = useSelector(
-    (state: ReduxState) => state.currentUser.data
-  );
+  const { _id } = useSelector((state: ReduxState) => state.currentUser.data);
   const { userMessages } = useSelector(
     (state: ReduxState) => state.communication.data
   );
@@ -23,10 +21,10 @@ const Conversation = ({ conversation }: ChatConversationProps) => {
 
   useEffect(() => {
     const secondUserId = conversation.members.find(
-      (member: string | undefined) => member !== currentUser?._id
+      (member: string | undefined) => member !== _id
     );
-    setUser(users?.find((user) => user._id === secondUserId));
-  }, [conversation.members, currentUser?._id, users]);
+    setUser(users.find((user) => user._id === secondUserId));
+  }, [conversation.members, _id, users]);
 
   const ifUnread = () => {
     const message = userMessages.find(

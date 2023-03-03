@@ -1,6 +1,11 @@
 import { ReduxState } from "../../../utils/interfaces";
 import { useSelector } from "react-redux";
-import { Accordion, AccordionSummary, Typography } from "@mui/material";
+import {
+  Accordion,
+  AccordionDetails,
+  AccordionSummary,
+  Typography,
+} from "@mui/material";
 import { Circle, ExpandMore, Markunread } from "@mui/icons-material";
 import Messages from "./Messages";
 
@@ -42,7 +47,9 @@ const UserMessages = () => {
           />
         ) : null}
       </AccordionSummary>
-      <Messages />
+      <AccordionDetails>
+        <Messages />
+      </AccordionDetails>
     </Accordion>
   );
 };

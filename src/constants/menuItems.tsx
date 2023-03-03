@@ -5,7 +5,6 @@ import RoomIcon from "@mui/icons-material/Room";
 import ChatIcon from "@mui/icons-material/Chat";
 import { styled } from "@mui/system";
 import { Badge } from "@mui/material";
-import store from "../store/store";
 
 const StyledBadge = styled(Badge)(() => ({
   "& .MuiBadge-badge": {
@@ -66,11 +65,4 @@ export const EventMenuItems = [
   },
 ];
 
-export const UserMenuLinks = [
-  {
-    id: 1,
-    label: "profile",
-    link: `/dashboard/profile/${store.getState().currentUser.data?.name}`,
-  },
-  { id: 2, label: "account", link: "account" },
-];
+export const UserMenuLinks = [{ id: 2, label: "account", link: "account" }];
