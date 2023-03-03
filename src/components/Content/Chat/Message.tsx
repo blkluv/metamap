@@ -1,13 +1,13 @@
 import { useEffect } from "react";
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 import { Avatar, Box, Typography } from "@mui/material";
-import { ChatMessageProps, ReduxState } from "../../utils/interfaces";
+import { ChatMessageProps, ReduxState } from "../../../utils/interfaces";
 // @ts-ignore
 import ReactEmoji from "react-emoji";
 import moment from "moment";
 import { useSelector } from "react-redux";
-import { readMessage } from "../../store/communication";
-import { useAppDispatch } from "../../store/store";
+import { readMessage } from "../../../store/communication";
+import { useAppDispatch } from "../../../store/store";
 
 const Message = ({
   message: { _id, read, text, createdAt },

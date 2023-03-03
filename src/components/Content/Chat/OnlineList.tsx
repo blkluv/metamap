@@ -1,15 +1,15 @@
 import { useEffect, useState } from "react";
-import { Box } from "@mui/material";
-import UserHeaderSimple from "./UserHeaderSimple";
-import SearchField from "../Elements/SearchField";
+import { AccordionDetails, Box } from "@mui/material";
+import UserHeaderSimple from "../UserHeaderSimple";
+import SearchField from "../../Elements/SearchField";
 import { Link as RouterLink } from "react-router-dom";
 import { Link } from "@mui/material";
-import { ReduxState, UserHeader } from "../../utils/interfaces";
+import { ReduxState, UserHeader } from "../../../utils/interfaces";
 import { useSelector } from "react-redux";
-import { getMembersConversation } from "../../store/communication";
-import { useAppDispatch } from "../../store/store";
+import { getMembersConversation } from "../../../store/communication";
+import { useAppDispatch } from "../../../store/store";
 
-const UsersOnline = () => {
+const OnlineList = () => {
   const currentUser = useSelector(
     (state: ReduxState) => state.currentUser.data
   );
@@ -50,7 +50,7 @@ const UsersOnline = () => {
   };
 
   return (
-    <>
+    <AccordionDetails>
       {currentUser?.following && currentUser.following.length > 0 ? (
         <Box>
           <SearchField
@@ -85,8 +85,8 @@ const UsersOnline = () => {
           Add some
         </Link>
       )}
-    </>
+    </AccordionDetails>
   );
 };
 
-export default UsersOnline;
+export default OnlineList;

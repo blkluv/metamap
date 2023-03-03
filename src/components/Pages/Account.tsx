@@ -1,5 +1,5 @@
 import { Box, Divider, Typography } from "@mui/material";
-import MenuAccordion from "../Navigation/Accordion";
+import MenuAccordion from "../Content/Account/Accordion";
 import { ReduxState } from "../../utils/interfaces";
 import { useSelector } from "react-redux";
 

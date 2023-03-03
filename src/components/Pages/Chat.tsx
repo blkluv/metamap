@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { Box } from "@mui/material";
-import ChatAccordion from "../Content/ChatAccordion";
+import ChatAccordion from "../Content/Chat/ChatAccordion";
 import ChatMessageForm from "../Elements/ChatMessageForm";
-import MessagesList from "../Content/MessagesList";
+import MessagesList from "../Content/Chat/MessagesList";
 import { ReduxState, UserHeader } from "../../utils/interfaces";
 import { useSelector } from "react-redux";
 import { getUsers } from "../../store/users";
@@ -63,12 +63,10 @@ const Chat = () => {
         }}
       >
         <MessagesList />
-        {currentConversation ? (
-          <ChatMessageForm
-            users={users}
-            currentConversation={currentConversation}
-          />
-        ) : null}
+        <ChatMessageForm
+          users={users}
+          currentConversation={currentConversation}
+        />
       </Box>
       <ChatAccordion />
     </Box>

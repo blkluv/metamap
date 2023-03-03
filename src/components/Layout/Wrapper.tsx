@@ -1,6 +1,6 @@
 import { Box } from "@mui/material";
+import TopNavbar from "../Navigation/Navbar/Navbar";
 import MainWindow from "./MainWindow";
-import TopNavbar from "../Navigation/Navbar";
 
 const Wrapper = () => {
   return (

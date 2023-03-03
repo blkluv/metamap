@@ -3,12 +3,12 @@ import {
   ChatConversationProps,
   ReduxState,
   UserHeader,
-} from "../../utils/interfaces";
-import UserHeaderSimple from "./UserHeaderSimple";
+} from "../../../utils/interfaces";
+import UserHeaderSimple from "../UserHeaderSimple";
 import { useSelector } from "react-redux";
-import { getUsers } from "../../store/users";
-import { setCurrentConversation } from "../../store/communication";
-import { useAppDispatch } from "../../store/store";
+import { getUsers } from "../../../store/users";
+import { setCurrentConversation } from "../../../store/communication";
+import { useAppDispatch } from "../../../store/store";
 
 const Conversation = ({ conversation }: ChatConversationProps) => {
   const [users, setUsers] = useState<UserHeader[]>([]);

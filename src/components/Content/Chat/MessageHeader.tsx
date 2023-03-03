@@ -2,12 +2,12 @@ import { memo } from "react";
 import ListItem from "@mui/material/ListItem";
 import { NavLink } from "react-router-dom";
 import { Box, Button, Typography } from "@mui/material";
-import { MessageProps, ReduxState } from "../../utils/interfaces";
+import { MessageProps, ReduxState } from "../../../utils/interfaces";
 import { Chat, Send } from "@mui/icons-material";
 import moment from "moment";
 import { useSelector } from "react-redux";
-import { setCurrentConversation } from "../../store/communication";
-import { useAppDispatch } from "../../store/store";
+import { setCurrentConversation } from "../../../store/communication";
+import { useAppDispatch } from "../../../store/store";
 
 const MessageHeader = ({
   message: { text, sender, conversationId, createdAt },
