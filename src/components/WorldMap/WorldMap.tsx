@@ -16,11 +16,11 @@ import { Box } from "@mui/material";
 import { PinCardProps, ReduxState } from "../../utils/interfaces";
 import { notify } from "../../utils/notifications";
 import EventHeader from "../Content/EventHeader";
-import BusinessHeader from "../Content/BusinessHeader";
 import PopupController from "./PopupController";
 import Geocoder from "./Coder";
 import Legend from "./Legend";
 import { useSelector } from "react-redux";
+import BusinessHeader from "../Content/Business/BusinessHeader";
 
 const WorldMap = () => {
   const { selectedEvent } = useSelector(

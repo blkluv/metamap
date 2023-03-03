@@ -34,6 +34,16 @@ export interface Rate {
   rating: number;
 }
 
+export interface RateProps {
+  rating?: {
+    rates: [Rate];
+    ratesNumber: number;
+    average: number;
+  };
+  _id?: string;
+  creator?: UserHeader;
+}
+
 export interface RatingProps {
   rating: {
     rates: [Rate];

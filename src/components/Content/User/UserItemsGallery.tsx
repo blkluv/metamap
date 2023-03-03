@@ -2,7 +2,8 @@ import { Masonry } from "@mui/lab";
 import { Box, LinearProgress } from "@mui/material";
 import { useRef } from "react";
 import ScrollToTheTop from "../../Elements/ScrollToTheTop";
-import BusinessHeader from "../BusinessHeader";
+import BusinessHeader from "../Business/BusinessHeader";
+
 import EventHeader from "../EventHeader";
 
 export interface UserItemsGalleryProps {

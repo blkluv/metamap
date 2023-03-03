@@ -1,13 +1,13 @@
 import { useEffect, useState, useRef } from "react";
 import { Box } from "@mui/material";
-import BusinessMenu from "../Navigation/BusinessMenu";
+import BusinessMenu from "../../Navigation/BusinessMenu";
 import BusinessesList from "./BusinessesList";
-import { Business, ReduxState } from "../../utils/interfaces";
-import { getBusinesses } from "../../store/businesses";
+import { Business, ReduxState } from "../../../utils/interfaces";
+import { getBusinesses } from "../../../store/businesses";
 import { useSelector } from "react-redux";
-import { useAppDispatch } from "../../store/store";
-import { removeSelectedBusiness } from "../../store/businesses";
-import { removeSelectedEvent } from "../../store/events";
+import { useAppDispatch } from "../../../store/store";
+import { removeSelectedBusiness } from "../../../store/businesses";
+import { removeSelectedEvent } from "../../../store/events";
 
 const Businesses = () => {
   const [filteredItems, setFilteredItems] = useState(null);

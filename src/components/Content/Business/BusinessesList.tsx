@@ -5,13 +5,13 @@ import {
   Business,
   BusinessesListProps,
   ReduxState,
-} from "../../utils/interfaces";
+} from "../../../utils/interfaces";
 import { Box, LinearProgress, ListItem } from "@mui/material";
-import ScrollToTheTop from "../Elements/ScrollToTheTop";
+import ScrollToTheTop from "../../Elements/ScrollToTheTop";
 import { useSelector } from "react-redux";
-import { setTargetElement } from "../../store/communication";
-import { setSelectedBusiness } from "../../store/businesses";
-import { useAppDispatch } from "../../store/store";
+import { setTargetElement } from "../../../store/communication";
+import { setSelectedBusiness } from "../../../store/businesses";
+import { useAppDispatch } from "../../../store/store";
 
 const BusinessesList = ({ items, scrollRef, loading }: BusinessesListProps) => {
   const palette = useSelector((state: ReduxState) => state.theme.palette);
