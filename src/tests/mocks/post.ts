@@ -1,4 +1,6 @@
-export const testComment = {
+import { Comment, Post } from "../../utils/interfaces";
+
+export const testComment: Comment = {
   _id: "testCommentId",
   creator: {
     _id: "testUserId",
@@ -22,7 +24,7 @@ export const testComment2 = {
   createdAt: "",
 };
 
-export const testPost = {
+export const testPost: Post = {
   _id: "testPostId",
   creator: {
     _id: "testUserId",

@@ -1,4 +1,6 @@
-export const testUser = {
+import { User } from "../../utils/interfaces";
+
+export const testUser: User = {
   _id: "testUserId",
   name: "testUser",
   email: "testUser@email.com",
