@@ -3,29 +3,37 @@ import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
-import SearchField from "../Elements/SearchField";
-import { ReduxState, UserHeader } from "../../utils/interfaces";
-import { Check, Close, Visibility } from "@mui/icons-material";
+import SearchField from "../../Elements/SearchField";
+import { Event, ItemMenuProps, ReduxState } from "../../../utils/interfaces";
+import { TravelExplore, Check, DoNotDisturb } from "@mui/icons-material";
 import { useSelector } from "react-redux";
 
-export const SocialMenu = ({ handleFilter, users, scrollRef }: any) => {
+export const EventMenu = ({
+  items,
+  handleFilter,
+  scrollRef,
+}: ItemMenuProps) => {
   const currentUser = useSelector(
     (state: ReduxState) => state.currentUser.data
   );
   const palette = useSelector((state: ReduxState) => state.theme.palette);
 
-  const handleFollowing = (data: UserHeader[]) => {
-    const followingUsers = data.filter((item: UserHeader | null) => {
-      return currentUser?.following?.find((user) => user._id === item?._id);
+  const handleJoinedEvents = (data: Event[] | null | undefined) => {
+    const joined = data?.filter((item: Event | null) => {
+      return item?.participants?.find((user) => user._id === currentUser?._id);
     });
-    handleFilter(followingUsers);
+    handleFilter(joined);
   };
 
-  const handleFollowers = (data: UserHeader[]) => {
-    const followedUsers = data.filter((item: UserHeader | null) => {
-      return currentUser?.followers?.find((user) => user._id === item?._id);
+  const handlePastEvents = (data: Event[] | null | undefined) => {
+    const currentMoment = new Date();
+    const ended = data?.filter((item: Event | null) => {
+      return (
+        //@ts-ignore
+        new Date(item?.end) < currentMoment
+      );
     });
-    handleFilter(followedUsers);
+    handleFilter(ended);
   };
 
   return (
@@ -48,7 +56,7 @@ export const SocialMenu = ({ handleFilter, users, scrollRef }: any) => {
           component="div"
           sx={{ fontWeight: "bold", mb: 1.5 }}
         >
-          Community
+          Events
         </Typography>
       </CardContent>
       <CardActions
@@ -57,10 +65,10 @@ export const SocialMenu = ({ handleFilter, users, scrollRef }: any) => {
           flexWrap: "wrap",
         }}
       >
-        <SearchField data={users} filter={handleFilter} />
+        <SearchField data={items} filter={handleFilter} />
         <Button
           variant="contained"
-          startIcon={<Close />}
+          startIcon={<TravelExplore />}
           disableElevation
           sx={{
             color: palette.text.primary,
@@ -69,12 +77,11 @@ export const SocialMenu = ({ handleFilter, users, scrollRef }: any) => {
             marginRight: "0.5rem !important",
             marginTop: "0.5rem !important",
           }}
-          onClick={() => handleFilter(null)}
+          onClick={() => handleFilter(items)}
         >
-          Clear
+          All
         </Button>
         <Button
-          onClick={() => handleFollowing(users)}
           variant="outlined"
           startIcon={<Check />}
           sx={{
@@ -84,26 +91,27 @@ export const SocialMenu = ({ handleFilter, users, scrollRef }: any) => {
             marginTop: "0.5rem !important",
             color: palette.blue,
           }}
+          onClick={() => handleJoinedEvents(items)}
         >
-          Following
+          Joined
         </Button>
         <Button
-          onClick={() => handleFollowers(users)}
           variant="outlined"
-          startIcon={<Visibility />}
+          startIcon={<DoNotDisturb />}
           sx={{
             border: `1px solid ${palette.background.tertiary}`,
             marginLeft: "0 !important",
             marginRight: "0.5rem !important",
             marginTop: "0.5rem !important",
-            color: palette.green,
+            color: palette.warning,
           }}
+          onClick={() => handlePastEvents(items)}
         >
-          Followers
+          Past
         </Button>
       </CardActions>
     </Box>
   );
 };
 
-export default SocialMenu;
+export default EventMenu;

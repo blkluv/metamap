@@ -1,9 +1,9 @@
 import { useEffect, useState, useRef } from "react";
 import { Box } from "@mui/material";
-import SocialMenu from "../Navigation/SocialMenu";
 import SocialList from "./SocialList";
-import { getUsers } from "../../store/users";
-import { UserHeader } from "../../utils/interfaces";
+import { getUsers } from "../../../store/users";
+import { UserHeader } from "../../../utils/interfaces";
+import SocialMenu from "./SocialMenu";
 
 const Social = () => {
   const [filteredData, setFilteredData] = useState([]);

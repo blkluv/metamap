@@ -3,8 +3,8 @@ import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
-import { Business, ItemMenuProps, ReduxState } from "../../utils/interfaces";
-import SearchField from "../Elements/SearchField";
+import { Business, ItemMenuProps, ReduxState } from "../../../utils/interfaces";
+import SearchField from "../../Elements/SearchField";
 import { TravelExplore, Check, FavoriteBorder } from "@mui/icons-material";
 import { useSelector } from "react-redux";
 

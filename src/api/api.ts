@@ -16,7 +16,7 @@ import {
 } from "../utils/interfaces";
 
 const http = axios.create({
-  baseURL: "https://geoevents-api-production.up.railway.app",
+  baseURL: "http://localhost:5000",
 });
 
 http.interceptors.request.use((req: any) => {

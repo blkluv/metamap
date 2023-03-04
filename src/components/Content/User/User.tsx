@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { Box, Divider } from "@mui/material";
+import { Box, Divider, LinearProgress } from "@mui/material";
 import { useParams, useNavigate } from "react-router-dom";
 import {
   Event,
@@ -32,12 +32,15 @@ const User = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const [user, setUser] = useState<UserHeader | undefined>(undefined);
+  const [loading, setLoading] = useState<boolean>(false);
   const userMenuRef = useRef();
   const dispatch = useAppDispatch();
 
   useEffect(() => {
+    setLoading(true);
     const onGetUser = async (id: string) => {
       const result = await getUser(id);
+      setLoading(false);
       if (result) {
         setUser(result);
       } else {
@@ -84,62 +87,75 @@ const User = () => {
           color: palette.text.tertiary,
         }}
       >
-        <Box
-          ref={userMenuRef}
-          sx={{
-            display: "flex",
-            flexDirection: { xs: "column", sm: "row", md: "column", lg: "row" },
-            alignItems: { xs: "flex-start", sm: "center" },
-            padding: "0 .5rem",
-          }}
-        >
-          <Box
-            sx={{
-              display: "flex",
-              flexDirection: { md: "row" },
-              alignSelf: { md: "baseline" },
-              alignItems: "center",
-            }}
-          >
-            <UserAvatar user={user} />
-            <Box sx={{ display: "flex", flexDirection: "column" }}>
-              <SmallHeader user={user} mobile />
+        {loading ? (
+          <Box mt={1}>
+            <LinearProgress />
+          </Box>
+        ) : (
+          <>
+            <Box
+              ref={userMenuRef}
+              sx={{
+                display: "flex",
+                flexDirection: {
+                  xs: "column",
+                  sm: "row",
+                  md: "column",
+                  lg: "row",
+                },
+                alignItems: { xs: "flex-start", sm: "center" },
+                padding: "0 .5rem",
+              }}
+            >
+              <Box
+                sx={{
+                  display: "flex",
+                  flexDirection: { md: "row" },
+                  alignSelf: { md: "baseline" },
+                  alignItems: "center",
+                }}
+              >
+                <UserAvatar user={user} />
+                <Box sx={{ display: "flex", flexDirection: "column" }}>
+                  <SmallHeader user={user} mobile />
+                </Box>
+              </Box>
+              <Stats
+                userItems={getUsersItems([...events, ...businesses])}
+                user={user}
+              />
+              <Box
+                component="div"
+                sx={{
+                  margin: ".5rem 0 1rem 0",
+                  fontSize: "1rem",
+                  width: "100%",
+                  display: { sm: "none", md: "block", lg: "none" },
+                }}
+              >
+                <Description user={user} />
+              </Box>
             </Box>
-          </Box>
-          <Stats
-            userItems={getUsersItems([...events, ...businesses])}
-            user={user}
-          />
-          <Box
-            component="div"
-            sx={{
-              margin: ".5rem 0 1rem 0",
-              fontSize: "1rem",
-              width: "100%",
-              display: { sm: "none", md: "block", lg: "none" },
-            }}
-          >
-            <Description user={user} />
-          </Box>
-        </Box>
-        <SmallHeader user={user} />
-        <Box
-          sx={{
-            margin: ".5rem",
-            fontSize: "1rem",
-            display: { xs: "none", sm: "block", md: "none", lg: "block" },
-          }}
-        >
-          <Description user={user} />
-        </Box>
-        <Divider
-          variant="middle"
-          sx={{
-            background: "rgb(120,120,126)",
-            margin: "1rem .5rem 1.5rem .5rem",
-          }}
-        />
-        <Posts userMenuRef={userMenuRef} />
+            <SmallHeader user={user} />
+            <Box
+              sx={{
+                margin: ".5rem",
+                fontSize: "1rem",
+                display: { xs: "none", sm: "block", md: "none", lg: "block" },
+              }}
+            >
+              <Description user={user} />
+            </Box>
+            <Divider
+              variant="middle"
+              sx={{
+                background: "rgb(120,120,126)",
+                margin: "1rem .5rem 1.5rem .5rem",
+              }}
+            />
+            <Posts userMenuRef={userMenuRef} />
+          </>
+        )}
       </Box>
       <UserItemsGallery
         status={status}

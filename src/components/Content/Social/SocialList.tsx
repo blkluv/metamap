@@ -1,13 +1,13 @@
 import List from "@mui/material/List";
-import UserHeader from "./User/UserHeader";
+import UserHeader from "../User/UserHeader";
 import {
   UserHeader as Header,
   SocialListProps,
   ReduxState,
-} from "../../utils/interfaces";
+} from "../../../utils/interfaces";
 import { Box, ListItem } from "@mui/material";
 import LinearProgress from "@mui/material/LinearProgress";
-import ScrollToTheTop from "../Elements/ScrollToTheTop";
+import ScrollToTheTop from "../../Elements/ScrollToTheTop";
 import { useSelector } from "react-redux";
 
 const SocialList = ({ data, users, scrollRef, loading }: SocialListProps) => {

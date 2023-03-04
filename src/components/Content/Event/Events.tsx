@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef } from "react";
 import { Box } from "@mui/material";
-import EventMenu from "../../Navigation/EventMenu";
+import EventMenu from "./EventMenu";
 import EventsList from "./EventsList";
 import { Event, ReduxState } from "../../../utils/interfaces";
 import { getEvents } from "../../../store/events";

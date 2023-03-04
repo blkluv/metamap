@@ -28,9 +28,12 @@ const Follow = ({ user }: DescriptionProps) => {
 
   return (
     <>
-      {currentUser?.name !== id ? (
+      {currentUser?.name !== id && currentUser?.name !== user?.name ? (
         <Button
-          onClick={debounce(() => user && dispatch(followUser(user._id)), 250)}
+          onClick={debounce(
+            () => user?._id && dispatch(followUser(user._id)),
+            250
+          )}
           sx={{
             color: ifFollowing(currentUser, user?._id)
               ? palette.warning

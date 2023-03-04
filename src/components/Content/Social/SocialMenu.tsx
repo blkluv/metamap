@@ -3,37 +3,29 @@ import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
-import SearchField from "../Elements/SearchField";
-import { Event, ItemMenuProps, ReduxState } from "../../utils/interfaces";
-import { TravelExplore, Check, DoNotDisturb } from "@mui/icons-material";
+import SearchField from "../../Elements/SearchField";
+import { ReduxState, UserHeader } from "../../../utils/interfaces";
+import { Check, Close, Visibility } from "@mui/icons-material";
 import { useSelector } from "react-redux";
 
-export const EventMenu = ({
-  items,
-  handleFilter,
-  scrollRef,
-}: ItemMenuProps) => {
+export const SocialMenu = ({ handleFilter, users, scrollRef }: any) => {
   const currentUser = useSelector(
     (state: ReduxState) => state.currentUser.data
   );
   const palette = useSelector((state: ReduxState) => state.theme.palette);
 
-  const handleJoinedEvents = (data: Event[] | null | undefined) => {
-    const joined = data?.filter((item: Event | null) => {
-      return item?.participants?.find((user) => user._id === currentUser?._id);
+  const handleFollowing = (data: UserHeader[]) => {
+    const followingUsers = data.filter((item: UserHeader | null) => {
+      return currentUser?.following?.find((user) => user._id === item?._id);
     });
-    handleFilter(joined);
+    handleFilter(followingUsers);
   };
 
-  const handlePastEvents = (data: Event[] | null | undefined) => {
-    const currentMoment = new Date();
-    const ended = data?.filter((item: Event | null) => {
-      return (
-        //@ts-ignore
-        new Date(item?.end) < currentMoment
-      );
+  const handleFollowers = (data: UserHeader[]) => {
+    const followedUsers = data.filter((item: UserHeader | null) => {
+      return currentUser?.followers?.find((user) => user._id === item?._id);
     });
-    handleFilter(ended);
+    handleFilter(followedUsers);
   };
 
   return (
@@ -56,7 +48,7 @@ export const EventMenu = ({
           component="div"
           sx={{ fontWeight: "bold", mb: 1.5 }}
         >
-          Events
+          Community
         </Typography>
       </CardContent>
       <CardActions
@@ -65,10 +57,10 @@ export const EventMenu = ({
           flexWrap: "wrap",
         }}
       >
-        <SearchField data={items} filter={handleFilter} />
+        <SearchField data={users} filter={handleFilter} />
         <Button
           variant="contained"
-          startIcon={<TravelExplore />}
+          startIcon={<Close />}
           disableElevation
           sx={{
             color: palette.text.primary,
@@ -77,11 +69,12 @@ export const EventMenu = ({
             marginRight: "0.5rem !important",
             marginTop: "0.5rem !important",
           }}
-          onClick={() => handleFilter(items)}
+          onClick={() => handleFilter(null)}
         >
-          All
+          Clear
         </Button>
         <Button
+          onClick={() => handleFollowing(users)}
           variant="outlined"
           startIcon={<Check />}
           sx={{
@@ -91,27 +84,26 @@ export const EventMenu = ({
             marginTop: "0.5rem !important",
             color: palette.blue,
           }}
-          onClick={() => handleJoinedEvents(items)}
         >
-          Joined
+          Following
         </Button>
         <Button
+          onClick={() => handleFollowers(users)}
           variant="outlined"
-          startIcon={<DoNotDisturb />}
+          startIcon={<Visibility />}
           sx={{
             border: `1px solid ${palette.background.tertiary}`,
             marginLeft: "0 !important",
             marginRight: "0.5rem !important",
             marginTop: "0.5rem !important",
-            color: palette.warning,
+            color: palette.green,
           }}
-          onClick={() => handlePastEvents(items)}
         >
-          Past
+          Followers
         </Button>
       </CardActions>
     </Box>
   );
 };
 
-export default EventMenu;
+export default SocialMenu;

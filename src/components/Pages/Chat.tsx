@@ -9,6 +9,7 @@ import { getUsers } from "../../store/users";
 import {
   setCurrentConversation,
   getUserMessages,
+  setMessages,
 } from "../../store/communication";
 import { useAppDispatch } from "../../store/store";
 
@@ -32,7 +33,10 @@ const Chat = () => {
   useEffect(() => {
     getAllUsers();
     dispatch(getUserMessages(currentUser._id));
-    return () => dispatch(setCurrentConversation(null));
+    return () => {
+      dispatch(setMessages([]));
+      dispatch(setCurrentConversation(null));
+    };
   }, [currentUser._id, dispatch]);
 
   return (

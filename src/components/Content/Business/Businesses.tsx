@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef } from "react";
 import { Box } from "@mui/material";
-import BusinessMenu from "../../Navigation/BusinessMenu";
+import BusinessMenu from "./BusinessMenu";
 import BusinessesList from "./BusinessesList";
 import { Business, ReduxState } from "../../../utils/interfaces";
 import { getBusinesses } from "../../../store/businesses";
