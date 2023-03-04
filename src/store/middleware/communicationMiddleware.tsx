@@ -13,6 +13,7 @@ import {
   updateMessage,
 } from "../communication";
 import { setUserUpdate } from "../currentUser";
+import { BASE_URL } from "../../api/api";
 import { io } from "socket.io-client";
 
 const handleSendNotification = (
@@ -55,7 +56,8 @@ const actionTypes = {
 };
 
 const communicationMiddleware: Middleware = (store) => {
-  const socket = io("https://geoevents-api-production.up.railway.app");
+  const socket = io(BASE_URL);
+
   return (next) => (action) => {
     if (
       action.type === actionTypes.signIn ||

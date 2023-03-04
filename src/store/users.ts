@@ -34,7 +34,7 @@ const slice = createSlice({
   name: "users",
   initialState: getStoreData("users", {}),
   reducers: {},
-  extraReducers: {},
+  extraReducers: (_builder) => {},
 });
 
 export default slice.reducer;

@@ -15,8 +15,10 @@ import {
   UserUpdateReq,
 } from "../utils/interfaces";
 
+export const BASE_URL = "https://geoevents-api-production.up.railway.app";
+
 const http = axios.create({
-  baseURL: "https://geoevents-api-production.up.railway.app",
+  baseURL: BASE_URL,
 });
 
 http.interceptors.request.use((req: any) => {

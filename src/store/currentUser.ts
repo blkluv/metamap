@@ -307,8 +307,10 @@ const slice = createSlice({
         state.status = "loading";
       })
       .addCase(updateUser.fulfilled, (state, action) => {
+        if (action.payload) {
+          state.data = action.payload;
+        }
         state.status = "success";
-        state.data = action.payload;
       })
       .addCase(updateUser.rejected, (state) => {
         state.status = "failed";

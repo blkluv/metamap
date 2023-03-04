@@ -39,12 +39,13 @@
     "react-router-dom": "^6.4.2",
     "react-scripts": "5.0.1",
     "socket.io-client": "^4.5.4",
+    "ts-jest": "^29.0.5",
     "typescript": "^4.8.4"
   },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test",
+    "test": "jest --watchAll --detectOpenHandles --verbose",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
@@ -67,6 +68,7 @@
   },
   "devDependencies": {
     "@types/lodash": "^4.14.188",
-    "@types/mapbox__mapbox-gl-geocoder": "^4.7.3"
+    "@types/mapbox__mapbox-gl-geocoder": "^4.7.3",
+    "msw": "^1.1.0"
   }
 }
