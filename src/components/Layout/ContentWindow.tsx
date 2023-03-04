@@ -1,11 +1,11 @@
 import { Box } from "@mui/material";
 import WorldMap from "../WorldMap/WorldMap";
 import Sponsored from "../Content/Sponsored";
-import Notifications from "../Content/Notifications";
 import Content from "./Content";
 import { Route, Routes } from "react-router-dom";
 import { ReduxState } from "../../utils/interfaces";
 import { useSelector } from "react-redux";
+import Notifications from "../Content/Notifications/Notifications";
 
 const ContentWindow = () => {
   const palette = useSelector((state: ReduxState) => state.theme.palette);

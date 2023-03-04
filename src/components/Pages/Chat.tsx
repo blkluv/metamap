@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Box } from "@mui/material";
 import ChatAccordion from "../Content/Chat/ChatAccordion";
-import ChatMessageForm from "../Elements/ChatMessageForm";
+import ChatMessageForm from "../Content/Chat/ChatMessageForm";
 import MessagesList from "../Content/Chat/MessagesList";
 import { ReduxState, UserHeader } from "../../utils/interfaces";
 import { useSelector } from "react-redux";

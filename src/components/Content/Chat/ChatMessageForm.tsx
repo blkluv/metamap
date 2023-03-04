@@ -2,11 +2,11 @@ import { Button, TextField, Typography } from "@mui/material";
 import { Box } from "@mui/system";
 import { RemoveCircleOutline, Send } from "@mui/icons-material";
 import { useForm } from "react-hook-form";
-import { notify } from "../../utils/notifications";
-import { ReduxState, UserHeader } from "../../utils/interfaces";
+import { notify } from "../../../utils/notifications";
+import { ReduxState, UserHeader } from "../../../utils/interfaces";
 import { useSelector } from "react-redux";
-import { addMessage, deleteConversation } from "../../store/communication";
-import { useAppDispatch } from "../../store/store";
+import { addMessage, deleteConversation } from "../../../store/communication";
+import { useAppDispatch } from "../../../store/store";
 
 const ChatMessageForm = ({ users, currentConversation }: any) => {
   const palette = useSelector((state: ReduxState) => state.theme.palette);

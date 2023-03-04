@@ -1,5 +1,5 @@
 import { Box } from "@mui/material";
-import NotificationIcon from "../../Content/NotificationIcon";
+import NotificationIcon from "../../Content/Notifications/NotificationIcon";
 import MessageIcon from "../../Elements/MessageIcon";
 
 interface BlockProps {

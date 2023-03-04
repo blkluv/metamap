@@ -1,11 +1,11 @@
 import { useEffect, useRef } from "react";
 import { Box } from "@mui/material";
 import Message from "./Message";
-import ChatTimeline from "../../Elements/ChatTimeline";
 import { ReduxState } from "../../../utils/interfaces";
 import { useSelector } from "react-redux";
 import { getMessages } from "../../../store/communication";
 import { useAppDispatch } from "../../../store/store";
+import ChatTimeline from "./ChatTimeline";
 
 const MessagesList = () => {
   const currentUser = useSelector(

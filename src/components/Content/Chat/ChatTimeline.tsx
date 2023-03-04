@@ -12,7 +12,7 @@ import {
   ArrowRight,
   Chat,
 } from "@mui/icons-material";
-import { ReduxState } from "../../utils/interfaces";
+import { ReduxState } from "../../../utils/interfaces";
 import { useSelector } from "react-redux";
 
 const ChatTimeline = () => {

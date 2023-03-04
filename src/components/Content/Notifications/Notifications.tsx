@@ -1,8 +1,8 @@
 import { useRef } from "react";
 import { Box, List, Typography } from "@mui/material";
-import { Notification, ReduxState } from "../../utils/interfaces";
+import { Notification, ReduxState } from "../../../utils/interfaces";
 import NotificationHeader from "./NotificationHeader";
-import ScrollToTheTop from "../Elements/ScrollToTheTop";
+import ScrollToTheTop from "../../Elements/ScrollToTheTop";
 import { useSelector } from "react-redux";
 
 const Notifications = () => {

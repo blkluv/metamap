@@ -4,9 +4,9 @@ import { styled } from "@mui/system";
 import NotificationsNoneIcon from "@mui/icons-material/NotificationsNone";
 import { NavLink } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { ReduxState } from "../../utils/interfaces";
-import { getNotifications } from "../../store/communication";
-import { useAppDispatch } from "../../store/store";
+import { ReduxState } from "../../../utils/interfaces";
+import { getNotifications } from "../../../store/communication";
+import { useAppDispatch } from "../../../store/store";
 
 const NotificationIcon = () => {
   const currentUser = useSelector(
