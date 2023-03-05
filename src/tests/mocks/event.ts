@@ -1,3 +1,5 @@
+import { rest } from "msw";
+import { BASE_URL } from "../../api/api";
 import { Event } from "../../utils/interfaces";
 
 export const testEvent: Event = {
@@ -24,3 +26,41 @@ export const testEvent: Event = {
     average: 0,
   },
 };
+
+export const eventsEndpoints = [
+  rest.get(`${BASE_URL}/events`, (_req, res, ctx) => {
+    return res(ctx.status(200), ctx.json([]));
+  }),
+
+  rest.post(`${BASE_URL}/events`, (_req, res, ctx) => {
+    return res(ctx.status(200), ctx.json(testEvent));
+  }),
+
+  rest.delete(`${BASE_URL}/events/testEventId`, (_req, res, ctx) => {
+    return res(ctx.status(200), ctx.json(testEvent));
+  }),
+
+  rest.patch(`${BASE_URL}/events/rate/testEventId`, (_req, res, ctx) => {
+    return res(
+      ctx.status(200),
+      ctx.json({
+        ...testEvent,
+        rating: {
+          rates: [{ _id: "testUserId2", rating: 3 }],
+          ratesNumber: 1,
+          average: 3,
+        },
+      })
+    );
+  }),
+
+  rest.patch(`${BASE_URL}/events/join/testEventId`, (_req, res, ctx) => {
+    return res(
+      ctx.status(200),
+      ctx.json({
+        ...testEvent,
+        participants: [{ _id: "testUserId", name: "testUser" }],
+      })
+    );
+  }),
+];
